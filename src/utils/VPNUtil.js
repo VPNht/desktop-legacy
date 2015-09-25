@@ -39,11 +39,11 @@ module.exports = assign(currentOSLib, {
 
         let server = _args.server;
 
-        let encryption = localStorage.getItem('settings.encryption');
-        let autoPath = localStorage.getItem('settings.autoPath') === 'true' ? true : false;
-        let port = localStorage.getItem('settings.customPort');
+        let encryption = hub.settings('encryption');
+        let autoPath = hub.settings('autoPath') === 'true' ? true : false;
+        let port = hub.settings('customPort');
         let smartdns = true;
-        let disableSmartdns = localStorage.getItem('settings.disableSmartdns') === 'true' ? true : false ;
+        let disableSmartdns = hub.settings('disableSmartdns') === 'true' ? true : false ;
 
         if (disableSmartdns) {
             smartdns = 'disable';
