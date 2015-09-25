@@ -1,0 +1,238 @@
+#!/bin/sh -e
+# ******************************************************************************************************************
+# Downscript for restoring DNS config
+# Created by: VPN.ht
+# Inspired by: TunnelBear and TunnelBlick
+# ******************************************************************************************************************
+
+# Has to be EXACTLY like this, no indentation and no tabs! Otherwise
+# string comparison will fail
+VPNHT_NO_SUCH_KEY="<dictionary> {
+  VPNhtNoSuchKey : true
+}"
+
+# @param String message - The message to log
+readonly LOG_MESSAGE_COMMAND=$(basename "${0}")
+logMessage()
+{
+	echo "$(date '+%a %b %e %T %Y') VPNHT $LOG_MESSAGE_COMMAND: "${@} >> /var/log/vpnht-script.down.log
+    return
+}
+################################################################################
+# @param String string - Content to trim
+trim()
+{
+	echo ${@}
+}
+
+################################################################################
+#Get PrimaryServiceId
+#TODO - IPv6?
+getPrimaryService()
+{
+	logMessage "getPrimaryService"
+
+	set +e # "grep" will return error status (1) if no matches are found, so don't fail on individual errors
+	PSID="$( scutil <<-EOF |
+		open
+		show State:/Network/Global/IPv4
+		quit
+		EOF
+		grep PrimaryService | sed -e 's/.*PrimaryService : //'
+		)"
+
+	set -e # resume abort on error
+
+	logMessage "PrimaryService" ${PSID}
+}
+
+getCurrentService()
+{
+	logMessage "getCurrentService"
+	PSID_CURRENT="$(echo "${TB_CONFIG}" | grep -i '^[[:space:]]*ServiceID :' | sed -e 's/^.*: //g')"
+	logMessage "CurrentService" ${PSID_CURRENT}
+}
+
+fetchOldSCUtil()
+{
+	logMessage "fetchOldSCUtil"
+	DNS_OLD="$(/usr/sbin/scutil <<-EOF
+		open
+		show State:/Network/VPNht/OldDNS
+		quit
+	EOF)"
+
+	DNS_OLD_SETUP="$(/usr/sbin/scutil <<-EOF
+		open
+		show State:/Network/VPNht/OldDNSSetup
+		quit
+	EOF)"
+
+	DNS_OLD_GLOBAL="$(/usr/sbin/scutil <<-EOF
+		open
+		show State:/Network/VPNht/OldGlobalDNS
+		quit
+	EOF)"
+
+	DNS_OLD_GLOBAL_SETUP="$(/usr/sbin/scutil <<-EOF
+		open
+		show State:/Network/VPNht/OldGlobalDNSSetup
+		quit
+	EOF)"
+
+	logMessage "DNS_OLD: " ${DNS_OLD}
+	logMessage "DNS_OLD_SETUP: " ${DNS_OLD_SETUP}
+	logMessage "DNS_OLD_GLOBAL: " ${DNS_OLD_GLOBAL}
+	logMessage "DNS_OLD_GLOBAL_SETUP: " ${DNS_OLD_GLOBAL_SETUP}
+}
+
+restoreSCUtil()
+{
+	logMessage "restoreSCUtil"
+
+	bAlsoUsingSetupKeys="$(echo "${TB_CONFIG}" | grep -i '^[[:space:]]*bAlsoUsingSetupKeys :' | sed -e 's/^.*: //g')"
+
+	if [ "${DNS_OLD}" = "${VPNHT_NO_SUCH_KEY}" ] ; then
+		scutil <<- EOF
+			open
+			remove State:/Network/Service/${PSID}/DNS
+			quit
+	EOF
+	else
+		scutil <<- EOF
+			open
+			get State:/Network/VPNht/OldDNS
+			set State:/Network/Service/${PSID}/DNS
+			quit
+	EOF
+	fi
+
+	if [ "${DNS_OLD_SETUP}" = "${VPNHT_NO_SUCH_KEY}" ] ; then
+		if ${bAlsoUsingSetupKeys} ; then
+			scutil <<- EOF
+				open
+				remove Setup:/Network/Service/${PSID}/DNS
+				quit
+			EOF
+		fi
+	else
+		if ${bAlsoUsingSetupKeys} ; then
+      logMessage "restoring old setup"
+			scutil <<- EOF
+				open
+				get State:/Network/VPNht/OldDNSSetup
+				set Setup:/Network/Service/${PSID}/DNS
+				quit
+			EOF
+		fi
+	fi
+
+	if [ "${DNS_OLD_GLOBAL}" = "${VPNHT_NO_SUCH_KEY}" ] ; then
+		scutil <<- EOF
+			open
+			remove State:/Network/Global/DNS
+			quit
+	EOF
+	else
+    logMessage "restoring old global"
+		scutil <<- EOF
+			open
+			get State:/Network/VPNht/OldGlobalDNS
+			set State:/Network/Global/DNS
+			quit
+	EOF
+	fi
+
+	if [ "${DNS_OLD_GLOBAL_SETUP}" = "${VPNHT_NO_SUCH_KEY}" ] ; then
+		if ${bAlsoUsingSetupKeys} ; then
+			scutil <<- EOF
+				open
+				remove Setup:/Network/Global/DNS
+				quit
+			EOF
+		fi
+	else
+		if ${bAlsoUsingSetupKeys} ; then
+      logMessage "restoring old global setup"
+			scutil <<- EOF
+				open
+				get State:/Network/VPNht/OldGlobalDNSSetup
+				set Setup:/Network/Global/DNS
+				quit
+			EOF
+		fi
+	fi
+}
+
+cleanupSCUtil()
+{
+	logMessage "cleanupSCUtil"
+	scutil <<- EOF
+		open
+		remove State:/Network/VPNht/OldDNS
+		remove State:/Network/VPNht/OldDNSSetup
+		remove State:/Network/VPNht/OldGlobalDNS
+		remove State:/Network/VPNht/OldGlobalDNSSetup
+		remove State:/Network/VPNht
+		quit
+	EOF
+}
+
+getDNSConfig()
+{
+	logMessage "getDNSConfig"
+	MAN_DNS_CONFIG="$( (scutil | sed -e 's/^[[:space:]]*[[:digit:]]* : //g' | tr '\n' ' ')<<- EOF
+		open
+		show Setup:/Network/Service/${PSID}/DNS
+		quit
+EOF )"
+
+	CUR_DNS_CONFIG="$( (scutil | sed -e 's/^[[:space:]]*[[:digit:]]* : //g' | tr '\n' ' ')<<- EOF
+		open
+		show State:/Network/Global/DNS
+		quit
+EOF )"
+
+	logMessage "MANUAL DNS" ${MAN_DNS_CONFIG}
+	logMessage "CURRENT DNS" ${CUR_DNS_CONFIG}
+}
+
+################################################################################
+#
+# Arguments & Script entry point
+#
+################################################################################
+
+
+trap "" TSTP
+trap "" HUP
+trap "" INT
+
+export PATH="/bin:/sbin:/usr/sbin:/usr/bin"
+
+#check whether or not TB up script ran and need to restore settings
+if ! scutil -w State:/Network/VPNht &>/dev/null -t 1 ; then
+	logMessage "No persisted settings to restore"
+	exit 0
+fi
+
+logMessage "Getting VPN.ht persisted settings"
+TB_CONFIG="$(/usr/sbin/scutil <<-EOF
+	open
+	show State:/Network/VPNht
+	quit
+EOF)"
+
+getPrimaryService
+getCurrentService
+
+if [ "${PSID}" != "${PSID_CURRENT}" ] ; then
+	logMessage "Ignoring change of Network Primary Service from ${PSID} to ${PSID_CURRENT}"
+fi
+
+fetchOldSCUtil
+restoreSCUtil
+cleanupSCUtil
+getDNSConfig
+
+exit 0

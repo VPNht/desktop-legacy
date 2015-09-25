@@ -1,0 +1,70 @@
+header {
+    width: 100vw;
+    height: 99px;
+    background-color: #595959;
+    /*background-image: url("broken_noise.png");*/
+    background-repeat: repeat;
+}
+
+header .control-bar {
+    height: 33px;
+    z-index: 5;
+    background-color: #edeced;
+}
+
+header .control-bar p {
+    width: 100vw;
+    text-align: center;
+    color: #1b1b1b;
+    padding-top: 3px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 21px;
+}
+
+header .logo {
+    width: 159px;
+    height: 62px;
+    margin-top: 20px;
+    margin-left: 25px
+}
+
+header .greenguy {
+    float: right;
+    right: 27px;
+    margin-top: 13px;
+    position: fixed;
+}
+
+header .greenguy.connected {
+    clip: rect(auto, auto, 45px, auto);
+    margin-top: 53px;
+}
+
+header .status {
+    position: absolute;
+    top: 60px;
+    width: 300px;
+    color: #219493;
+    height: 46px;
+    text-align: right;
+    line-height: 16px;
+    right: 167px;
+}
+
+header .status p {
+    font-family: "Gotham Rounded";
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+header .status p.disconnected {
+    color: #ff4848;
+}
+
+header .status span {
+    color: white;
+    font-size: 12px;
+    font-weight: 300;
+}

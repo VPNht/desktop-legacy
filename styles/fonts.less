@@ -1,0 +1,50 @@
+@font-face {
+    font-family: "Gotham Rounded Bold";
+    src: url("Gotham/GothamRoundedBold_21016.eot");
+    src: url("Gotham/GothamRoundedBold_21016.eot?#iefix") format("embedded-opentype"), url("Gotham/GothamRoundedBold_21016.woff") format("woff"), url("Gotham/GothamRoundedBold_21016.woff2") format("woff2"), url("Gotham/GothamRoundedBold_21016.ttf") format("truetype"), url("Gotham/GothamRoundedBold_21016.svg#GothamRoundedBold_21016") format("svg");
+}
+
+@font-face {
+    font-family: "Gotham Rounded";
+    src: url("Gotham/GothamRoundedMedium_21022.eot");
+    src: url("Gotham/GothamRoundedMedium_21022.eot?#iefix") format("embedded-opentype"), url("Gotham/GothamRoundedMedium_21022.woff") format("woff"), url("Gotham/GothamRoundedMedium_21022.woff2") format("woff2"), url("Gotham/GothamRoundedMedium_21022.ttf") format("truetype"), url("Gotham/GothamRoundedMedium_21022.svg#GothamRoundedMedium_21022") format("svg");
+}
+
+@roboto-font-path: 'roboto';
+
+.roboto-font(@type, @weight, @style) {
+    @font-face {
+        font-family: 'Roboto';
+        src: url('@{roboto-font-path}/Roboto-@{type}.eot');
+        src: local('Roboto @{type}'),
+             local('Roboto-@{type}'),
+             url('@{roboto-font-path}/Roboto-@{type}.eot?#iefix') format('embedded-opentype'),
+             url('@{roboto-font-path}/Roboto-@{type}.woff2') format('woff2'),
+             url('@{roboto-font-path}/Roboto-@{type}.woff') format('woff'),
+             url('@{roboto-font-path}/Roboto-@{type}.ttf') format('truetype'),
+             url('@{roboto-font-path}/Roboto-@{type}.svg#Roboto') format('svg');
+        font-weight: @weight;
+        font-style: @style;
+    }
+
+    @font-face {
+        font-family: 'Roboto-@{type}';
+        src: url('@{roboto-font-path}/Roboto-@{type}.eot');
+        src: local('Roboto @{type}'),
+             local('Roboto-@{type}'),
+             url('@{roboto-font-path}/Roboto-@{type}.eot?#iefix') format('embedded-opentype'),
+             url('@{roboto-font-path}/Roboto-@{type}.woff2') format('woff2'),
+             url('@{roboto-font-path}/Roboto-@{type}.woff') format('woff'),
+             url('@{roboto-font-path}/Roboto-@{type}.ttf') format('truetype'),
+             url('@{roboto-font-path}/Roboto-@{type}.svg#Roboto') format('svg');
+    }
+}
+
+.roboto-font-pair(@type, @weight) {
+    .roboto-font('@{type}', @weight, normal);
+    .roboto-font('@{type}Italic', @weight, italic);
+}
+
+.roboto-font-pair('Light', 300);
+.roboto-font-pair('Regular', 400);
+.roboto-font-pair('Black', 900);

@@ -1,0 +1,25 @@
+.DS_Store
+.swp
+build
+dist
+util
+installer
+node_modules
+coverage
+npm-debug.log
+
+# Integration test environment
+integration
+
+# Cache
+cache
+
+# Tests
+.test
+settings.json
+
+# IDEs
+.idea
+
+# OpenVPN Config
+config.ovpn

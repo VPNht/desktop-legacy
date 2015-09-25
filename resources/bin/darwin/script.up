@@ -1,0 +1,304 @@
+#!/bin/sh -e
+# ******************************************************************************************************************
+# Upscript for updating DNS config
+# Created by: VPN.ht
+# Inspired by: TunnelBear and TunnelBlick
+# ******************************************************************************************************************
+
+##########################################################################################
+# @param String message - The message to log
+readonly LOG_MESSAGE_COMMAND=$(basename "${0}")
+logMessage()
+{
+	echo "$(date '+%a %b %e %T %Y') VPN.ht $LOG_MESSAGE_COMMAND: "${@} >> /var/log/vpnht-script.up.log
+	return
+}
+##########################################################################################
+# @param String string - Content to trim
+trim()
+{
+	echo ${@}
+}
+##########################################################################################
+#Get primary service
+#TODO - IPv6?
+getPrimaryService()
+{
+  logMessage "getPrimaryService"
+
+  # "grep" will return error status (1) if no matches are found,
+  # so don't fail on individual errors
+  set +e
+
+  # For some mysterious reasons, has to have tabs
+	PSID="$( scutil <<-EOF |
+		open
+		show State:/Network/Global/IPv4
+		quit
+		EOF
+		grep PrimaryService | sed -e 's/.*PrimaryService : //'
+		)"
+
+
+  set -e # resume abort on error
+
+  logMessage "PrimaryService" ${PSID}
+}
+
+getDNSConfig()
+{
+	logMessage "getDNSConfig"
+	MAN_DNS_CONFIG="$( (scutil | sed -e 's/^[[:space:]]*[[:digit:]]* : //g' | tr '\n' ' ')<<- EOF
+		open
+		show Setup:/Network/Service/${PSID}/DNS
+		quit
+EOF )"
+
+	CUR_DNS_CONFIG="$( (scutil | sed -e 's/^[[:space:]]*[[:digit:]]* : //g' | tr '\n' ' ')<<- EOF
+		open
+		show State:/Network/Global/DNS
+		quit
+EOF )"
+
+
+	logMessage "MANUAL DNS" ${MAN_DNS_CONFIG}
+	logMessage "CURRENT DNS" ${CUR_DNS_CONFIG}
+}
+
+parseDNSConfig()
+{
+	logMessage "paseDNSConfig"
+	set +e
+
+	if echo "${MAN_DNS_CONFIG}" | grep -q "DomainName" ;
+	then
+		readonly MAN_DNS_SD="$(trim "$( echo "${MAN_DNS_CONFIG}" | sed -e 's/^.*DomainName[^{]*{[[:space:]]*\([^}]*\)[[:space:]]*}.*$/\1/g' )")"
+	else
+		readonly MAN_DNS_SD="";
+	fi
+
+	if echo "${MAN_DNS_CONFIG}" | grep -q "ServerAddresses" ; then
+		readonly MAN_DNS_SA="$(trim "$( echo "${MAN_DNS_CONFIG}" | sed -e 's/^.*ServerAddresses[^{]*{[[:space:]]*\([^}]*\)[[:space:]]*}.*$/\1/g' )")"
+	else
+		readonly MAN_DNS_SA="";
+	fi
+
+	if echo "${MAN_DNS_CONFIG}" | grep -q "SearchDomains" ; then
+		readonly MAN_DNS_SEARCH_DOMAINS="$(trim "$( echo "${MAN_DNS_CONFIG}" | sed -e 's/^.*SearchDomains[^{]*{[[:space:]]*\([^}]*\)[[:space:]]*}.*$/\1/g' )")"
+	else
+		readonly MAN_DNS_SEARCH_DOMAINS="";
+	fi
+
+	if echo "${CUR_DNS_CONFIG}" | grep -q "DomainName" ; then
+		readonly CUR_DNS_DOMAIN_NAME="$(trim "$( echo "${CUR_DNS_CONFIG}" | sed -e 's/^.*DomainName[^{]*{[[:space:]]*\([^}]*\)[[:space:]]*}.*$/\1/g' )")"
+	else
+		readonly CUR_DNS_DOMAIN_NAME="";
+	fi
+
+	if echo "${CUR_DNS_CONFIG}" | grep -q "ServerAddresses" ; then
+		readonly CUR_DNS_SERVER_ADDRESSES="$(trim "$( echo "${CUR_DNS_CONFIG}" | sed -e 's/^.*ServerAddresses[^{]*{[[:space:]]*\([^}]*\)[[:space:]]*}.*$/\1/g' )")"
+	else
+		readonly CUR_DNS_SERVER_ADDRESSES="";
+	fi
+
+	if echo "${CUR_DNS_CONFIG}" | grep -q "SearchDomains" ; then
+		readonly CUR_DNS_SEARCH_DOMAINS="$(trim "$( echo "${CUR_DNS_CONFIG}" | sed -e 's/^.*SearchDomains[^{]*{[[:space:]]*\([^}]*\)[[:space:]]*}.*$/\1/g' )")"
+	else
+		readonly CUR_DNS_SEARCH_DOMAINS="";
+	fi
+
+	set -e
+
+	logMessage "Manual DNS CONFIG " ${MAN_DNS_SD}
+	logMessage "Manual DNS SERVER ADDRESSES " ${MAN_DNS_SA}
+	logMessage "Manual SEARCH DOMAINS" ${MAN_DNS_SD}
+	logMessage "Current DNS CONFIG" ${CUR_DNS_CONFIG}
+	logMessage "Current DNS Domain Name" ${CUR_DNS_DOMAIN_NAME}
+	logMessage "Current SERVER ADDRESSES" ${CUR_DNS_SERVER_ADDRESSES}
+}
+
+updateSCUtil()
+{
+	logMessage "updateSCUtil"
+	#bAlsoUsingSetupKeys allows the down script to find out if we change the Setup dict or not
+	case "${OSVER}" in
+	10.6 )
+		readonly bAlsoUsingSetupKeys="false"
+		readonly SKP_SETUP_DNS="#"
+		;;
+	10.7 )
+		if [ "${MANUAL_DNS_SERVER_ADDRESSES}" = "" -a  "${MANUAL_DNS_SEARCH_DOMAINS}" = "" ] ; then
+			readonly bAlsoUsingSetupKeys="false"
+			readonly SKP_SETUP_DNS="#"
+		else
+			readonly bAlsoUsingSetupKeys="true"
+			readonly SKP_SETUP_DNS=""
+		fi
+		;;
+	* )
+		readonly bAlsoUsingSetupKeys="true"
+		readonly SKP_SETUP_DNS=""
+		;;
+	esac
+
+	scutil > /dev/null <<- EOF
+	open
+
+	# General settings
+	d.init
+	d.add ServiceID ${PSID}
+	d.add bAlsoUsingSetupKeys "${bAlsoUsingSetupKeys}"
+	set State:/Network/VPNht
+
+	# Save old config for down script restore
+	d.init
+	d.add VPNhtNoSuchKey true
+	get State:/Network/Service/${PSID}/DNS
+	set State:/Network/VPNht/OldDNS
+
+	d.init
+	d.add VPNhtNoSuchKey true
+	get Setup:/Network/Service/${PSID}/DNS
+	set State:/Network/VPNht/OldDNSSetup
+
+	d.init
+	d.add VPNhtNoSuchKey true
+	get State:/Network/Global/DNS
+	set State:/Network/VPNht/OldGlobalDNS
+
+	d.init
+	d.add VPNhtNoSuchKey true
+	get Setup:/Network/Global/DNS
+	set State:/Network/VPNht/OldGlobalDNSSetup
+
+	# Update Global & Primary State
+	# No huge difference from init - but this will handle another DNS change if there's one.
+	d.init
+	d.add ServerAddresses * ${vDNS[@]}
+	d.add SearchDomains * ""
+	d.add DomainName ${domain}
+	set State:/Network/Service/${PSID}/DNS
+
+	d.init
+	d.add ServerAddresses * ${vDNS[@]}
+	d.add SearchDomains * ""
+	d.add DomainName ${domain}
+	set State:/Network/Global/DNS
+
+	# Update Global & Primary Setup
+	${SKP_SETUP_DNS} d.init
+	${SKP_SETUP_DNS} d.add ServerAddresses * ${vDNS[@]}
+	${SKP_SETUP_DNS} d.add SearchDomains   * ""
+	${SKP_SETUP_DNS} d.add DomainName      ${domain}
+	${SKP_SETUP_DNS} set Setup:/Network/Service/${PSID}/DNS
+
+	${SKP_SETUP_DNS} d.init
+	${SKP_SETUP_DNS} d.add ServerAddresses * ${vDNS[@]}
+	${SKP_SETUP_DNS} d.add SearchDomains   * ""
+	${SKP_SETUP_DNS} d.add DomainName      ${domain}
+	${SKP_SETUP_DNS} set Setup:/Network/Global/DNS
+
+	quit
+
+	EOF
+
+}
+
+flushDNSCache()
+{
+	logMessage "flushDNSCache"
+
+    if ${ARG_FLUSH_DNS_CACHE} ; then
+        case "${OSVER}" in
+            10.5 | 10.6 )
+                if [ -f /usr/bin/dscacheutil ] ; then
+                    /usr/bin/dscacheutil -flushcache
+                    logMessage "Flushed the DNS Cache"
+                else
+                    logMessage "/usr/bin/dscacheutil not present. Not flushing the DNS cache"
+                fi
+                ;;
+            * )
+				set +e # "grep" will return error status (1) if no matches are found, so don't fail on individual errors
+				hands_off_ps="$( ps -ax | grep HandsOffDaemon | grep -v grep.HandsOffDaemon )"
+				set -e # We instruct bash that it CAN again fail on errors
+				if [ "${hands_off_ps}" = "" ] ; then
+					if [ -f /usr/bin/killall ] ; then
+						/usr/bin/killall -HUP mDNSResponder
+						logMessage "Flushed the DNS Cache"
+					else
+						logMessage "/usr/bin/killall not present. Not flushing the DNS cache"
+					fi
+				else
+					logMessage "Hands Off is running. Not flushing the DNS cache"
+				fi
+                ;;
+        esac
+    fi
+}
+
+################################################################################
+#
+# Arguments & Script entry point
+#
+################################################################################
+
+trap "" TSTP
+trap "" HUP
+trap "" INT
+export PATH="/bin:/sbin:/usr/sbin:/usr/bin"
+
+
+ARG_FLUSH_DNS_CACHE="false"
+
+set +e # "grep" will return error status (1) if no matches are found, so don't fail on individual errors
+readonly OSVER="$(sw_vers | grep 'ProductVersion:' | grep -o '10\.[0-9]*')"
+set -e # We instruct bash that it CAN again fail on errors
+readonly DEFAULT_DOMAIN_NAME="openvpn"
+
+################################################################################
+
+logMessage "hello"
+logMessage "script version 0.2"
+
+if [ "$foreign_option_1" == "" ]; then
+  logMessage "VPNHT: Exiting nothing to do"
+  exit 0
+fi
+
+nOptionIndex=1
+nNameServerIndex=1
+unset vForOptions
+unset vDNS
+unset vOptions
+
+#parse settings
+while vForOptions=foreign_option_$nOptionIndex; [ -n "${!vForOptions}" ]; do
+	{
+	vOptions[nOptionIndex-1]=${!vForOptions}
+
+	case ${vOptions[nOptionIndex-1]} in
+	*DOMAIN* )
+	domain=${vOptions[nOptionIndex-1]//dhcp-option DOMAIN /}
+	;;
+
+	*DNS*    )
+	vDNS[nNameServerIndex-1]=${vOptions[nOptionIndex-1]//dhcp-option DNS /}
+	let nNameServerIndex++
+	;;
+
+	esac
+let nOptionIndex++
+}
+done
+
+#cleanup script log everytime.
+rm -f /var/log/vpnht-script.up.log
+
+getPrimaryService
+getDNSConfig
+parseDNSConfig
+updateSCUtil
+#fetch & show the updated config
+getDNSConfig
+exit 0
