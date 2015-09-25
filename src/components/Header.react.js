@@ -6,6 +6,7 @@ import util from '../utils/Util';
 import metrics from '../utils/MetricsUtil';
 import accountStore from '../stores/AccountStore';
 import accountActions from '../actions/AccountActions';
+import hub from '../utils/HubUtil';
 import Router from 'react-router';
 import classNames from 'classnames';
 
@@ -65,7 +66,10 @@ var Header = React.createClass({
 
   },
   handleMinimize: function () {
-    remote.getCurrentWindow().minimize();
+    if(hub.settings('minToTaskbar') === 'false' ? true : false)
+      remote.getCurrentWindow().minimize();
+    else
+      remote.getCurrentWindow().hide();
   },
   handleFullscreen: function () {},
 

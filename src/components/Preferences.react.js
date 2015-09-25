@@ -16,8 +16,9 @@ var Preferences = React.createClass({
       autoPath: hub.settings('autoPath') === 'true' ? true : false,
       disableSmartdns: hub.settings('disableSmartdns') === 'true' ? true : false,
       encryption: hub.settings('encryption') || 128,
-      customPort: hub.settings('customPort') || 'default'
-    };
+      customPort: hub.settings('customPort') || 'default',
+      minToTaskbar: hub.settings('minToTaskbar') === 'true' ? true : false  
+  	};
   },
 
   handleChangeMetricsEnabled: function (e) {
@@ -58,6 +59,18 @@ var Preferences = React.createClass({
 
     // save for future use
     hub.saveSettings('disableSmartdns', !!checked);
+
+  },
+
+  handleChangeMinToTaskbar: function (e) {
+
+    var checked = e.target.checked;
+    this.setState({
+      minToTaskbar: checked
+    });
+
+    // save for future use
+    hub.saveSettings('minToTaskbar', !!checked);
 
   },
 
@@ -192,6 +205,11 @@ var Preferences = React.createClass({
                     <input id="disableSmartdns" type="checkbox" checked={this.state.disableSmartdns} onChange={this.handleChangeDisableSmartdns}/>
                     <label htmlFor="disableSmartdns"> </label>
                     <p>Disable SmartDNS</p>
+                </div>
+                <div className="checkbox">
+                    <input id="minToTaskbar" type="checkbox" checked={this.state.minToTaskbar} onChange={this.handleChangeMinToTaskbar}/>
+                    <label htmlFor="minToTaskbar"> </label>
+                    <p>Minimize to taskbar</p>
                 </div>
         </section>
         <section className="preferences">
