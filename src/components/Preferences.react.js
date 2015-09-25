@@ -10,14 +10,14 @@ var Preferences = React.createClass({
   getInitialState: function () {
     return {
       metricsEnabled: metrics.enabled(),
-      launchStartup: hub.settings('launchStartup') === 'true' ? true : false,
-      connectLaunch: hub.settings('connectLaunch') === 'true' ? true : false,
-      saveCredentials: hub.settings('saveCredentials') === 'true' ? true : false,
-      autoPath: hub.settings('autoPath') === 'true' ? true : false,
-      disableSmartdns: hub.settings('disableSmartdns') === 'true' ? true : false,
+      launchStartup: hub.settings('launchStartup'),
+      connectLaunch: hub.settings('connectLaunch'),
+      saveCredentials: hub.settings('saveCredentials'),
+      autoPath: hub.settings('autoPath'),
+      disableSmartdns: hub.settings('disableSmartdns') ,
       encryption: hub.settings('encryption') || 128,
       customPort: hub.settings('customPort') || 'default',
-      minToTaskbar: hub.settings('minToTaskbar') === 'true' ? true : false  
+      minToTaskbar: hub.settings('minToTaskbar') 
   	};
   },
 
@@ -46,7 +46,7 @@ var Preferences = React.createClass({
     }
 
     // save for future use
-    hub.saveSettings('launchStartup', !!checked);
+    hub.saveSettings('launchStartup', checked);
 
   },
 
@@ -58,7 +58,7 @@ var Preferences = React.createClass({
     });
 
     // save for future use
-    hub.saveSettings('disableSmartdns', !!checked);
+    hub.saveSettings('disableSmartdns', checked);
 
   },
 
@@ -70,7 +70,7 @@ var Preferences = React.createClass({
     });
 
     // save for future use
-    hub.saveSettings('minToTaskbar', !!checked);
+    hub.saveSettings('minToTaskbar', checked);
 
   },
 
@@ -83,7 +83,7 @@ var Preferences = React.createClass({
     });
 
     // save for future use
-    hub.saveSettings('connectLaunch', !!checked);
+    hub.saveSettings('connectLaunch', checked);
 
   },
 
@@ -100,7 +100,7 @@ var Preferences = React.createClass({
     }
 
     // save for future use
-    hub.saveSettings('autoPath', !!checked);
+    hub.saveSettings('autoPath', checked);
 
   },
 

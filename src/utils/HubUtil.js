@@ -7,13 +7,13 @@ import log from '../stores/LogStore';
 let HUB_ENDPOINT = process.env.HUB_ENDPOINT || 'https://vpn.ht';
 
 var defaultSettings = {
-    launchStartup: 'false',
-    connectLaunch: 'false',
-    saveCredentials: 'false',
-    disableSmartdns: 'false',
-    autoPath: 'true',
+    launchStartup: false,
+    connectLaunch: false,
+    saveCredentials: false,
+    disableSmartdns: false,
+    autoPath: true,
     encryption: 128,
-    minToTaskbar: 'true'
+    minToTaskbar: true
 };
 
 module.exports = {
@@ -48,7 +48,10 @@ module.exports = {
     if (defaultSettings[item]) {
         haveDefault = defaultSettings[item];
     }
-    return localStorage.getItem('settings.'+item) || haveDefault;
+    if(localStorage.getItem('settings.'+item) === 'true' || 'false')
+      return (localStorage.getItem('settings.'+item) === 'true') ? true : false || haveDefault;
+    else
+      return localStorage.getItem('settings.'+item) || haveDefault;
   },
 
   loggedin: function () {
