@@ -4,8 +4,6 @@ import Promise from 'bluebird';
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
-import remote from 'remote';
-var app = remote.require('app');
 
 module.exports = {
   exec: function (args, options) {
@@ -53,14 +51,14 @@ module.exports = {
     return str.replace(/ /g, '\\ ').replace(/\(/g, '\\(').replace(/\)/g, '\\)');
   },
   home: function () {
-    return app.getPath('home');
+    //return app.getPath('home');
   },
   documents: function () {
     // TODO: fix me for windows 7
     return 'Documents';
   },
   supportDir: function () {
-    return app.getPath('userData');
+    //return app.getPath('userData');
   },
   CommandOrCtrl: function () {
     return this.isWindows() ? 'Ctrl' : 'Command';
