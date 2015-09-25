@@ -174,11 +174,10 @@ app.on('ready', function() {
 
 			if (response === 0) {
 				if (process.platform == 'win32') {
-					child_process.spawn(updaterPath, [], {
-						detached: true,
-						stdio: ['ignore', 'ignore', 'ignore']
+					require('./utils/Util').exec('start '+updaterPath).then(function(stdOut) {
+						console.log(stdOut);
+						app.terminate();
 					});
-					app.terminate();
 				} else {
 					child_process.spawn('open', [updaterPath], {
 						detached: true,
@@ -197,11 +196,6 @@ app.on('ready', function() {
 		console.log('An error occured while checking for updates.');
 		console.log(err);
 	});
-
-	// do not trigger for nothing
-	if (process.env.NODE_ENV !== 'development') {
-		autoUpdater.update();
-	}
 
 	var helper = {
 		toggleVisibility: function() {
@@ -238,6 +232,11 @@ app.on('ready', function() {
 			app.quit();
 		}
 	};
+
+	// do not trigger for nothing
+	if (process.env.NODE_ENV !== 'development') {
+		autoUpdater.update();
+	}
 
 	trayTemplate.init(helper);
 });
