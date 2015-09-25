@@ -43,6 +43,7 @@ module.exports = assign(currentOSLib, {
         let autoPath = hub.settings('autoPath') === 'true' ? true : false;
         let port = hub.settings('customPort');
         let smartdns = true;
+        let platform = process.platform;
         let disableSmartdns = hub.settings('disableSmartdns') === 'true' ? true : false ;
 
         if (disableSmartdns) {
@@ -57,7 +58,7 @@ module.exports = assign(currentOSLib, {
             port = 'autoPath';
         }
 
-        request.get(`${GENCONFIG_ENDPOINT}/${server}/${managementPort}/${port}/${encryption}/${smartdns}`, (error, response, body) => {
+        request.get(`${GENCONFIG_ENDPOINT}/${server}/${managementPort}/${port}/${encryption}/${smartdns}/${platform}`, (error, response, body) => {
 
           let configPath = path.resolve(process.env.CONFIG_PATH, 'config.ovpn');
           fs.writeFileSync(configPath, body);
