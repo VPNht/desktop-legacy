@@ -51,14 +51,14 @@ module.exports = {
     return str.replace(/ /g, '\\ ').replace(/\(/g, '\\(').replace(/\)/g, '\\)');
   },
   home: function () {
-    //return app.getPath('home');
+    return require('remote').require('app').getPath('home');
   },
   documents: function () {
     // TODO: fix me for windows 7
     return 'Documents';
   },
   supportDir: function () {
-    //return app.getPath('userData');
+    return require('remote').require('app').getPath('userData');
   },
   CommandOrCtrl: function () {
     return this.isWindows() ? 'Ctrl' : 'Command';
