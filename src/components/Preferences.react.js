@@ -135,7 +135,6 @@ var Preferences = React.createClass({
     } else if (this.state.encryption == 128) {
         ports = [
             { value: 'default', label: 'UDP - Default' },
-            { value: 3389, label: 'UDP - 3389' },
             { value: 53, label: 'UDP - 53' },
             { value: 443, label: 'TCP - 443' },
             { value: 80, label: 'TCP - 80' }
