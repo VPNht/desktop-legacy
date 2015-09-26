@@ -17,7 +17,7 @@ var Preferences = React.createClass({
       disableSmartdns: hub.settings('disableSmartdns') ,
       encryption: hub.settings('encryption') || 128,
       customPort: hub.settings('customPort') || 'default',
-      minToTaskbar: hub.settings('minToTaskbar') 
+      minToTaskbar: hub.settings('minToTaskbar')
   	};
   },
 

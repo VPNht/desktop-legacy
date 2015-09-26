@@ -26,7 +26,7 @@ var DashboardConnect = React.createClass({
       appReady: accountStore.getState().appReady,
       username: hub.credentials().username,
       password: hub.credentials().password,
-      saveCredentials: hub.settings('saveCredentials') === 'true' ? true : false,
+      saveCredentials: hub.settings('saveCredentials'),
       server: hub.settings('server') || 'hub.vpn.ht'
     };
   },

@@ -44,14 +44,31 @@ module.exports = {
   },
 
   settings: function (item) {
-    var haveDefault = null;
-    if (defaultSettings[item]) {
-        haveDefault = defaultSettings[item];
+    var haveDefault = null,
+        value = localStorage.getItem('settings.'+item);
+
+    // hack to parse the local storage type and fully
+    // backward compatible
+    try {
+        value = JSON.parse(value);
+    } catch(e) {
+        if (value === 'true' || 'false') {
+            value = (value === 'true') ? true : false;
+        }
     }
-    if(localStorage.getItem('settings.'+item) === 'true' || 'false')
-      return (localStorage.getItem('settings.'+item) === 'true') ? true : false || haveDefault;
-    else
-      return localStorage.getItem('settings.'+item) || haveDefault;
+
+    if (defaultSettings[item] && value === null) {
+        value = defaultSettings[item];
+    }
+
+    return value;
+
+  },
+
+  saveSettings: function (key, value, callback) {
+    log.info('Preferences | ' + key + ' = ' + value);
+    localStorage.setItem('settings.'+key, JSON.stringify(value));
+    if (callback) { callback(); }
   },
 
   loggedin: function () {
@@ -69,12 +86,6 @@ module.exports = {
     localStorage.setItem('auth.username', username);
     localStorage.setItem('auth.config', new Buffer(username + ':' + password).toString('base64'));
     accountServerActions.loggedin({username});
-    if (callback) { callback(); }
-  },
-
-  saveSettings: function (key, value, callback) {
-    log.info('Settings | ' + key + ' = ' + value);
-    localStorage.setItem('settings.'+key, value);
     if (callback) { callback(); }
   },
 

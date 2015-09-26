@@ -40,11 +40,11 @@ module.exports = assign(currentOSLib, {
         let server = _args.server;
 
         let encryption = hub.settings('encryption');
-        let autoPath = hub.settings('autoPath') === 'true' ? true : false;
+        let autoPath = hub.settings('autoPath');
         let port = hub.settings('customPort');
         let smartdns = true;
         let platform = process.platform;
-        let disableSmartdns = hub.settings('disableSmartdns') === 'true' ? true : false ;
+        let disableSmartdns = hub.settings('disableSmartdns');
 
         if (disableSmartdns) {
             smartdns = 'disable';

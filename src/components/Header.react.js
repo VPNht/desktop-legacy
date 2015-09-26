@@ -66,7 +66,7 @@ var Header = React.createClass({
 
   },
   handleMinimize: function () {
-    if(hub.settings('minToTaskbar') === 'false' ? true : false)
+    if(hub.settings('minToTaskbar'))
       remote.getCurrentWindow().minimize();
     else
       remote.getCurrentWindow().hide();
