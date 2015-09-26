@@ -10,14 +10,15 @@ var Preferences = React.createClass({
   getInitialState: function () {
     return {
       metricsEnabled: metrics.enabled(),
-      launchStartup: hub.settings('launchStartup') === 'true' ? true : false,
-      connectLaunch: hub.settings('connectLaunch') === 'true' ? true : false,
-      saveCredentials: hub.settings('saveCredentials') === 'true' ? true : false,
-      autoPath: hub.settings('autoPath') === 'true' ? true : false,
-      disableSmartdns: hub.settings('disableSmartdns') === 'true' ? true : false,
+      launchStartup: hub.settings('launchStartup'),
+      connectLaunch: hub.settings('connectLaunch'),
+      saveCredentials: hub.settings('saveCredentials'),
+      autoPath: hub.settings('autoPath'),
+      disableSmartdns: hub.settings('disableSmartdns') ,
       encryption: hub.settings('encryption') || 128,
-      customPort: hub.settings('customPort') || 'default'
-    };
+      customPort: hub.settings('customPort') || 'default',
+      minToTaskbar: hub.settings('minToTaskbar') 
+  	};
   },
 
   handleChangeMetricsEnabled: function (e) {
@@ -45,7 +46,7 @@ var Preferences = React.createClass({
     }
 
     // save for future use
-    hub.saveSettings('launchStartup', !!checked);
+    hub.saveSettings('launchStartup', checked);
 
   },
 
@@ -57,7 +58,19 @@ var Preferences = React.createClass({
     });
 
     // save for future use
-    hub.saveSettings('disableSmartdns', !!checked);
+    hub.saveSettings('disableSmartdns', checked);
+
+  },
+
+  handleChangeMinToTaskbar: function (e) {
+
+    var checked = e.target.checked;
+    this.setState({
+      minToTaskbar: checked
+    });
+
+    // save for future use
+    hub.saveSettings('minToTaskbar', checked);
 
   },
 
@@ -70,7 +83,7 @@ var Preferences = React.createClass({
     });
 
     // save for future use
-    hub.saveSettings('connectLaunch', !!checked);
+    hub.saveSettings('connectLaunch', checked);
 
   },
 
@@ -87,7 +100,7 @@ var Preferences = React.createClass({
     }
 
     // save for future use
-    hub.saveSettings('autoPath', !!checked);
+    hub.saveSettings('autoPath', checked);
 
   },
 
@@ -191,6 +204,11 @@ var Preferences = React.createClass({
                     <input id="disableSmartdns" type="checkbox" checked={this.state.disableSmartdns} onChange={this.handleChangeDisableSmartdns}/>
                     <label htmlFor="disableSmartdns"> </label>
                     <p>Disable SmartDNS</p>
+                </div>
+                <div className="checkbox">
+                    <input id="minToTaskbar" type="checkbox" checked={this.state.minToTaskbar} onChange={this.handleChangeMinToTaskbar}/>
+                    <label htmlFor="minToTaskbar"> </label>
+                    <p>Minimize to taskbar</p>
                 </div>
         </section>
         <section className="preferences">
