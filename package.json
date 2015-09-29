@@ -58,7 +58,7 @@
     "grunt-curl": "^2.2.0",
     "grunt-download-electron": "^2.1.1",
     "grunt-electron": "^2.0.0",
-    "grunt-electron-installer": "^0.37.0",
+    "grunt-electron-installer": "^1.0.3",
     "grunt-if-missing": "^1.0.0",
     "grunt-newer": "^1.1.1",
     "grunt-plistbuddy": "^0.1.1",
@@ -72,7 +72,7 @@
     "react-tools": "^0.13.1",
     "run-sequence": "^1.0.2",
     "shell-escape": "^0.2.0",
-    "source-map-support": "^0.2.10"
+    "source-map-support": "^0.3.2"
   },
   "optionalDependencies": {
     "electron-prebuilt": "^0.33.3"
