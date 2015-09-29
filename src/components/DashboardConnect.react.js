@@ -4,6 +4,7 @@ import hub from '../utils/HubUtil';
 import myip from '../utils/MyipUtil';
 
 import accountStore from '../stores/AccountStore';
+import serverStore from '../stores/ServerStore';
 import accountActions from '../actions/AccountActions';
 import VPN from '../actions/VPNActions';
 import Select from 'react-select';
@@ -27,16 +28,19 @@ var DashboardConnect = React.createClass({
       username: hub.credentials().username,
       password: hub.credentials().password,
       saveCredentials: hub.settings('saveCredentials'),
-      server: hub.settings('server') || 'hub.vpn.ht'
+      server: hub.settings('server') || 'hub.vpn.ht',
+      servers: serverStore.getState().servers
     };
   },
 
   componentDidMount: function () {
     accountStore.listen(this.update);
+    serverStore.listen(this.updateServers);
   },
 
   componentWillUnmount: function () {
     accountStore.unlisten(this.update);
+    serverStore.unlisten(this.updateServers);
   },
 
   update: function () {
@@ -44,6 +48,14 @@ var DashboardConnect = React.createClass({
         this.setState({
           connecting: accountStore.getState().connecting,
           appReady: accountStore.getState().appReady
+        });
+    }
+  },
+
+  updateServers: function () {
+    if (this.isMounted()) {
+        this.setState({
+          servers: serverStore.getState().servers
         });
     }
   },
@@ -84,65 +96,6 @@ var DashboardConnect = React.createClass({
     accountActions.saveSettings('server', val);
   },
 
-  handleRemoteServer: function (input, callback) {
-    var self = this;
-    serversCache.get( "serversList", function( err, value ){
-
-        if (value) {
-
-            setTimeout(function() {
-    			callback(null, { options: value, complete: true });
-    		}, 500);
-
-        } else {
-            self.getRemoteServers(function(servers) {
-                serversCache.set( "serversList", servers, function( err, success ){
-                    if (err) {
-                        log.error('Servers list error', err);
-                    }
-
-                    log.debug('Caching servers list');
-                    callback(null, { options: servers, complete: true });
-                });
-            });
-        }
-
-
-    });
-  },
-
-  getRemoteServers: function(callback) {
-
-    var options = [{ value: 'hub.vpn.ht', label: 'Nearest Server (Random)', country: 'blank' }];
-    var serverName;
-
-    myip.servers(function(error, response, body) {
-        var servers = JSON.parse(body);
-
-        _.each(servers, function(server, country) {
-
-            serverName = server.countryName + ' - ' + Math.round(server.distance) + ' KM  - LOC ' + server.host.toUpperCase().replace( /^\D+/g, '');
-
-            if (server.regionName) {
-                serverName = server.regionName + ", " + serverName;
-            }
-
-            if (server.city) {
-                serverName = server.city + ", " + serverName;
-            }
-
-            options.push({
-                value: server.ip,
-                label: serverName,
-                country: server.country
-            });
-        });
-
-        callback(options);
-    });
-
-  },
-
   handleChangeSaveCredentials: function (e) {
     var checked = e.target.checked;
     this.setState({
@@ -162,6 +115,7 @@ var DashboardConnect = React.createClass({
             currentStatus = 'Disconnected';
         }
     }
+
     return (
         <div>
 
@@ -194,7 +148,7 @@ var DashboardConnect = React.createClass({
                     name="server"
                     value={this.state.server}
 					onOptionLabelClick={this.onLabelClick}
-                    asyncOptions={this.handleRemoteServer}
+                    options={this.state.servers}
                     onChange={this.handleServer}
 					placeholder="Select server"
 					optionComponent={ServerOption}
