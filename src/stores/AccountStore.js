@@ -5,7 +5,6 @@ var _connectionTimer = false;
 
 class AccountStore {
   constructor () {
-    this.bindActions(accountActions);
     this.bindActions(vpnActions);
 
     this.errors = {};

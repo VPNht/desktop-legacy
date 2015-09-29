@@ -15,7 +15,9 @@ import routerContainer from './router';
 import log from './stores/LogStore';
 import accountStore from './stores/AccountStore';
 import utils from './utils/Util';
-import hub from './utils/HubUtil';
+import Credentials from './utils/CredentialsUtil';
+
+import Settings from './utils/SettingsUtil';
 
 var app = remote.require('app');
 var Menu = remote.require('menu');
@@ -50,11 +52,11 @@ ipc.on('application:open-url', opts => {
 });
 
 ipc.on('application:vpn-connect', () => {
-	if (hub.config()) {
+	if (Credentials._config()) {
 		vpnActions.connect({
-			username: hub.credentials().username,
-			password: hub.credentials().password,
-			server: hub.settings('server') || 'hub.vpn.ht'
+			username: Credentials.get().username,
+			password: Credentials.get().password,
+			server: Settings.get('server') || 'hub.vpn.ht'
 		});
 	} else {
 		log.error('No user/pass saved in the hash.\n\nTIPS: Try to connect manually first to save your data.')
@@ -73,11 +75,11 @@ ipc.on('application:vpn-check-disconnect', () => {
 ipc.on('application:vpn-check-sleep', () => {
 	if (accountStore.getState().connected) {
 		log.info('Trying to reconnect after sleep');
-		if (hub.config()) {
+		if (Credentials._config()) {
 			vpnActions.connect({
-				username: hub.credentials().username,
-				password: hub.credentials().password,
-				server: hub.settings('server') || 'hub.vpn.ht'
+				username: Credentials.get().username,
+				password: Credentials.get().password,
+				server: Settings.get('server') || 'hub.vpn.ht'
 			});
 		} else {
 			log.info('No user/pass saved in the hash, now disconnecting.');

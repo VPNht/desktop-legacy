@@ -6,9 +6,9 @@ import util from '../utils/Util';
 import metrics from '../utils/MetricsUtil';
 import accountStore from '../stores/AccountStore';
 import accountActions from '../actions/AccountActions';
-import hub from '../utils/HubUtil';
 import Router from 'react-router';
 import classNames from 'classnames';
+import Settings from '../utils/SettingsUtil';
 
 var autoUpdater = remote.require('auto-updater');
 var app = remote.require('app');
@@ -66,7 +66,7 @@ var Header = React.createClass({
 
   },
   handleMinimize: function () {
-    if(hub.settings('minToTaskbar'))
+    if(Settings.get('minToTaskbar'))
       remote.getCurrentWindow().minimize();
     else
       remote.getCurrentWindow().hide();

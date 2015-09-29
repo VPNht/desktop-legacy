@@ -1,11 +1,9 @@
 import React from 'react/addons';
 import Router from 'react-router';
-import hub from '../utils/HubUtil';
 import myip from '../utils/MyipUtil';
 
 import accountStore from '../stores/AccountStore';
 import serverStore from '../stores/ServerStore';
-import accountActions from '../actions/AccountActions';
 import VPN from '../actions/VPNActions';
 import Select from 'react-select';
 import _ from 'underscore';
@@ -13,6 +11,8 @@ import log from '../stores/LogStore';
 import ServerOption from './ServerListOption.react';
 import ServerItem from './ServerListItem.react';
 import Logs from './DashboardLogs.react';
+import Settings from '../utils/SettingsUtil';
+import Credentials from './utils/CredentialsUtil';
 
 import Cache from 'node-cache';
 let serversCache = new Cache();
@@ -25,10 +25,10 @@ var DashboardConnect = React.createClass({
     return {
       connecting: accountStore.getState().connecting,
       appReady: accountStore.getState().appReady,
-      username: hub.credentials().username,
-      password: hub.credentials().password,
-      saveCredentials: hub.settings('saveCredentials'),
-      server: hub.settings('server') || 'hub.vpn.ht',
+      username: Credentials.get().username,
+      password: Credentials.get().password,
+      saveCredentials: Settings.get('saveCredentials'),
+      server: Settings.get('server') || 'hub.vpn.ht',
       servers: serverStore.getState().servers
     };
   },
@@ -76,10 +76,10 @@ var DashboardConnect = React.createClass({
 
             // should we save credentials ?
             if (this.state.saveCredentials) {
-                hub.saveLogin(this.state.username, this.state.password);
+                Credentials.save(this.state.username, this.state.password);
             } else {
                 // make sure to flush previous save
-                hub.logout();
+                Credentials.logout();
             }
 
             VPN.connect(this.state);
@@ -93,7 +93,7 @@ var DashboardConnect = React.createClass({
     });
 
     // save for future use
-    accountActions.saveSettings('server', val);
+    Settings.save('server', val);
   },
 
   handleChangeSaveCredentials: function (e) {
@@ -103,7 +103,7 @@ var DashboardConnect = React.createClass({
     });
 
     // save for future use
-    hub.saveSettings('saveCredentials', !!checked);
+    Settings.save('saveCredentials', !!checked);
   },
 
   render: function () {

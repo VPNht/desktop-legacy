@@ -1,23 +1,23 @@
 import React from 'react/addons';
 import metrics from '../utils/MetricsUtil';
 import Router from 'react-router';
-import hub from '../utils/HubUtil';
 import Select from 'react-select';
 import VPN from '../utils/VPNUtil';
+import Settings from '../utils/SettingsUtil';
 
 var Preferences = React.createClass({
   mixins: [Router.Navigation],
   getInitialState: function () {
     return {
       metricsEnabled: metrics.enabled(),
-      launchStartup: hub.settings('launchStartup'),
-      connectLaunch: hub.settings('connectLaunch'),
-      saveCredentials: hub.settings('saveCredentials'),
-      autoPath: hub.settings('autoPath'),
-      disableSmartdns: hub.settings('disableSmartdns') ,
-      encryption: hub.settings('encryption') || 128,
-      customPort: hub.settings('customPort') || 'default',
-      minToTaskbar: hub.settings('minToTaskbar')
+      launchStartup: Settings.get('launchStartup'),
+      connectLaunch: Settings.get('connectLaunch'),
+      saveCredentials: Settings.get('saveCredentials'),
+      autoPath: Settings.get('autoPath'),
+      disableSmartdns: Settings.get('disableSmartdns') ,
+      encryption: Settings.get('encryption') || 128,
+      customPort: Settings.get('customPort') || 'default',
+      minToTaskbar: Settings.get('minToTaskbar')
   	};
   },
 
@@ -46,7 +46,7 @@ var Preferences = React.createClass({
     }
 
     // save for future use
-    hub.saveSettings('launchStartup', checked);
+    Settings.save('launchStartup', checked);
 
   },
 
@@ -58,7 +58,7 @@ var Preferences = React.createClass({
     });
 
     // save for future use
-    hub.saveSettings('disableSmartdns', checked);
+    Settings.save('disableSmartdns', checked);
 
   },
 
@@ -70,7 +70,7 @@ var Preferences = React.createClass({
     });
 
     // save for future use
-    hub.saveSettings('minToTaskbar', checked);
+    Settings.save('minToTaskbar', checked);
 
   },
 
@@ -83,7 +83,7 @@ var Preferences = React.createClass({
     });
 
     // save for future use
-    hub.saveSettings('connectLaunch', checked);
+    Settings.save('connectLaunch', checked);
 
   },
 
@@ -100,7 +100,7 @@ var Preferences = React.createClass({
     }
 
     // save for future use
-    hub.saveSettings('autoPath', checked);
+    Settings.save('autoPath', checked);
 
   },
 
@@ -108,14 +108,14 @@ var Preferences = React.createClass({
 
     this.setState({encryption});
     this.handlePortChange('default');
-    hub.saveSettings('encryption', encryption);
+    Settings.save('encryption', encryption);
 
   },
 
   handlePortChange: function (customPort) {
 
     this.setState({customPort});
-    hub.saveSettings('customPort', customPort);
+    Settings.save('customPort', customPort);
 
   },
 

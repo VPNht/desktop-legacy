@@ -10,7 +10,7 @@ import openvpnmanager from 'node-openvpn';
 
 import util from './Util';
 import myip from './MyipUtil';
-import hub from './HubUtil';
+import Settings from '../utils/SettingsUtil';
 import helpers from './VPNHelpers';
 
 import log from '../stores/LogStore';
@@ -40,12 +40,12 @@ module.exports = assign(currentOSLib, {
 
         let server = _args.server;
 
-        let encryption = hub.settings('encryption');
-        let autoPath = hub.settings('autoPath');
-        let port = hub.settings('customPort');
+        let encryption = Settings.get('encryption');
+        let autoPath = Settings.get('autoPath');
+        let port = Settings.get('customPort');
         let smartdns = true;
         let platform = process.platform;
-        let disableSmartdns = hub.settings('disableSmartdns');
+        let disableSmartdns = Settings.get('disableSmartdns');
 
         if (disableSmartdns) {
             smartdns = 'disable';

@@ -3,6 +3,8 @@ var vpnUtil;
 import ipc from 'ipc';
 import alt from '../alt';
 import log from '../stores/LogStore';
+import Settings from '../utils/SettingsUtil';
+import Credentials from './utils/CredentialsUtil';
 
 class VPNActions {
 
@@ -73,21 +75,19 @@ class VPNActions {
         });
   }
 
-
   invalidCredentials () {
     this.dispatch();
     alert("Invalid credentials")
   }
 
   appReady () {
-    var hub = require('../utils/HubUtil');
     this.dispatch();
-    if (hub.settings('connectLaunch') === 'true' && hub.config()) {
+    if (Settings.get('connectLaunch') === 'true' && Credentials._config()) {
         log.info('Auto-connect on launch')
         this.actions.connect({
-            username: hub.credentials().username,
-            password: hub.credentials().password,
-            server: hub.settings('server') || 'hub.vpn.ht'
+            username: Credentials.get().username,
+            password: Credentials.get().password,
+            server: Settings.get('server') || 'hub.vpn.ht'
         });
     }
 

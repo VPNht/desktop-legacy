@@ -7,14 +7,6 @@ import bugsnag from 'bugsnag-js';
 import metrics from './MetricsUtil';
 
 var WebUtil = {
-  addWindowSizeSaving: function () {
-    window.addEventListener('resize', function () {
-      fs.writeFileSync(path.join(util.supportDir(), 'size'), JSON.stringify({
-        width: window.outerWidth,
-        height: window.outerHeight
-      }));
-    });
-  },
   addLiveReload: function () {
     if (process.env.NODE_ENV === 'development') {
       var head = document.getElementsByTagName('head')[0];
