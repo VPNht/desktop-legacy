@@ -12,7 +12,7 @@ import ServerOption from './ServerListOption.react';
 import ServerItem from './ServerListItem.react';
 import Logs from './DashboardLogs.react';
 import Settings from '../utils/SettingsUtil';
-import Credentials from './utils/CredentialsUtil';
+import Credentials from '../utils/CredentialsUtil';
 
 import Cache from 'node-cache';
 let serversCache = new Cache();

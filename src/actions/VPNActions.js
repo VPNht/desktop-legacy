@@ -4,7 +4,7 @@ import ipc from 'ipc';
 import alt from '../alt';
 import log from '../stores/LogStore';
 import Settings from '../utils/SettingsUtil';
-import Credentials from './utils/CredentialsUtil';
+import Credentials from '../utils/CredentialsUtil';
 
 class VPNActions {
 

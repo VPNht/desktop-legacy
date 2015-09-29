@@ -1,4 +1,5 @@
-import accountServerActions from './actions/AccountServerActions';
+import accountServerActions from '../actions/AccountServerActions';
+import log from '../stores/LogStore';
 
 var CredentialsUtil = {
 
@@ -7,7 +8,7 @@ var CredentialsUtil = {
   },
 
   get: function () {
-    let config = this.config();
+    let config = CredentialsUtil._config();
     if (!config) {
       return {
           username: null,

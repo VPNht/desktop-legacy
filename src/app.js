@@ -25,7 +25,6 @@ var Menu = remote.require('menu');
 // Init process
 log.initLogs(app.getVersion());
 VPN.initCheck();
-webUtil.addWindowSizeSaving();
 webUtil.addLiveReload();
 webUtil.addBugReporting();
 webUtil.disableGlobalBackspace();
