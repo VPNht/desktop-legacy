@@ -319,6 +319,8 @@ module.exports = function (grunt) {
     grunt.registerTask('release', ['clean:release', 'babel', 'less', 'copy:dev', 'electron:osx', 'copy:osx', 'shell:sign', 'shell:zip', 'shell:macdist']);
   }
 
+  grunt.registerTask('ci', ['clean:release', 'babel', 'less', 'copy:dev', 'electron:osx', 'electron:windows', 'copy:osx', 'copy:windows', 'rcedit:exes', 'compress', 'shell:sign', 'shell:zip', 'shell:macdist']);
+
   process.on('SIGINT', function () {
     grunt.task.run(['shell:electron:kill']);
     process.exit(1);

@@ -44,6 +44,7 @@
     "winreg": "0.0.12"
   },
   "devDependencies": {
+    "async": "^1.4.2",
     "babel": "^5.1.10",
     "electron-prebuilt": "^0.33.1",
     "grunt": "^0.4.5",

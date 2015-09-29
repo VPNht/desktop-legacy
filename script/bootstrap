@@ -1,0 +1,33 @@
+#!/usr/bin/env node
+
+var safeExec = require('./utils/child-process-wrapper.js').safeExec;
+var path = require('path');
+
+// Executes an array of commands one by one.
+function executeCommands(commands, done, index) {
+  index = (index == undefined ? 0 : index);
+  if (index < commands.length) {
+    var command = commands[index];
+    if (command.message)
+      console.log(command.message);
+    var options = null;
+    if (typeof command !== 'string') {
+      options = command.options;
+      command = command.command;
+    }
+    safeExec(command, options, executeCommands.bind(this, commands, done, index + 1));
+  }
+  else
+    done(null);
+}
+function bootstrap() {
+  var commands = [
+    'npm install',
+    'npm dedupe'
+  ];
+
+  process.chdir(path.dirname(__dirname));
+  executeCommands(commands, process.exit);
+}
+
+bootstrap();
