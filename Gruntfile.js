@@ -263,8 +263,19 @@ module.exports = function (grunt) {
           'codesign -v --verify <%= OSX_DIST_X64 %>'
         ].join(' && '),
       },
+      macdistci: {
+        options: {
+          failOnError: false,
+        },
+        command: [
+          'util/mac/linux-dist'
+        ].join(' && '),
+      },
       zip: {
         command: 'ditto -c -k --sequesterRsrc --keepParent <%= OSX_FILENAME_ESCAPED %> dist/' + BASENAME + '-' + packagejson.version + '-Mac.zip',
+      },
+      makensis: {
+        command: 'makensis util/windows/installer.nsi',
       }
     },
 
@@ -319,7 +330,7 @@ module.exports = function (grunt) {
     grunt.registerTask('release', ['clean:release', 'babel', 'less', 'copy:dev', 'electron:osx', 'copy:osx', 'shell:sign', 'shell:zip', 'shell:macdist']);
   }
 
-  grunt.registerTask('ci', ['clean:release', 'babel', 'less', 'copy:dev', 'electron:osx', 'electron:windows', 'copy:osx', 'copy:windows', 'rcedit:exes', 'compress', 'shell:sign', 'shell:zip', 'shell:macdist']);
+  grunt.registerTask('ci', ['clean:release', 'babel', 'less', 'copy:dev', 'electron:osx', 'electron:windows', 'copy:osx', 'copy:windows', 'rcedit:exes', 'shell:sign', 'shell:macdistci', 'shell:makensis']);
 
   process.on('SIGINT', function () {
     grunt.task.run(['shell:electron:kill']);

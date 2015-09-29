@@ -1,4 +1,8 @@
-# Contributing to VPN.ht
+[![Build Status](https://ci.vpn.ht/buildStatus/icon?job=Desktop)](https://ci.vpn.ht/job/Desktop/)
+
+[![VPN.ht Logo](http://i.imgur.com/qXmqrQA.png)](https://vpn.ht)
+
+## Contributing to VPN.ht
 
 ### Getting Started
 

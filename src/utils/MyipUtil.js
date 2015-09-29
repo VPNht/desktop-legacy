@@ -1,4 +1,4 @@
-import _ from 'underscore';
+import _ from 'lodash';
 import request from 'request';
 import metrics from './MetricsUtil';
 import Promise from 'bluebird';

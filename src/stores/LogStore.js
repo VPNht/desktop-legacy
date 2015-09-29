@@ -1,6 +1,6 @@
 import {EventEmitter} from 'events';
 import assign from 'object-assign';
-import _ from 'underscore';
+import _ from 'lodash';
 import os from 'os';
 var _logs = [];
 

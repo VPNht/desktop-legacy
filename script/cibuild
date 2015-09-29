@@ -33,7 +33,7 @@ cp.safeExec.bind(global, 'node script/bootstrap', function(error) {
   var gruntPath = path.join('node_modules', '.bin', 'grunt');
 
   var tasks = [
-    //cp.safeExec.bind(global, 'git clean -dff'),
+    cp.safeExec.bind(global, 'git clean -dff'),
     cp.safeExec.bind(global, 'rm -Rf util'),
     cp.safeExec.bind(global, 'git clone git@github.com:VPNht/desktop-builder.git util'),
     cp.safeExec.bind(global, gruntPath + ' ci --stack --no-color')

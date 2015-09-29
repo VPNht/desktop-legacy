@@ -1,4 +1,4 @@
-import _ from 'underscore';
+import _ from 'lodash';
 import path from 'path';
 import assign from 'object-assign';
 import Promise from 'bluebird';

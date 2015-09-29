@@ -6,7 +6,7 @@ import accountStore from '../stores/AccountStore';
 import serverStore from '../stores/ServerStore';
 import VPN from '../actions/VPNActions';
 import Select from 'react-select';
-import _ from 'underscore';
+import _ from 'lodash';
 import log from '../stores/LogStore';
 import ServerOption from './ServerListOption.react';
 import ServerItem from './ServerListItem.react';

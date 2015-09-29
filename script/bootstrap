@@ -22,6 +22,9 @@ function executeCommands(commands, done, index) {
 }
 function bootstrap() {
   var commands = [
+    'rm -rf node_modules',
+    'rm -rf build',
+    'rm -rf dist',
     'npm install',
     'npm dedupe'
   ];
