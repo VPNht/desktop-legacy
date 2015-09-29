@@ -1,4 +1,4 @@
-[![Build Status](https://ci.vpn.ht/buildStatus/icon?job=Desktop)](https://ci.vpn.ht/job/Desktop/)
+[![Build Status](https://ci.vpn.ht/buildStatus/icon?job=Desktop)](https://ci.vpn.ht/job/Desktop/) [![Dependency Status](https://david-dm.org/vpnht/desktop.svg)](https://david-dm.org/vpnht/desktop) [![devDependency Status](https://david-dm.org/vpnht/desktop/dev-status.svg)](https://david-dm.org/vpnht/desktop#info=devDependencies) [![optionalDependency Status](https://david-dm.org/vpnht/desktop/optional-status.svg)](https://david-dm.org/vpnht/desktop#info=optionalDependencies)
 
 [![VPN.ht Logo](http://i.imgur.com/qXmqrQA.png)](https://vpn.ht)
 
