@@ -5,7 +5,6 @@ import ipc from 'ipc';
 import util from '../utils/Util';
 import metrics from '../utils/MetricsUtil';
 import accountStore from '../stores/AccountStore';
-import accountActions from '../actions/AccountActions';
 import Router from 'react-router';
 import classNames from 'classnames';
 import Settings from '../utils/SettingsUtil';

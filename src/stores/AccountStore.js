@@ -1,5 +1,4 @@
 import alt from '../alt';
-import accountActions from '../actions/AccountActions';
 import vpnActions from '../actions/VPNActions';
 var _connectionTimer = false;
 
