@@ -38,7 +38,7 @@ exports.init = function(helper) {
 	// Connected State
 	trayMenuConnected = new Menu();
 	trayMenuConnected.append(new MenuItem({
-		label: 'Toggle VPN.ht',
+		label: 'Show Window',
 		click: helper.toggleVisibility
 	}));
 	trayMenuConnected.append(new MenuItem({
@@ -56,14 +56,14 @@ exports.init = function(helper) {
 		type: 'separator'
 	}));
 	trayMenuConnected.append(new MenuItem({
-		label: 'Quit and Disconnect',
+		label: 'Quit',
 		click: helper.quit
 	}));
 
 	// Connecting State
 	trayMenuConnecting = new Menu();
 	trayMenuConnecting.append(new MenuItem({
-		label: 'Toggle VPN.ht',
+		label: 'Show Window',
 		click: helper.toggleVisibility
 	}));
 	trayMenuConnecting.append(new MenuItem({
@@ -81,7 +81,7 @@ exports.init = function(helper) {
 		type: 'separator'
 	}));
 	trayMenuConnecting.append(new MenuItem({
-		label: 'Quit and Disconnect',
+		label: 'Quit',
 		click: helper.quit
 	}));
 
