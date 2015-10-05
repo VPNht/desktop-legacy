@@ -41,7 +41,8 @@
     "request": "2.55.0",
     "validator": "4.0.6",
     "windows-service-manager": "vpnht/windows-service-manager",
-    "winreg": "0.0.12"
+    "winreg": "0.0.12",
+    "xps": "^1.0.2"
   },
   "devDependencies": {
     "async": "^1.4.2",
