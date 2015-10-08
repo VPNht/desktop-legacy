@@ -95,7 +95,7 @@ module.exports = {
     },
     enableStartOnBoot: function() {
         return new Promise((resolve) => {
-            regKey.set('VPNht', Winreg.REG_SZ, "\"" + require('remote').require('app').getPath('exe') + "\"", function() {
+            regKey.set('VPNht', Winreg.REG_SZ, "\"" + require('remote').require('app').getPath('exe') + ' --hide'+ "\"", function() {
                 resolve();
             });
         });
