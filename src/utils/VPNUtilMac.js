@@ -72,7 +72,7 @@ module.exports = {
     }
   },
 
-  enableStartOnBoot: function() {
+  enableStartOnBoot: function(hidden) {
     return util.exec([
         'osascript',
         path.join(resources.resourceDir(), 'scripts/LoginItemAdd.scpt'),
