@@ -2,6 +2,7 @@ import log from '../stores/LogStore';
 
 var defaultSettings = {
     launchStartup: false,
+    launchStartupHidden: true,
     connectLaunch: false,
     saveCredentials: false,
     disableSmartdns: false,

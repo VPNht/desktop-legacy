@@ -93,9 +93,9 @@ module.exports = {
             );
         });
     },
-    enableStartOnBoot: function() {
+    enableStartOnBoot: function(hidden) {
         return new Promise((resolve) => {
-            regKey.set('VPNht', Winreg.REG_SZ, "\"" + require('remote').require('app').getPath('exe') + ' --hide'+ "\"", function() {
+            regKey.set('VPNht', Winreg.REG_SZ, "\"" + require('remote').require('app').getPath('exe') + (hidden ? ' --hide' : '') + "\"", function() {
                 resolve();
             });
         });

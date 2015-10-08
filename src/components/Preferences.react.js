@@ -11,6 +11,7 @@ var Preferences = React.createClass({
     return {
       metricsEnabled: metrics.enabled(),
       launchStartup: Settings.get('launchStartup'),
+      launchStartupHidden: Settings.get('launchStartupHidden'),
       connectLaunch: Settings.get('connectLaunch'),
       saveCredentials: Settings.get('saveCredentials'),
       autoPath: Settings.get('autoPath'),
@@ -40,13 +41,32 @@ var Preferences = React.createClass({
     });
 
     if (checked) {
-        VPN.enableStartOnBoot();
+        VPN.enableStartOnBoot(this.state.launchStartupHidden);
     } else {
         VPN.disableStartOnBoot();
     }
 
     // save for future use
     Settings.save('launchStartup', checked);
+
+  },
+
+
+  handleChangeLaunchStartupHidden: function (e) {
+
+    var checked = e.target.checked;
+    this.setState({
+      launchStartupHidden: checked
+    });
+
+    if (checked) {
+        VPN.enableStartOnBoot(true);
+    } else {
+        VPN.disableStartOnBoot();
+    }
+
+    // save for future use
+    Settings.save('launchStartupHidden', checked);
 
   },
 
@@ -199,6 +219,11 @@ var Preferences = React.createClass({
                     <input id="launchStartup" type="checkbox" checked={this.state.launchStartup} onChange={this.handleChangeLaunchStartup}/>
                     <label htmlFor="launchStartup"> </label>
                     <p>Launch on operating system startup</p>
+                </div>
+                <div className="checkbox">
+                    <input id="launchStartupHidden" type="checkbox" checked={this.state.launchStartupHidden} onChange={this.handleChangeLaunchStartupHidden}/>
+                    <label htmlFor="launchStartupHidden"> </label>
+                    <p>Launch on operating system startup hidden</p>
                 </div>
                 <div className="checkbox">
                     <input id="disableSmartdns" type="checkbox" checked={this.state.disableSmartdns} onChange={this.handleChangeDisableSmartdns}/>
