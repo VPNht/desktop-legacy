@@ -8,8 +8,9 @@ import path from 'path';
 import child_process from 'child_process';
 import trayTemplate from './app-tray'
 import Updater from 'autoupdater'
+import yargs from 'yargs';
 
-
+let args = yargs(process.argv.slice(1)).wrap(100).argv;
 
 process.env.NODE_PATH = path.join(__dirname, 'node_modules');
 if (process.env.NODE_ENV !== 'development') {
@@ -156,9 +157,12 @@ app.on('ready', function() {
     });
 
     mainWindow.webContents.on('did-finish-load', function() {
+
         mainWindow.setTitle('VPN.ht');
-        mainWindow.show();
-        mainWindow.focus();
+        if (!args.hide) {
+            mainWindow.show();
+            mainWindow.focus();
+        }
         if (openURL) {
             mainWindow.webContents.send('application:open-url', {
                 url: openURL
