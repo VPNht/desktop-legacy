@@ -1,0 +1,267 @@
+.content-container {
+    height: calc(~"100vh - 132px");
+    width: 100%;
+    z-index: 1;
+    background-color: #ededed;
+}
+
+.content-scroller {
+    overflow: auto;
+    height: calc(~"100vw - 132px");
+    position: relative;
+}
+
+section {
+    float: right;
+    padding: 25px 60px 20px;
+    width: calc(~"100vw - 370px");
+    border-bottom-color: #d9d9d9;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+}
+
+section:first-of-type {
+    padding-top: 50px;
+}
+
+section .title {
+    color: #1b1b1b;
+    font-size: 14px;
+    margin-top: 27px;
+    margin-bottom: 7px;
+    font-weight: 600;
+    line-height: 21px;
+}
+
+section .connectionstatus {
+    float: left;
+    min-width: 30vw;
+}
+
+section .connectionstatus p {
+    color: #1b1b1b;
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 35px;
+}
+
+section .connectionstatus i {
+    float: left;
+    margin-right: 15px;
+    font-size: 35px;
+}
+
+section .connectionstatus i.disconnected {
+    color: #fe5151;
+}
+
+section .connectionstatus i.connected {
+    color: #00adab;
+}
+
+section button.left {
+    float: left;
+    margin-right: 10px;
+}
+
+section button.right {
+    float: left;
+    margin-left: 10px;
+}
+
+section button {
+    height: 41px;
+    border: 0;
+    padding-left: 15px;
+    padding-right: 15px;
+    outline: none;
+    cursor: pointer;
+    background-color: #00adab;
+}
+
+section button:hover {
+    height: 41px;
+    background-color: #00a3a2;
+}
+
+section button:active {
+    background-color: #01c4c3;
+}
+
+section button p {
+    color: #fcfcfc;
+    font-family: "Gotham Rounded";
+    font-size: 12px;
+    font-style: italic;
+    line-height: 28px;
+    text-transform: uppercase;
+}
+
+section input[type="text"]::-webkit-input-placeholder {
+    font-style: italic;
+}
+
+section input[type="password"]::-webkit-input-placeholder {
+    font-style: italic;
+}
+
+section .Select, section input[type="password"], section input[type="text"] {
+    color: #595959;
+    height: 40px;
+    outline: 0;
+    font-size: 14px;
+    font-weight: 300;
+    border: 1px solid #ccc;
+}
+
+section input[type="password"], section input[type="text"] {
+    width: calc(~"100vw - 433px");
+    padding-left: 26px;
+    position: relative;
+    line-height: 28px;
+    margin-bottom: 22px;
+}
+
+section .Select {
+  width: calc(~"100vw - 407px");
+}
+
+
+section textarea.logs {
+    overflow: auto;
+    height: 80px;
+    width: calc(~"100vw - 407px");
+    -webkit-user-select: text;
+    font-size: 10px;
+    white-space: pre-wrap;
+    border: 1px solid #ccc;
+    background-color: #ffffff;
+    padding: 15px 0;
+    margin-bottom: 7px;
+    -webkit-user-select: all;
+}
+
+section .console-output p {
+    color: #1b1b1b;
+    font-size: 14px;
+    margin-bottom: 10px;
+    font-weight: 300;
+}
+
+section.ipOverview div {
+    position: relative;
+    height: 17px;
+}
+
+section.ipOverview p {
+    color: #1b1b1b;
+    width: 200px;
+    float: left;
+    font-size: 14px;
+    position: relative;
+    font-weight: 300;
+}
+
+section.ipOverview i {
+    width: 23px;
+    position: relative;
+    top: 1px;
+    height: 15px;
+    background-size: cover;
+    margin-right: 10px;
+    float: left;
+}
+
+section.ipOverview span {
+    color: #1b1b1b;
+    -webkit-user-select: text;
+    position: relative;
+    font-size: 14px;
+    font-weight: 300;
+}
+
+section.preferences .info {
+    width: 60%;
+}
+
+section .checkbox {
+    height: 18px;
+    margin-bottom: 5px;
+    position: relative;
+}
+
+section .checkbox.disabled p {
+    color: #cccccc;
+}
+
+section .checkbox.disabled p.info {
+    color: #1b1b1b;
+}
+
+section input[type=checkbox] {
+    display: none;
+}
+
+section label {
+    cursor: pointer;
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    background-color: white;
+    border: 1px solid #ccc;
+}
+
+section .checkbox p {
+    margin-left: 30px;
+    color: #1b1b1b;
+    font-size: 14px;
+    float: left;
+    font-weight: 300;
+    line-height: 20px;
+}
+
+section .checkbox p.info {
+    margin-left: 28px;
+    padding-left: 28px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-left-color: #d9d9d9;
+    border-left-style: solid;
+    position: relative;
+    border-left-width: 1px;
+}
+
+section label:after {
+    opacity: 0;
+    display: inline-block;
+    font-family: Ionicons;
+    content: "\f3fd";
+    color: #1eb7b5;
+    font-size: 38px;
+    margin-left: 2px;
+    position: relative;
+    top: -9px;
+    transform: rotate(-10deg);
+}
+
+section input[type=checkbox]:checked + label:after {
+    opacity: 1;
+}
+
+section .section-seperator {
+    width: 100vw;
+    height: 1px;
+    margin-bottom: 25px;
+    background-color: #d9d9d9;
+}
+
+section p.disabled {
+    color: #bdbdbd;
+}
+
+section p {
+    font-family: Roboto;
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 21px;
+}

@@ -1,0 +1,162 @@
+.header {
+  min-height: 30px;
+  -webkit-app-region: drag;
+  -webkit-user-select: none;
+
+  &.bordered {
+    border-bottom: 1px solid #e6edf4;
+  }
+
+  display: flex;
+
+  .no-drag {
+    -webkit-app-region: no-drag;
+  }
+
+  .left-header {
+    display: flex;
+    min-width: 221px;
+  }
+
+  .right-header {
+    display: flex;
+    justify-content: flex-end;
+    flex: 1 0;
+  }
+
+  .windows-buttons {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+    flex: 0 1 auto;
+    margin-right: 7px;
+    -webkit-app-region: no-drag;
+
+    .windows-button {
+      height: 25px;
+      margin-left: 1px;
+      -webkit-transition: -webkit-filter 0.3s;
+
+      &:hover {
+        -webkit-transition: -webkit-filter 0s;
+      }
+
+      &.button-minimize, &.button-fullscreen, &.button-fullscreenclose  {
+        min-width: 34px;
+        background-color: white;
+
+        .icon {
+          background-repeat: no-repeat;
+          -webkit-filter: brightness(0.3);
+          height: 25px;
+        }
+
+        &:hover {
+          -webkit-filter: brightness(0.9);
+        }
+
+        &:active {
+          -webkit-filter: brightness(0.8);
+        }
+      }
+
+      &.button-minimize {
+        .icon {
+          background-position: 50% 18px;
+          .at2x('~images/windows-minimize.png', 14px, 2px);
+        }
+      }
+
+      &.button-fullscreen {
+        .icon {
+          background-position: center;
+          .at2x('~images/windows-fullscreen.png', 14px, 12px);
+        }
+      }
+
+      &.button-fullscreenclose {
+        .icon {
+          background-position: center;
+          .at2x('~images/windows-fullscreenclose.png', 14px, 12px);
+        }
+      }
+
+      &.button-close {
+        min-width: 58px;
+        background: #C75050;
+        .at2x('~images/windows-close.png', 12px, 9px);
+        background-repeat: no-repeat;
+        background-position: center;
+        box-shadow: inset 0 0 0 -1px rgba(255, 255, 255, 0.4);
+        &:hover {
+          -webkit-filter: saturate(120%);
+        }
+
+        &:active {
+          -webkit-filter: brightness(0.8);
+        }
+      }
+    }
+  }
+
+  .buttons {
+    display: flex;
+    margin: 0 0.7rem;
+    align-items: center;
+    justify-content: center;
+    &:hover {
+      .button-minimize.enabled {
+        .at2x('~images/minimize.png', 10px, 10px);
+      }
+      .button-close.enabled {
+        .at2x('~images/close.png', 10px, 10px);
+      }
+      .button-fullscreen.enabled {
+        .at2x('~images/fullscreen.png', 10px, 10px);
+      }
+      .button-fullscreenclose.enabled {
+        .at2x('~images/fullscreenclose.png', 10px, 10px);
+      }
+    }
+    .button {
+      flex: 0 auto;
+      box-sizing: border-box;
+      display: inline-block;
+      background: white;
+      margin-right: 8px;
+      height: 12px;
+      width: 12px;
+      border: 1px solid #D3D3D3;
+      border-radius: 6px;
+      box-shadow: 0px 1px 1px 0px rgba(234,234,234,0.50);
+      -webkit-app-region: no-drag;
+      &.enabled:hover {
+        box-shadow: 0px 1px 1px 0px rgba(195,198,201,0.50);
+      }
+      &.enabled:hover:active {
+        cursor: default;
+        -webkit-filter: brightness(92%);
+      }
+      &.button-close {
+        background-color: #FF5F52;
+        border-color: #E33E32;
+      }
+      &.button-minimize {
+        background-color: #FFBE05;
+        border-color: #E2A100;
+      }
+      &.button-fullscreen {
+        background-color: #15CC35;
+        border-color: #17B230;
+      }
+      &.button-fullscreenclose {
+        background-color: #15CC35;
+        border-color: #17B230;
+      }
+      &.disabled {
+        background-color: #E5E5E5;
+        border-color: #D3D3D3;
+      }
+    }
+  }
+}
