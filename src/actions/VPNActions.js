@@ -17,96 +17,107 @@ class VPNActions {
     );
   }
 
-  connect (args) {
+  connect(args) {
+      return function(dispatch) {
+          // set tray in connecting state
+          ipc.send('vpn.connecting');
 
-    // set tray in connecting state
-    ipc.send('vpn.connecting');
+          vpnUtil = require('../utils/VPNUtil');
+          dispatch();
 
-    vpnUtil = require('../utils/VPNUtil');
-    this.dispatch();
+          vpnUtil.connect(args)
+              .then(() => {
+                  log.info('VPNAction.connect() done');
+                  // update tray
+                  ipc.send('vpn.connected');
+                  this.connected();
+              })
+              .catch((error) => {
+                  console.log(error);
+                  log.error('Unable to launch process');
+                  this.disconnected();
 
-    vpnUtil.connect(args)
-        .then(() => {
-            log.info('VPNAction.connect() done');
-            // update tray
-            ipc.send('vpn.connected');
-            this.actions.connected();
-        })
-        .catch((error) => {
-            console.log(error);
-            log.error('Unable to launch process');
-            this.actions.disconnected();
-
-        });
+              });
+      };
   }
 
-  disconnect () {
+  disconnect() {
+      return function(dispatch) {
+          vpnUtil = require('../utils/VPNUtil');
+          dispatch();
+          vpnUtil.disconnect()
+              .then(() => {
 
-    vpnUtil = require('../utils/VPNUtil');
-    this.dispatch();
-    vpnUtil.disconnect()
-        .then(() => {
+                  log.info('Waiting EXITING state');
 
-            log.info('Waiting EXITING state');
+              })
+              .catch((error) => {
 
-        })
-        .catch((error) => {
+                  log.error('Unable to disconnect');
+                  console.log(error);
 
-            log.error('Unable to disconnect');
-            console.log(error);
-
-        });
+              });
+      };
   }
 
-  checkIp () {
-    var helpers = require('../utils/VPNHelpers');
-    this.dispatch();
-    helpers.updateIp()
-        .then(() => {
+  checkIp() {
+      return function(dispatch) {
+          var helpers = require('../utils/VPNHelpers');
+          dispatch();
+          helpers.updateIp()
+              .then(() => {
 
-            log.info('IP Updated');
+                  log.info('IP Updated');
 
-        })
-        .catch((error) => {
+              })
+              .catch((error) => {
 
-            log.error('Unable to update ip');
-            console.log(error);
+                  log.error('Unable to update ip');
+                  console.log(error);
 
-        });
+              });
+      };
   }
 
-  invalidCredentials () {
-    this.dispatch();
-    alert("Invalid credentials")
+  invalidCredentials() {
+      return function(dispatch) {
+          dispatch();
+          alert("Invalid credentials")
+      };
   }
 
-  appReady () {
-    this.dispatch();
-    if (Settings.get('connectLaunch') === 'true' && Credentials._config()) {
-        log.info('Auto-connect on launch')
-        this.actions.connect({
-            username: Credentials.get().username,
-            password: Credentials.get().password,
-            server: Settings.get('server') || 'hub.vpn.ht'
-        });
-    }
-
+  appReady() {
+      return function(dispatch) {
+          dispatch();
+          if (Settings.get('connectLaunch') === 'true' && Credentials._config()) {
+              log.info('Auto-connect on launch')
+              this.connect({
+                  username: Credentials.get().username,
+                  password: Credentials.get().password,
+                  server: Settings.get('server') || 'hub.vpn.ht'
+              });
+          }
+      };
   }
 
   // used by tray
   disconnected() {
-    this.dispatch();
-    ipc.send('vpn.disconnected');
+      return function(dispatch) {
+          dispatch();
+          ipc.send('vpn.disconnected');
 
-    // on windows we need to stop the service
-    if (process.platform == 'win32') {
-        require('../utils/Util').exec(['net', 'stop', 'openvpnservice'])
-    }
+          // on windows we need to stop the service
+          if (process.platform == 'win32') {
+              require('../utils/Util').exec(['net', 'stop', 'openvpnservice'])
+          }
+      };
   }
 
   connected() {
-    this.dispatch();
-    ipc.send('vpn.connected');
+      return function(dispatch) {
+          dispatch();
+          ipc.send('vpn.connected');
+      };
   }
 
 
