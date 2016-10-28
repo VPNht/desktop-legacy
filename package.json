@@ -40,7 +40,7 @@
     "react-select": "0.6.11",
     "request": "2.76.0",
     "windows-service-manager": "vpnht/windows-service-manager",
-    "winreg": "0.0.12",
+    "winreg": "1.2.2",
     "xps": "^1.0.2",
     "yargs": "6.3.0"
   },
