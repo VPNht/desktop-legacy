@@ -86,14 +86,14 @@ module.exports = {
         return str.replace(/ /g, '\\ ').replace(/\(/g, '\\(').replace(/\)/g, '\\)');
     },
     home: function() {
-        return require('remote').require('app').getPath('home');
+        return require('electron').remote.app.getPath('home');
     },
     documents: function() {
         // TODO: fix me for windows 7
         return 'Documents';
     },
     supportDir: function() {
-        return require('remote').require('app').getPath('userData');
+        return require('electron').remote.app.getPath('userData');
     },
     CommandOrCtrl: function() {
         return this.isWindows() ? 'Ctrl' : 'Command';

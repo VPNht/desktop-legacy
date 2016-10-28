@@ -1,7 +1,6 @@
 import React from 'react/addons';
-import remote from 'remote';
+import {remote, ipcRenderer} from 'electron';
 import RetinaImage from 'react-retina-image';
-import ipc from 'ipc';
 import util from '../utils/Util';
 import metrics from '../utils/MetricsUtil';
 import accountStore from '../stores/AccountStore';
@@ -9,10 +8,10 @@ import Router from 'react-router';
 import classNames from 'classnames';
 import Settings from '../utils/SettingsUtil';
 
-var autoUpdater = remote.require('auto-updater');
-var app = remote.require('app');
-var Menu = remote.require('menu');
-var MenuItem = remote.require('menu-item');
+var autoUpdater = require('electron').remote.autoUpdater;
+var app = require('electron').remote.app;
+var Menu = require('electron').remote.menu;
+var MenuItem = require('electron').remote.menuItem;
 
 var Header = React.createClass({
   mixins: [Router.Navigation],
@@ -29,7 +28,7 @@ var Header = React.createClass({
 
     accountStore.listen(this.update);
 
-    ipc.on('application:update-available', () => {
+    ipcRenderer.on('application:update-available', () => {
       this.setState({
         updateAvailable: true
       });
@@ -77,7 +76,7 @@ var Header = React.createClass({
   },
   handleAutoUpdateClick: function () {
     metrics.track('Restarted to Update');
-    ipc.send('application:quit-install');
+    ipcRenderer.send('application:quit-install');
   },
   renderWindowButtons: function () {
     let buttons;

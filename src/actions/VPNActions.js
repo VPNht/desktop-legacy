@@ -1,6 +1,6 @@
 var vpnUtil;
 
-import ipc from 'ipc';
+import {ipcRenderer} from 'electron';
 import alt from '../alt';
 import log from '../stores/LogStore';
 import Settings from '../utils/SettingsUtil';
@@ -20,7 +20,7 @@ class VPNActions {
   connect(args) {
       return function(dispatch) {
           // set tray in connecting state
-          ipc.send('vpn.connecting');
+          ipcRenderer.send('vpn.connecting');
 
           vpnUtil = require('../utils/VPNUtil');
           dispatch();
@@ -29,7 +29,7 @@ class VPNActions {
               .then(() => {
                   log.info('VPNAction.connect() done');
                   // update tray
-                  ipc.send('vpn.connected');
+                  ipcRenderer.send('vpn.connected');
                   this.connected();
               })
               .catch((error) => {
@@ -104,7 +104,7 @@ class VPNActions {
   disconnected() {
       return function(dispatch) {
           dispatch();
-          ipc.send('vpn.disconnected');
+          ipcRenderer.send('vpn.disconnected');
 
           // on windows we need to stop the service
           if (process.platform == 'win32') {
@@ -116,7 +116,7 @@ class VPNActions {
   connected() {
       return function(dispatch) {
           dispatch();
-          ipc.send('vpn.connected');
+          ipcRenderer.send('vpn.connected');
       };
   }
 

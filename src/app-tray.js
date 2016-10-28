@@ -1,7 +1,4 @@
-import Menu from 'menu';
-import MenuItem from 'menu-item';
-import Tray from 'tray';
-import ipc from 'ipc';
+import {Menu, MenuItem, ipcMain, Tray} from 'electron';
 
 var trayMenuDisconnected = null;
 var trayMenuConnected = null;
@@ -91,19 +88,19 @@ exports.init = function(helper) {
 
 	tray.on('clicked', helper.toggleVisibility);
 
-	ipc.on('vpn.connected', function handleConnected() {
+	ipcMain.on('vpn.connected', function handleConnected() {
 		tray.setContextMenu(trayMenuConnected);
 		tray.setImage(__dirname + '/tray_connected.png');
     	tray.setToolTip('Connected');
 	});
 
-	ipc.on('vpn.connecting', function handleConnecting() {
+	ipcMain.on('vpn.connecting', function handleConnecting() {
 		tray.setContextMenu(trayMenuConnecting);
 		tray.setImage(__dirname + '/tray_connecting.png');
     	tray.setToolTip('Connecting...');
 	});
 
-	ipc.on('vpn.disconnected', function handleDisconnected() {
+	ipcMain.on('vpn.disconnected', function handleDisconnected() {
 		tray.setContextMenu(trayMenuDisconnected);
 		tray.setImage(__dirname + '/tray.png');
     	tray.setToolTip('Disconnected');

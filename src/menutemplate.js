@@ -1,11 +1,10 @@
-import remote from 'remote';
-import shell from 'shell';
+import {remote, shell} from 'electron';
 import router from './router';
 import metrics from './utils/MetricsUtil';
 import util from './utils/Util';
 
-var dialog = remote.require('dialog');
-var app = remote.require('app');
+var dialog = require('electron').remote.app;
+var app = require('electron').remote.app;
 
 // main.js
 var MenuTemplate = function () {

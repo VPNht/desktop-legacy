@@ -6,7 +6,7 @@ import Sidebar from './Sidebar.react';
 import Header from './Header.react';
 import SubHeader from './SubHeader.react';
 import metrics from '../utils/MetricsUtil';
-import shell from 'shell';
+import {shell} from 'electron';
 import RetinaImage from 'react-retina-image';
 
 var Client = React.createClass({

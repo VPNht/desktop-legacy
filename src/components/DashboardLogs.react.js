@@ -42,12 +42,14 @@ var DashboardLogs = React.createClass({
 
   handleCopyClipboard: function () {
 
-    require('remote')
-        .require('clipboard')
+    require('electron')
+        .remote
+        .clipboard
         .writeText(this.state.logs.join("\n"));
 
-    require('remote')
-        .require('dialog')
+    require('electron')
+        .remote
+        .dialog
         .showMessageBox({
             type:'info',
             title: 'Log Copied',
@@ -62,7 +64,7 @@ var DashboardLogs = React.createClass({
         filters: [{ name: 'Log files', extensions: ['log'] }]
     };
 
-    var dialog = require('remote').require('dialog');
+    var dialog = require('electron').remote.dialog;
     var self = this;
 
     dialog.showSaveDialog(args,function(filename) {

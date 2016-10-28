@@ -1,5 +1,5 @@
-import remote from 'remote';
-var app = remote.require('app');
+import {remote} from 'electron';
+var app = require('electron').remote.app;
 import fs from 'fs';
 import util from './Util';
 import path from 'path';

@@ -1,7 +1,6 @@
 require.main.paths.splice(0, 0, process.env.NODE_PATH);
-import remote from 'remote';
+import {remote, ipcRenderer} from 'electron';
 import React from 'react';
-import ipc from 'ipc';
 import metrics from './utils/MetricsUtil';
 import VPN from './utils/VPNUtil';
 import vpnActions from './actions/VPNActions';
@@ -19,8 +18,8 @@ import Credentials from './utils/CredentialsUtil';
 
 import Settings from './utils/SettingsUtil';
 
-var app = remote.require('app');
-var Menu = remote.require('menu');
+var app = require('electron').remote.app;
+var Menu = require('electron').remote.Menu;
 
 // Init process
 log.initLogs(app.getVersion());
@@ -43,14 +42,14 @@ routerContainer.set(router);
 
 // Default Route
 router.transitionTo('dashboard');
-ipc.on('application:quitting', () => {});
+ipcRenderer.on('application:quitting', () => {});
 
 // Event fires when the app receives a vpnht:// URL
-ipc.on('application:open-url', opts => {
+ipcRenderer.on('application:open-url', opts => {
 	console.log('open', opts);
 });
 
-ipc.on('application:vpn-connect', () => {
+ipcRenderer.on('application:vpn-connect', () => {
 	if (Credentials._config()) {
 		vpnActions.connect({
 			username: Credentials.get().username,
@@ -62,7 +61,7 @@ ipc.on('application:vpn-connect', () => {
 	}
 });
 
-ipc.on('application:vpn-check-disconnect', () => {
+ipcRenderer.on('application:vpn-check-disconnect', () => {
 	if (accountStore.getState().connecting || accountStore.getState().connected) {
 		log.info('Disconnecting before closing application');
 		vpnActions.disconnect();
@@ -71,7 +70,7 @@ ipc.on('application:vpn-check-disconnect', () => {
 	}
 });
 
-ipc.on('application:vpn-check-sleep', () => {
+ipcRenderer.on('application:vpn-check-sleep', () => {
 	if (accountStore.getState().connected) {
 		log.info('Trying to reconnect after sleep');
 		if (Credentials._config()) {
@@ -87,7 +86,7 @@ ipc.on('application:vpn-check-sleep', () => {
 	}
 });
 
-ipc.on('application:vpn-disconnect', () => {
+ipcRenderer.on('application:vpn-disconnect', () => {
 	vpnActions.disconnect();
 });
 

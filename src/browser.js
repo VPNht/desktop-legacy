@@ -1,7 +1,5 @@
-import app from 'app';
-import BrowserWindow from 'browser-window';
+import {app, BrowserWindow, ipcMain, screen, powerMonitor} from 'electron';
 import os from 'os';
-import ipc from 'ipc';
 import net from 'net';
 import fs from 'fs';
 import path from 'path';
@@ -42,7 +40,6 @@ app.on('ready', function() {
 
     var checkingQuit = false;
     var canQuit = false;
-    var screen = require('screen');
     var size = screen.getPrimaryDisplay().workAreaSize;
     var autoUpdater = new Updater({
         currentVersion: app.getVersion()
@@ -66,6 +63,8 @@ app.on('ready', function() {
         frame: false,
         show: false
     });
+
+    mainWindow.webContents.openDevTools();
 
     var preventMultipleInstances = function() {
         var socket = (process.platform === 'win32') ? '\\\\.\\pipe\\vpnht-sock' : path.join(os.tmpdir(), 'vpnht.sock');
@@ -103,7 +102,7 @@ app.on('ready', function() {
             });
 
             server.listen(socket);
-            mainWindow.loadUrl(path.normalize('file://' + path.join(__dirname, 'index.html')));
+            mainWindow.loadURL(path.normalize('file://' + path.join(__dirname, 'index.html')));
         });
     }
 
@@ -115,7 +114,7 @@ app.on('ready', function() {
             if (!checkingQuit) {
                 checkingQuit = true;
                 mainWindow.webContents.send('application:vpn-check-disconnect');
-                ipc.on('vpn.disconnected', () => {
+                ipcMain.on('vpn.disconnected', () => {
                     canQuit = true;
                     app.quit();
                 });
@@ -123,7 +122,7 @@ app.on('ready', function() {
         }
     });
 
-    require('power-monitor').on('resume', function() {
+    powerMonitor.on('resume', function() {
         mainWindow.webContents.send('application:vpn-check-sleep');
     });
 
