@@ -33,30 +33,19 @@ module.exports = {
                 .then(function() {
 
                     // checking if process stopped as security
-                    running(Number(pid), function(err, live) {
-                        if (err) {
-                            // weird?
-                            log.info('Process stopped successfully');
-                            resolve();
-
-                        } else {
-                            if (live) {
-                                // process running
-                                log.info('Process still running running manual kill');
-                                util.exec(['kill', '-9', Number(pid)])
-                                    .then(function() {
-                                        log.info('Process stopped successfully');
-                                        resolve();
-                                    });
-
-                            } else {
-                                // process stopped
+                    if (running(Number(pid))) {
+                        // process running
+                        log.info('Process still running, running manual kill');
+                        util.exec(['kill', '-9', Number(pid)])
+                            .then(function() {
                                 log.info('Process stopped successfully');
                                 resolve();
-                            }
-                        }
-                    });
-
+                            });
+                    } else {
+                        // process stopped
+                        log.info('Process stopped successfully');
+                        resolve();
+                    }
                 })
                 .catch(function() {
                     log.info('We have to kill the process manually');

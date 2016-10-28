@@ -75,17 +75,9 @@ module.exports = {
               pid = fs.readFileSync(path.join(util.supportDir(), 'openvpn.pid')) || false;
           } catch (err) {}
 
-          if (pid) {
-              log.info('Checking previous openvpn status PID: '+pid);
-              running(Number(pid), function(err, live) {
-                  if (err) {
-                      log.error('Process error', {err})
-                      reject(err);
-                  } else {
-                      log.info('Process status : ' + live)
-                      resolve(live);
-                  }
-              });
+          if (pid && running(Number(pid))) {
+              log.info('Previous openvpn status still running, PID: '+pid);
+              resolve(true);
           } else {
               resolve(false);
           }

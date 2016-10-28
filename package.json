@@ -24,7 +24,7 @@
     "classnames": "2.2.5",
     "exec": "0.2.1",
     "get-port": "2.1.0",
-    "is-running": "1.0.5",
+    "is-running": "2.1.0",
     "jquery": "3.1.1",
     "lodash": "4.16.4",
     "mixpanel": "kitematic/mixpanel-node",
