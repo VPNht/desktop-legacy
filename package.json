@@ -23,7 +23,7 @@
     "bugsnag-js": "3.0.6",
     "classnames": "2.2.5",
     "exec": "0.2.1",
-    "get-port": "1.0.0",
+    "get-port": "2.1.0",
     "is-running": "1.0.5",
     "jquery": "3.1.1",
     "lodash": "4.16.4",

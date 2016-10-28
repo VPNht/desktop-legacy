@@ -14,15 +14,9 @@ var openvpn;
 module.exports = {
 
     managementPort: function () {
-      return new Promise((resolve, reject) => {
-          getPort((err, port) => {
-              if (err) {
-                  reject(err);
-              } else {
-                  fs.writeFileSync(path.join(util.supportDir(), 'openvpn.port'), port);
-                  resolve(port);
-              }
-          });
+      return getPort().then(port => {
+          fs.writeFileSync(path.join(util.supportDir(), 'openvpn.port'), port);
+          return port;
       });
     },
 
