@@ -39,7 +39,6 @@
     "react-router": "0.13.3",
     "react-select": "0.6.11",
     "request": "2.76.0",
-    "validator": "4.0.6",
     "windows-service-manager": "vpnht/windows-service-manager",
     "winreg": "0.0.12",
     "xps": "^1.0.2",
