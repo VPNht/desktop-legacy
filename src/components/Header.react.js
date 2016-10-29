@@ -8,7 +8,6 @@ import Router from 'react-router';
 import classNames from 'classnames';
 import Settings from '../utils/SettingsUtil';
 
-/*var autoUpdater = remote.require('autoupdater');*/
 var app = remote.app;
 var Menu = remote.menu;
 var MenuItem = remote.menuItem;
@@ -33,7 +32,6 @@ var Header = React.createClass({
         updateAvailable: true
       });
     });
-    /*autoUpdater.checkForUpdates();*/
   },
   componentWillUnmount: function () {
     document.removeEventListener('keyup', this.handleDocumentKeyUp, false);
