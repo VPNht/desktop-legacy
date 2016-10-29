@@ -72,13 +72,13 @@ app.on('ready', function() {
             path: socket
         }, function() {
             var errorMessage = 'Another instance of VPN.ht is already running. Only one instance of the app can be open at a time.'
-            require('dialog').showMessageBox(mainWindow, {
+            require('electron').dialog.showMessageBox(mainWindow, {
                 'type': 'error',
                 message: errorMessage,
                 buttons: ['OK']
             }, function() {
                 client.end();
-                app.terminate();
+                process.exit(0);
             })
         }).on('error', function(err) {
 
@@ -183,7 +183,7 @@ app.on('ready', function() {
 
     autoUpdater.on("updateReady", function(updaterPath) {
         console.log("Launching " + updaterPath);
-        require('dialog').showMessageBox(mainWindow, {
+        require('electron').dialog.showMessageBox(mainWindow, {
             'type': 'info',
             message: 'A new version is available, do you want to install now ?',
             buttons: ['Yes', 'No']
@@ -193,14 +193,14 @@ app.on('ready', function() {
                 if (process.platform == 'win32') {
                     require('./utils/Util').exec('start ' + updaterPath).then(function(stdOut) {
                         console.log(stdOut);
-                        app.terminate();
+                        process.exit(0);
                     });
                 } else {
                     child_process.spawn('open', [updaterPath], {
                         detached: true,
                         stdio: ['ignore', 'ignore', 'ignore']
                     });
-                    app.terminate();
+                    process.exit(0);
                 }
             }
 
