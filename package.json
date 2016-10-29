@@ -32,7 +32,6 @@
     "object-assign": "4.1.0",
     "osx-release": "1.1.0",
     "react": "15.x.x",
-    "react-addons-linked-state-mixin": "15.x.x",
     "react-bootstrap": "0.30.x",
     "react-dom": "15.x.x",
     "react-retina-image": "2.x.x",

@@ -1,5 +1,4 @@
 import React from 'react';
-import LinkedStateMixin from 'react-addons-linked-state-mixin'
 import Router from 'react-router';
 import myip from '../utils/MyipUtil';
 
@@ -16,8 +15,6 @@ import Settings from '../utils/SettingsUtil';
 import Credentials from '../utils/CredentialsUtil';
 
 var DashboardConnect = React.createClass({
-
-  mixins: [LinkedStateMixin],
 
   getInitialState: function () {
     return {
@@ -56,6 +53,14 @@ var DashboardConnect = React.createClass({
           servers: serverStore.getState().servers
         });
     }
+  },
+
+  handleChange: function (key) {
+      return function (e) {
+          var state = {};
+          state[key] = e.target.value;
+          this.setState(state);
+      }.bind(this);
   },
 
   handleConnect: function (e) {
@@ -130,8 +135,8 @@ var DashboardConnect = React.createClass({
 
           <section>
             <h1 className="title">Login</h1>
-            <input name="username" disabled={!this.state.appReady} valueLink={this.linkState('username')} placeholder="Username" type="text" />
-            <input name="password" disabled={!this.state.appReady} valueLink={this.linkState('password')} placeholder="Password" type="password" />
+            <input name="username" disabled={!this.state.appReady} value={this.state.username} onChange={this.handleChange('username')} placeholder="Username" type="text" />
+            <input name="password" disabled={!this.state.appReady} value={this.state.password} onChange={this.handleChange('password')} placeholder="Password" type="password" />
             <div className="checkbox">
                 <input type="checkbox" disabled={!this.state.appReady} checked={this.state.saveCredentials} onChange={this.handleChangeSaveCredentials} id="saveCredentials" />
                 <label htmlFor="saveCredentials"></label>
