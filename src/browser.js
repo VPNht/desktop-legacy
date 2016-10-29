@@ -1,4 +1,4 @@
-import {app, BrowserWindow, ipcMain, screen, powerMonitor, dialog} from 'electron';
+import {app, BrowserWindow, ipcMain, screen, dialog} from 'electron';
 import os from 'os';
 import net from 'net';
 import fs from 'fs';
@@ -123,7 +123,8 @@ app.on('ready', function() {
         }
     });
 
-    powerMonitor.on('resume', function() {
+    // powerMonitor cannot be required before 'ready' event is fired: https://github.com/electron/electron/blob/master/docs/api/power-monitor.md
+    require('electron').powerMonitor.on('resume', function() {
         mainWindow.webContents.send('application:vpn-check-sleep');
     });
 
