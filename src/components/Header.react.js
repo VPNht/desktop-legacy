@@ -8,10 +8,10 @@ import Router from 'react-router';
 import classNames from 'classnames';
 import Settings from '../utils/SettingsUtil';
 
-var autoUpdater = require('electron').remote.autoUpdater;
-var app = require('electron').remote.app;
-var Menu = require('electron').remote.menu;
-var MenuItem = require('electron').remote.menuItem;
+/*var autoUpdater = remote.require('autoupdater');*/
+var app = remote.app;
+var Menu = remote.menu;
+var MenuItem = remote.menuItem;
 
 var Header = React.createClass({
   mixins: [Router.Navigation],
@@ -33,7 +33,7 @@ var Header = React.createClass({
         updateAvailable: true
       });
     });
-    autoUpdater.checkForUpdates();
+    /*autoUpdater.checkForUpdates();*/
   },
   componentWillUnmount: function () {
     document.removeEventListener('keyup', this.handleDocumentKeyUp, false);
