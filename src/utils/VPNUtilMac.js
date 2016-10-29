@@ -1,7 +1,6 @@
 import resources from './ResourcesUtil';
 import util from './Util';
 import path from 'path';
-import Promise from 'bluebird';
 import log from '../stores/LogStore';
 import fs from 'fs';
 import running from 'is-running';

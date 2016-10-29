@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import path from 'path';
 import assign from 'object-assign';
-import Promise from 'bluebird';
 import request from 'request';
 import fs from 'fs';
 

@@ -1,6 +1,5 @@
 import {exec, execFile} from 'child_process';
 import {remote} from 'electron';
-import Promise from 'bluebird';
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';

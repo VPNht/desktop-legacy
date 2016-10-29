@@ -1,4 +1,3 @@
-import Promise from 'bluebird';
 import fs from 'fs';
 import log from '../stores/LogStore';
 import vpnActions from '../actions/VPNActions';

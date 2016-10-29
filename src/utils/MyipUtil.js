@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import request from 'request';
 import metrics from './MetricsUtil';
-import Promise from 'bluebird';
 import log from '../stores/LogStore';
 import ServerActions from '../actions/ServerActions';
 

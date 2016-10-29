@@ -2,7 +2,6 @@ import resources from './ResourcesUtil';
 import util from './Util';
 import path from 'path';
 import Winreg from 'winreg';
-import Promise from 'bluebird';
 import fs from 'fs';
 import helpers from './VPNHelpers';
 import log from '../stores/LogStore';
