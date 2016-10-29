@@ -14,6 +14,7 @@ var MenuTemplate = function () {
       submenu: [
       {
         label: 'About VPN.ht',
+        accelerator: util.CommandOrCtrl() + '+I',
         click: function () {
           metrics.track('Opened About', {
             from: 'menu'
