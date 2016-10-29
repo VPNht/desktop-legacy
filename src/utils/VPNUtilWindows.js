@@ -7,6 +7,7 @@ import fs from 'fs';
 import helpers from './VPNHelpers';
 import log from '../stores/LogStore';
 import ps from 'xps';
+import {remote} from 'electron';
 
 import serviceManager from 'windows-service-manager';
 
@@ -95,7 +96,7 @@ module.exports = {
     },
     enableStartOnBoot: function(hidden) {
         return new Promise((resolve) => {
-            regKey.set('VPNht', Winreg.REG_SZ, "\"" + require('electron').remote.app.getPath('exe') + (hidden ? ' --hide' : '') + "\"", function() {
+            regKey.set('VPNht', Winreg.REG_SZ, "\"" + remote.app.getPath('exe') + (hidden ? ' --hide' : '') + "\"", function() {
                 resolve();
             });
         });

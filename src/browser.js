@@ -1,4 +1,4 @@
-import {app, BrowserWindow, ipcMain, screen, powerMonitor} from 'electron';
+import {app, BrowserWindow, ipcMain, screen, powerMonitor, dialog} from 'electron';
 import os from 'os';
 import net from 'net';
 import fs from 'fs';
@@ -7,6 +7,7 @@ import child_process from 'child_process';
 import trayTemplate from './app-tray'
 import Updater from 'autoupdater'
 import yargs from 'yargs';
+import util from './utils/Util';
 
 let args = yargs(process.argv.slice(1)).wrap(100).argv;
 
@@ -42,7 +43,7 @@ app.on('ready', function() {
     var canQuit = false;
     var size = screen.getPrimaryDisplay().workAreaSize;
     var autoUpdater = new Updater({
-        currentVersion: app.getVersion()
+        currentVersion: '0.0.2'
     });
 
     var windowSize = {
@@ -72,7 +73,7 @@ app.on('ready', function() {
             path: socket
         }, function() {
             var errorMessage = 'Another instance of VPN.ht is already running. Only one instance of the app can be open at a time.'
-            require('electron').dialog.showMessageBox(mainWindow, {
+            dialog.showMessageBox(mainWindow, {
                 'type': 'error',
                 message: errorMessage,
                 buttons: ['OK']
@@ -183,7 +184,7 @@ app.on('ready', function() {
 
     autoUpdater.on("updateReady", function(updaterPath) {
         console.log("Launching " + updaterPath);
-        require('electron').dialog.showMessageBox(mainWindow, {
+        dialog.showMessageBox(mainWindow, {
             'type': 'info',
             message: 'A new version is available, do you want to install now ?',
             buttons: ['Yes', 'No']
@@ -191,7 +192,7 @@ app.on('ready', function() {
 
             if (response === 0) {
                 if (process.platform == 'win32') {
-                    require('./utils/Util').exec('start ' + updaterPath).then(function(stdOut) {
+                    util.exec('start ' + updaterPath).then(function(stdOut) {
                         console.log(stdOut);
                         process.exit(0);
                     });

@@ -1,5 +1,7 @@
 import React from 'react/addons';
 import Router from 'react-router';
+import {remote} from 'electron';
+import fs from 'fs';
 
 import LogStore from '../stores/LogStore';
 
@@ -42,13 +44,11 @@ var DashboardLogs = React.createClass({
 
   handleCopyClipboard: function () {
 
-    require('electron')
-        .remote
+    remote
         .clipboard
         .writeText(this.state.logs.join("\n"));
 
-    require('electron')
-        .remote
+    remote
         .dialog
         .showMessageBox({
             type:'info',
@@ -64,24 +64,23 @@ var DashboardLogs = React.createClass({
         filters: [{ name: 'Log files', extensions: ['log'] }]
     };
 
-    var dialog = require('electron').remote.dialog;
+    var dialog = remote.dialog;
     var self = this;
 
     dialog.showSaveDialog(args,function(filename) {
-        require('fs')
-            .writeFile(filename, self.state.logs.join("\n"), function (err) {
-                if (err) {
-                    dialog.showErrorBox('Unable to save log path', 'Looks like we can\'t save the log file. Try again with another path.')
-                } else {
-                    dialog.showMessageBox({
-                        type:'info',
-                        title: 'Log saved !',
-                        buttons: ['OK'],
-                        message: 'Your log file has been saved successfully.'
-                    });
-                }
+        fs.writeFile(filename, self.state.logs.join("\n"), function (err) {
+            if (err) {
+                dialog.showErrorBox('Unable to save log path', 'Looks like we can\'t save the log file. Try again with another path.')
+            } else {
+                dialog.showMessageBox({
+                    type:'info',
+                    title: 'Log saved !',
+                    buttons: ['OK'],
+                    message: 'Your log file has been saved successfully.'
+                });
+            }
 
-            });
+        });
     })
   },
 

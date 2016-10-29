@@ -18,8 +18,8 @@ import Credentials from './utils/CredentialsUtil';
 
 import Settings from './utils/SettingsUtil';
 
-var app = require('electron').remote.app;
-var Menu = require('electron').remote.Menu;
+var app = remote.app;
+var Menu = remote.Menu;
 
 // Init process
 log.initLogs(app.getVersion());

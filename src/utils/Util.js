@@ -1,4 +1,5 @@
 import {exec, execFile} from 'child_process';
+import {remote} from 'electron';
 import Promise from 'bluebird';
 import fs from 'fs';
 import path from 'path';
@@ -91,14 +92,14 @@ module.exports = {
         return str.replace(/ /g, '\\ ').replace(/\(/g, '\\(').replace(/\)/g, '\\)');
     },
     home: function() {
-        return require('electron').remote.app.getPath('home');
+        return remote.app.getPath('home');
     },
     documents: function() {
         // TODO: fix me for windows 7
         return 'Documents';
     },
     supportDir: function() {
-        return require('electron').remote.app.getPath('userData');
+        return remote.app.getPath('userData');
     },
     CommandOrCtrl: function() {
         return this.isWindows() ? 'Ctrl' : 'Command';

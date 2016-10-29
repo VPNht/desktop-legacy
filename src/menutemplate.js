@@ -3,8 +3,8 @@ import router from './router';
 import metrics from './utils/MetricsUtil';
 import util from './utils/Util';
 
-var dialog = require('electron').remote.app;
-var app = require('electron').remote.app;
+var dialog = remote.dialog;
+var app = remote.app;
 
 // main.js
 var MenuTemplate = function () {

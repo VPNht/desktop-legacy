@@ -1,10 +1,11 @@
 import {remote} from 'electron';
-var app = require('electron').remote.app;
 import fs from 'fs';
 import util from './Util';
 import path from 'path';
 import bugsnag from 'bugsnag-js';
 import metrics from './MetricsUtil';
+
+var app = remote.app;
 
 var WebUtil = {
   addLiveReload: function () {
