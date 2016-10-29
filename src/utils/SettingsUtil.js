@@ -33,8 +33,8 @@ module.exports = {
       return value;
     },
 
-    save: function (key, value) {
-      log.info('Preferences | ' + key + ' = ' + value);
+    save: function (key, value, displayValue) {
+      log.info('Preferences | ' + key + ' = ' + (displayValue || value));
       localStorage.setItem('settings.'+key, JSON.stringify(value));
     }
 }

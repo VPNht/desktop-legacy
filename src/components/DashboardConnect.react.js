@@ -96,7 +96,7 @@ var DashboardConnect = React.createClass({
     });
 
     // save for future use
-    Settings.save('server', val);
+    Settings.save('server', val, val.label);
   },
 
   handleChangeSaveCredentials: function (e) {
@@ -135,8 +135,8 @@ var DashboardConnect = React.createClass({
 
           <section>
             <h1 className="title">Login</h1>
-            <input name="username" disabled={!this.state.appReady} value={this.state.username} onChange={this.handleChange('username')} placeholder="Username" type="text" />
-            <input name="password" disabled={!this.state.appReady} value={this.state.password} onChange={this.handleChange('password')} placeholder="Password" type="password" />
+            <input name="username" disabled={!this.state.appReady} value={this.state.username || ''} onChange={this.handleChange('username')} placeholder="Username" type="text" />
+            <input name="password" disabled={!this.state.appReady} value={this.state.password || ''} onChange={this.handleChange('password')} placeholder="Password" type="password" />
             <div className="checkbox">
                 <input type="checkbox" disabled={!this.state.appReady} checked={this.state.saveCredentials} onChange={this.handleChangeSaveCredentials} id="saveCredentials" />
                 <label htmlFor="saveCredentials"></label>
