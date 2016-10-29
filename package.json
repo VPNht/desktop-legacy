@@ -22,7 +22,6 @@
     "bluebird": "3.4.6",
     "bugsnag-js": "3.0.6",
     "classnames": "2.2.5",
-    "exec": "0.2.1",
     "get-port": "2.1.0",
     "is-running": "2.1.0",
     "jquery": "3.1.1",
