@@ -1,4 +1,4 @@
-import React from 'react/addons';
+import React from 'react';
 import metrics from '../utils/MetricsUtil';
 import utils from '../utils/Util';
 import Router from 'react-router';

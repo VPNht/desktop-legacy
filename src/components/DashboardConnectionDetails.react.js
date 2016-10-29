@@ -1,4 +1,4 @@
-import React from 'react/addons';
+import React from 'react';
 import Router from 'react-router';
 import VPN from '../actions/VPNActions';
 import util from '../utils/Util';

@@ -1,4 +1,4 @@
-import React from 'react/addons';
+import React from 'react';
 import RetinaImage from 'react-retina-image';
 import accountStore from '../stores/AccountStore';
 

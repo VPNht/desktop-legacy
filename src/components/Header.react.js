@@ -1,4 +1,4 @@
-import React from 'react/addons';
+import React from 'react';
 import {remote, ipcRenderer} from 'electron';
 import RetinaImage from 'react-retina-image';
 import util from '../utils/Util';

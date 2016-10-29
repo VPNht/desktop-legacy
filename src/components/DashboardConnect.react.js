@@ -1,4 +1,5 @@
-import React from 'react/addons';
+import React from 'react';
+import LinkedStateMixin from 'react-addons-linked-state-mixin'
 import Router from 'react-router';
 import myip from '../utils/MyipUtil';
 
@@ -16,7 +17,7 @@ import Credentials from '../utils/CredentialsUtil';
 
 var DashboardConnect = React.createClass({
 
-  mixins: [React.addons.LinkedStateMixin],
+  mixins: [LinkedStateMixin],
 
   getInitialState: function () {
     return {

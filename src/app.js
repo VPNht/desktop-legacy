@@ -1,6 +1,7 @@
 require.main.paths.splice(0, 0, process.env.NODE_PATH);
 import {remote, ipcRenderer} from 'electron';
 import React from 'react';
+import ReactDOM from 'react-dom';
 import metrics from './utils/MetricsUtil';
 import VPN from './utils/VPNUtil';
 import vpnActions from './actions/VPNActions';
@@ -37,7 +38,7 @@ var router = Router.create({
 	routes: routes
 });
 
-router.run(Handler => React.render( < Handler / > , document.body));
+router.run(Handler => ReactDOM.render( < Handler / > , document.getElementById('root')));
 routerContainer.set(router);
 
 // Default Route

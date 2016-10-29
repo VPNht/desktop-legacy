@@ -1,4 +1,4 @@
-import React from 'react/addons';
+import React from 'react';
 
 import Framework from './components/Framework.react';
 import Dashboard from './components/Dashboard.react';
