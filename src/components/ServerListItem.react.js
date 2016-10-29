@@ -14,8 +14,13 @@ var SingleValue = React.createClass({
 			marginRight: 10,
 			position: 'relative',
 			top: -2,
-			verticalAlign: 'middle',
+			verticalAlign: 'middle'
 		};
+        var placeHolderStyle = {
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+        }
 
 		var flag = false;
 		if (obj.value == 'hub.vpn.ht') {
@@ -28,7 +33,7 @@ var SingleValue = React.createClass({
 		return (
 			<div className="Select-placeholder">
 					{flag ? (
-						<div>
+						<div style={placeHolderStyle}>
 							<i className={flag} style={flagStyle}></i>
 							{obj.label}
 						</div>

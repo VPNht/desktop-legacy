@@ -47,7 +47,7 @@ var MyipUtil = {
 
                 _.each(servers, function(server, country) {
 
-                    serverName = server.countryName + ' - ' + Math.round(server.distance) + ' KM  - LOC ' + server.host.toUpperCase().replace( /^\D+/g, '');
+                    serverName = server.countryName + ' - ' + server.host.toUpperCase().replace( /^\D+/g, '') + ' (' + Math.round(server.distance) + ' KM)';
 
                     if (server.regionName) {
                         serverName = server.regionName + ", " + serverName;

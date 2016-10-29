@@ -35,7 +35,7 @@
     "react-dom": "15.x.x",
     "react-retina-image": "2.x.x",
     "react-router": "0.13.x",
-    "react-select": "0.9.x",
+    "react-select": "v1.0.0-rc.1",
     "request": "2.76.0",
     "windows-service-manager": "vpnht/windows-service-manager",
     "winreg": "1.2.2",

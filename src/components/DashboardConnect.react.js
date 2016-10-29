@@ -150,12 +150,11 @@ var DashboardConnect = React.createClass({
                     disabled={!this.state.appReady}
                     name="server"
                     value={this.state.server}
-					onOptionLabelClick={this.onLabelClick}
                     options={this.state.servers}
                     onChange={this.handleServer}
 					placeholder="Select server"
 					optionComponent={ServerOption}
-					singleValueComponent={ServerItem}
+					valueComponent={ServerItem}
                     searchable={false}
                     clearable={false}
             />

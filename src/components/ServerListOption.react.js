@@ -3,7 +3,6 @@ import RetinaImage from 'react-retina-image';
 
 var Option = React.createClass({
 	propTypes: {
-		addLabelText: React.PropTypes.string,
 		className: React.PropTypes.string,
 		mouseDown: React.PropTypes.func,
 		mouseEnter: React.PropTypes.func,
@@ -11,6 +10,18 @@ var Option = React.createClass({
 		option: React.PropTypes.object.isRequired,
 		renderFunc: React.PropTypes.func
 	},
+	handleMouseDown (event) {
+		event.preventDefault();
+		event.stopPropagation();
+		this.props.onSelect(this.props.option, event);
+	},
+	handleMouseEnter (event) {
+		this.props.onFocus(this.props.option, event);
+	},
+	handleMouseMove (event) {
+		if (this.props.isFocused) return;
+		this.props.onFocus(this.props.option, event);
+    },
 	render () {
 		var obj = this.props.option;
 		var size = 15;
@@ -32,10 +43,10 @@ var Option = React.createClass({
 
 		return (
 			<div className={this.props.className}
-				onMouseEnter={this.props.mouseEnter}
-				onMouseLeave={this.props.mouseLeave}
-				onMouseDown={this.props.mouseDown}
-				onClick={this.props.mouseDown}>
+				onMouseEnter={this.handleMouseEnter}
+				onMouseLeave={this.handleMouseMove}
+				onMouseDown={this.handleMouseDown}
+				onClick={this.handleMouseDown}>
 				<i className={flag} style={flagStyle}></i>
 				{obj.label}
 			</div>
