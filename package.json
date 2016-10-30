@@ -15,7 +15,7 @@
     "release": "grunt release"
   },
   "license": "GPL-3.0",
-  "electron-version": "0.33.3",
+  "electron-version": "1.4.4",
   "dependencies": {
     "alt": "0.18.6",
     "autoupdater": "vpnht/autoupdater",
