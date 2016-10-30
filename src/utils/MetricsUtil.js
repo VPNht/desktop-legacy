@@ -1,4 +1,3 @@
-import assign from 'object-assign';
 import Mixpanel from 'mixpanel';
 import uuid from 'node-uuid';
 import fs from 'fs';
@@ -51,7 +50,7 @@ var Metrics = {
     let osName = os.platform();
     let osVersion = util.isWindows() ? os.release() : osxRelease(os.release()).version;
 
-    mixpanel.track(name, assign({
+    mixpanel.track(name, Object.assign({
       distinct_id: id,
       version: util.packagejson().version,
       'Operating System': osName,
