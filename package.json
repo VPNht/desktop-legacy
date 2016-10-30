@@ -14,6 +14,10 @@
     "start": "grunt",
     "release": "grunt release"
   },
+  "engines": {
+    "node": ">=6.0.0",
+    "npm": ">=3.0.0"
+  },
   "license": "GPL-3.0",
   "electron-version": "1.4.4",
   "dependencies": {
