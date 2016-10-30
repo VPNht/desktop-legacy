@@ -17,6 +17,10 @@ module.exports = function (grunt) {
     return match ? match[1] : null;
   };
 
+  var clear = function (str) {
+    return str.replace(/ /g, '\\ ').replace(/\(/g,'\\(').replace(/\)/g,'\\)'); 
+  };
+
   var BASENAME = 'VPN.ht';
   var APPNAME = BASENAME;
 
@@ -35,14 +39,14 @@ module.exports = function (grunt) {
   grunt.initConfig({
     IDENTITY: 'Developer ID Application: David Lemarier',
     APPNAME: APPNAME,
-    APPNAME_ESCAPED: APPNAME.replace(/ /g, '\\ ').replace(/\(/g,'\\(').replace(/\)/g,'\\)'),
+    APPNAME_ESCAPED: clear(APPNAME),
     OSX_OUT: OSX_OUT,
-    OSX_OUT_ESCAPED: OSX_OUT.replace(/ /g, '\\ ').replace(/\(/g,'\\(').replace(/\)/g,'\\)'),
+    OSX_OUT_ESCAPED: clear(OSX_OUT),
     OSX_OUT_X64: OSX_OUT_X64,
     OSX_FILENAME: OSX_FILENAME,
-    OSX_FILENAME_ESCAPED: OSX_FILENAME.replace(/ /g, '\\ ').replace(/\(/g,'\\(').replace(/\)/g,'\\)'),
+    OSX_FILENAME_ESCAPED: clear(OSX_FILENAME),
     OSX_DIST_X64: OSX_DIST_X64,
-    OSX_DIST_X64_ESCAPED: OSX_DIST_X64.replace(/ /g, '\\ ').replace(/\(/g,'\\(').replace(/\)/g,'\\)'),
+    OSX_DIST_X64_ESCAPED: clear(OSX_DIST_X64),
     // electron
     electron: {
       windows: {
