@@ -131,19 +131,19 @@ var Preferences = React.createClass({
     handleEncryptionChange: function(encryption) {
 
         this.setState({
-            encryption
+            encryption: encryption.value
         });
-        this.handlePortChange('default');
-        Settings.save('encryption', encryption);
+        this.handlePortChange({value:'default'});
+        Settings.save('encryption', encryption.value);
 
     },
 
     handlePortChange: function(customPort) {
 
         this.setState({
-            customPort
+            customPort: customPort.value
         });
-        Settings.save('customPort', customPort);
+        Settings.save('customPort', customPort.value);
 
     },
 
@@ -175,7 +175,6 @@ var Preferences = React.createClass({
                 label: '256 BIT AES'
             }];
         }
-
 
         if (this.state.encryption == 64) {
             ports = [{
