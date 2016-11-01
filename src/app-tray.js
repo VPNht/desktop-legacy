@@ -87,6 +87,7 @@ exports.init = function(helper) {
 
         var tray = new Tray(__dirname + '/tray.png');
         tray.setContextMenu(trayMenuDisconnected);
+        tray.setToolTip(t['Disconnected']);
 
         tray.on('clicked', helper.toggleVisibility);
 

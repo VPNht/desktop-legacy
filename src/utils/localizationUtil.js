@@ -35,7 +35,7 @@ const localization = {
         try {
             tr = JSON.parse(sessionStorage[sessionStorage.locale])[str];
         } catch (e) {
-            console.error('Unable to translate:', str);
+            console.error('Unable to translate "' + str + '" because', e);
         }
         return tr;
     }
