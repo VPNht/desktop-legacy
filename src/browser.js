@@ -43,7 +43,7 @@ app.on('ready', function() {
     var canQuit = false;
     var size = screen.getPrimaryDisplay().workAreaSize;
     var autoUpdater = new Updater({
-        currentVersion: '0.0.2'
+        currentVersion: app.getVersion()
     });
 
     var windowSize = {
