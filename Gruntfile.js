@@ -200,13 +200,6 @@ module.exports = function (grunt) {
       }
     },
 
-    rename: {
-      installer: {
-        src: 'dist/Setup.exe',
-        dest: 'dist/' + BASENAME + 'Setup-' + packagejson.version + '-Windows-Alpha.exe'
-      }
-    },
-
     // styles
     less: {
       options: {
