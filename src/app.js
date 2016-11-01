@@ -33,10 +33,10 @@ Menu.setApplicationMenu(Menu.buildFromTemplate(template()));
 metrics.track('Started App');
 metrics.track('app heartbeat');
 setInterval(function() {
-	metrics.track('app heartbeat');
+    metrics.track('app heartbeat');
 }, 14400000);
 var router = Router.create({
-	routes: routes
+    routes: routes
 });
 
 router.run(Handler => ReactDOM.render( < Handler / > , document.getElementById('root')));
@@ -48,50 +48,50 @@ ipcRenderer.on('application:quitting', () => {});
 
 // Event fires when the app receives a vpnht:// URL
 ipcRenderer.on('application:open-url', opts => {
-	console.log('open', opts);
+    console.log('open', opts);
 });
 
 ipcRenderer.on('application:vpn-connect', () => {
-	if (Credentials._config()) {
-		vpnActions.connect({
-			username: Credentials.get().username,
-			password: Credentials.get().password,
-			server: Settings.get('server') || 'hub.vpn.ht'
-		});
-	} else {
-		log.error('No user/pass saved in the hash.\n\nTIPS: Try to connect manually first to save your data.')
-	}
+    if (Credentials._config()) {
+        vpnActions.connect({
+            username: Credentials.get().username,
+            password: Credentials.get().password,
+            server: Settings.get('server') || 'hub.vpn.ht'
+        });
+    } else {
+        log.error('No user/pass saved in the hash.\n\nTIPS: Try to connect manually first to save your data.')
+    }
 });
 
 ipcRenderer.on('application:vpn-check-disconnect', () => {
-	if (accountStore.getState().connecting || accountStore.getState().connected) {
-		log.info('Disconnecting before closing application');
-		vpnActions.disconnect();
-	} else {
-		vpnActions.disconnected();
-	}
+    if (accountStore.getState().connecting || accountStore.getState().connected) {
+        log.info('Disconnecting before closing application');
+        vpnActions.disconnect();
+    } else {
+        vpnActions.disconnected();
+    }
 });
 
 ipcRenderer.on('application:vpn-check-sleep', () => {
-	if (accountStore.getState().connected) {
-		log.info('Trying to reconnect after sleep');
-		if (Credentials._config()) {
-			vpnActions.connect({
-				username: Credentials.get().username,
-				password: Credentials.get().password,
-				server: Settings.get('server') || 'hub.vpn.ht'
-			});
-		} else {
-			log.info('No user/pass saved in the hash. Disconnecting.');
-			vpnActions.disconnect();
-		}
-	}
+    if (accountStore.getState().connected) {
+        log.info('Trying to reconnect after sleep');
+        if (Credentials._config()) {
+            vpnActions.connect({
+                username: Credentials.get().username,
+                password: Credentials.get().password,
+                server: Settings.get('server') || 'hub.vpn.ht'
+            });
+        } else {
+            log.info('No user/pass saved in the hash. Disconnecting.');
+            vpnActions.disconnect();
+        }
+    }
 });
 
 ipcRenderer.on('application:vpn-disconnect', () => {
-	vpnActions.disconnect();
+    vpnActions.disconnect();
 });
 
 module.exports = {
-	router: router
+    router: router
 };

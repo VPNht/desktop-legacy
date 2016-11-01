@@ -2,12 +2,12 @@ import path from 'path';
 
 module.exports = {
 
-  resourceDir: function () {
-    return process.env.BIN_PATH;
-  },
+    resourceDir: function() {
+        return process.env.BIN_PATH;
+    },
 
-  macsudo: function () {
-    return path.join(this.resourceDir(), 'macsudo');
-  }
+    macsudo: function() {
+        return path.join(this.resourceDir(), 'macsudo');
+    }
 
 };

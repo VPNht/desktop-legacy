@@ -7,7 +7,7 @@ var trayMenuConnecting = null;
 // Define a function to set up our tray icon
 exports.init = function(helper) {
 
-    ipcMain.on('localization.ready', function localize (e, arg) {
+    ipcMain.on('localization.ready', function localize(e, arg) {
         let t = JSON.parse(arg);
 
         // Disconnected State

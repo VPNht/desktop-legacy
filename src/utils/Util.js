@@ -19,7 +19,7 @@ module.exports = {
 
         return new Promise((resolve, reject) => {
             let cmd = Array.isArray(args) ? args.join(' ') : args;
-            let cb = function (stderr, stdout, code) {
+            let cb = function(stderr, stdout, code) {
                 if (code) {
                     reject(new Error(cmd + ' returned non-zero exit code. Stderr: ' + stderr));
                 } else {

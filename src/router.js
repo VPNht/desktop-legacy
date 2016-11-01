@@ -1,11 +1,11 @@
 module.exports = {
-  router: null,
+    router: null,
 
-  get: function () {
-    return this.router;
-  },
+    get: function() {
+        return this.router;
+    },
 
-  set: function (router) {
-    this.router = router;
-  }
+    set: function(router) {
+        this.router = router;
+    }
 };

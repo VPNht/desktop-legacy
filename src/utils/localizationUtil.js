@@ -1,7 +1,7 @@
 import {ipcRenderer} from 'electron';
 
 const localization = {
-    init: function () {
+    init: function() {
         let availableLocales = ['en', 'fr'],
             detectedLocale = false,
             pureLanguage = navigator.language.toLowerCase(),
@@ -20,7 +20,7 @@ const localization = {
         for (let i in availableLocales) {
             let l = availableLocales[i];
             try {
-                sessionStorage[l] = JSON.stringify(require('../translations/'+l));
+                sessionStorage[l] = JSON.stringify(require('../translations/' + l));
             } catch (e) {
                 console.error('Unable to load language:', l);
             }
@@ -30,7 +30,7 @@ const localization = {
         // build tray
         ipcRenderer.send('localization.ready', sessionStorage[detectedLocale]);
     },
-    t: function translate (str) {
+    t: function translate(str) {
         let tr = str;
         try {
             tr = JSON.parse(sessionStorage[sessionStorage.locale])[str];

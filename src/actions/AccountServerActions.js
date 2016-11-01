@@ -2,12 +2,12 @@ import alt from '../alt';
 
 class AccountServerActions {
 
-  constructor () {
-    this.generateActions(
-      'loggedin',
-      'loggedout'
-    );
-  }
+    constructor() {
+        this.generateActions(
+            'loggedin',
+            'loggedout'
+        );
+    }
 
 }
 
