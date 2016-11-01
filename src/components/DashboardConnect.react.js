@@ -97,7 +97,7 @@ var DashboardConnect = React.createClass({
     });
 
     // save for future use
-    Settings.save('server', val, val.label);
+    Settings.save('server', val, val.value);
   },
 
   handleChangeSaveCredentials: function (e) {
@@ -108,6 +108,7 @@ var DashboardConnect = React.createClass({
 
     // clear username/pw
     if (!checked) {
+        Credentials.logout();
         this.setState({
             username: '',
             password: ''
