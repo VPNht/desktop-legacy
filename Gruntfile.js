@@ -223,7 +223,7 @@ module.exports = function (grunt) {
     babel: {
       options: {
         sourceMap: 'inline',
-        blacklist: 'regenerator'
+        presets: ['es2015', 'react']
       },
       dist: {
         files: [{
