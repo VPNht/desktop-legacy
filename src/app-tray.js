@@ -10,7 +10,7 @@ exports.init = function(helper) {
 	// Disconnected State
 	trayMenuDisconnected = new Menu();
 	trayMenuDisconnected.append(new MenuItem({
-		label: 'Toggle VPN.ht',
+		label: 'Toggle' + ' VPN.ht',
 		click: helper.toggleVisibility
 	}));
 	trayMenuDisconnected.append(new MenuItem({

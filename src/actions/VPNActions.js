@@ -72,7 +72,7 @@ class VPNActions {
               })
               .catch((error) => {
 
-                  log.error('Unable to update ip');
+                  log.error('Unable to update IP');
                   console.log(error);
 
               });
@@ -82,7 +82,7 @@ class VPNActions {
   invalidCredentials() {
       return function(dispatch) {
           dispatch();
-          alert("Invalid credentials")
+          alert('Invalid credentials');
       };
   }
 
@@ -90,7 +90,7 @@ class VPNActions {
       return function(dispatch) {
           dispatch();
           if (Settings.get('connectLaunch') === 'true' && Credentials._config()) {
-              log.info('Auto-connect on launch')
+              log.info('Auto-connect on launch');
               this.connect({
                   username: Credentials.get().username,
                   password: Credentials.get().password,

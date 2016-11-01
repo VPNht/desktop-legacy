@@ -1,6 +1,7 @@
 import React from 'react';
 import RetinaImage from 'react-retina-image';
 import accountStore from '../stores/AccountStore';
+import {t} from '../utils/localizationUtil';
 
 var SubHeader = React.createClass({
 
@@ -32,16 +33,16 @@ var SubHeader = React.createClass({
     if (this.state.connected) {
         status = (
             <div className="status">
-                <p className="connected">connected!</p>
-                <span>Your internet traffic is now encrypted! and your online identity has become anonymous.</span>
+                <p className="connected">{t('connected!')}</p>
+                <span>{t('Your internet traffic is now encrypted! and your online identity has become anonymous.')}</span>
             </div>
         );
         greenGuyClass += ' connected';
     } else {
         status = (
             <div className="status">
-                <p className="disconnected">not connected!</p>
-                <span>Your internet traffic is unencrypted and your online identity is exposed.</span>
+                <p className="disconnected">{t('not connected!')}</p>
+                <span>{t('Your internet traffic is unencrypted and your online identity is exposed.')}</span>
             </div>
         );
     }

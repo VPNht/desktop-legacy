@@ -73,10 +73,10 @@ module.exports = Object.assign(Object.create(EventEmitter.prototype), {
     var ifaces = os.networkInterfaces();
     var memories = os.totalmem()/1024/1024/1024;
     var freeMemories = os.freemem()/1024/1024/1024;
-    this.info("Launching VPN.ht Application "+ appVersion);
+    this.info("Launching VPN.ht Application " + appVersion);
     this.info("Network Interfaces", ifaces);
     this.info("Operating System", {
-        'Release':os.release(),
+        'Release': os.release(),
         'Type': os.type(),
         'Arch': os.arch(),
         'LoadAvg': os.loadavg(),

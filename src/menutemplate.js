@@ -13,7 +13,7 @@ var MenuTemplate = function () {
       label: 'VPN.ht',
       submenu: [
       {
-        label: 'About VPN.ht',
+        label: 'About' + ' VPN.ht',
         accelerator: util.CommandOrCtrl() + '+I',
         click: function () {
           metrics.track('Opened About', {
@@ -26,7 +26,7 @@ var MenuTemplate = function () {
         type: 'separator'
       },
       {
-        label: 'Hide VPN.ht',
+        label: 'Hide' + ' VPN.ht',
         accelerator: util.CommandOrCtrl() + '+H',
         selector: 'hide:'
       },

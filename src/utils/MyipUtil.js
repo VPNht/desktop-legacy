@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import request from 'request';
 import metrics from './MetricsUtil';
+import {t} from './localizationUtil';
 import log from '../stores/LogStore';
 import ServerActions from '../actions/ServerActions';
 
@@ -38,7 +39,7 @@ var MyipUtil = {
 
   _getRemoteServers: function() {
 
-    var options = [{ value: 'hub.vpn.ht', label: 'Nearest Server (Random)', country: 'blank' }];
+    var options = [{ value: 'hub.vpn.ht', label: t('Nearest Server (Random)'), country: 'blank' }];
     var serverName;
     return new Promise((resolve) => {
         MyipUtil._servers()

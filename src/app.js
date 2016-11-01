@@ -16,8 +16,8 @@ import log from './stores/LogStore';
 import accountStore from './stores/AccountStore';
 import utils from './utils/Util';
 import Credentials from './utils/CredentialsUtil';
-
 import Settings from './utils/SettingsUtil';
+import Localization from './utils/localizationUtil';
 
 var app = remote.app;
 var Menu = remote.Menu;
@@ -25,6 +25,7 @@ var Menu = remote.Menu;
 // Init process
 log.initLogs(app.getVersion());
 VPN.initCheck();
+Localization.init();
 webUtil.addLiveReload();
 webUtil.addBugReporting();
 webUtil.disableGlobalBackspace();
@@ -81,7 +82,7 @@ ipcRenderer.on('application:vpn-check-sleep', () => {
 				server: Settings.get('server') || 'hub.vpn.ht'
 			});
 		} else {
-			log.info('No user/pass saved in the hash, now disconnecting.');
+			log.info('No user/pass saved in the hash. Disconnecting.');
 			vpnActions.disconnect();
 		}
 	}

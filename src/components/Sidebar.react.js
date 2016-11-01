@@ -1,6 +1,7 @@
 import React from 'react';
 import Router from 'react-router';
 import RetinaImage from 'react-retina-image';
+import {t} from '../utils/localizationUtil';
 
 var Sidebar = React.createClass({
   componentWillMount: function () {
@@ -12,13 +13,13 @@ var Sidebar = React.createClass({
         <Router.Link to="dashboard">
           <li>
             <RetinaImage src="icons/Dashboard%20Icon.png"/>
-            <p>dashboard</p>
+            <p>{t('dashboard')}</p>
           </li>
         </Router.Link>
         <Router.Link to="preferences">
           <li>
             <RetinaImage src="icons/Country%20Selection.png"/>
-            <p>preferences</p>
+            <p>{t('preferences')}</p>
           </li>
         </Router.Link>
       </ul>

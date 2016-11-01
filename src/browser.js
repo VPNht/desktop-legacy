@@ -159,6 +159,7 @@ app.on('ready', function() {
 
     mainWindow.webContents.on('did-finish-load', function() {
 
+        console.log('ready')
         mainWindow.setTitle('VPN.ht');
         if (!args.hide) {
             mainWindow.show();

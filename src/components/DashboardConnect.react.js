@@ -13,6 +13,7 @@ import ServerItem from './ServerListItem.react';
 import Logs from './DashboardLogs.react';
 import Settings from '../utils/SettingsUtil';
 import Credentials from '../utils/CredentialsUtil';
+import {t} from '../utils/localizationUtil';
 
 var DashboardConnect = React.createClass({
 
@@ -70,11 +71,11 @@ var DashboardConnect = React.createClass({
         VPN.disconnect();
     } else {
         if (!this.state.username) {
-            alert('Username should not be left blank');
+            alert(t('Username should not be left blank'));
         } else if (!this.state.password) {
-            alert('Password should not be left blank');
+            alert(t('Password should not be left blank'));
         } else if (!this.state.server) {
-            alert('You should select a server');
+            alert(t('You should select a server'));
         } else {
 
             // should we save credentials ?
@@ -127,9 +128,9 @@ var DashboardConnect = React.createClass({
     var currentStatus = 'Loading...';
     if (this.state.appReady) {
         if (this.state.connecting) {
-            currentStatus = 'Connecting...';
+            currentStatus = t('Connecting...');
         } else {
-            currentStatus = 'Disconnected';
+            currentStatus = t('Disconnected');
         }
     }
 
@@ -137,37 +138,37 @@ var DashboardConnect = React.createClass({
         <div>
 
           <section>
-            <h1 className="title">VPN connection status</h1>
+            <h1 className="title">{t('VPN connection status')}</h1>
             <div className="connectionstatus">
                 <i className={this.state.connecting ? 'ion-ios-loop spin' : 'ion-ios-close-empty disconnected'}></i>
                 <p>{currentStatus}</p>
             </div>
             <button disabled={!this.state.appReady} className="right" onClick={this.handleConnect}>
-                <p>{this.state.connecting ? 'cancel' : 'connect to vpn'}</p>
+                <p>{this.state.connecting ? t('cancel') : t('connect to vpn')}</p>
             </button>
           </section>
 
           <section>
-            <h1 className="title">Login</h1>
-            <input name="username" disabled={!this.state.appReady} value={this.state.username || ''} onChange={this.handleChange('username')} placeholder="Username" type="text" />
-            <input name="password" disabled={!this.state.appReady} value={this.state.password || ''} onChange={this.handleChange('password')} onKeyPress={this.handleKeyPress} placeholder="Password" type="password" />
+            <h1 className="title">{t('Login')}</h1>
+            <input name="username" disabled={!this.state.appReady} value={this.state.username || ''} onChange={this.handleChange('username')} placeholder={t('Username')} type="text" />
+            <input name="password" disabled={!this.state.appReady} value={this.state.password || ''} onChange={this.handleChange('password')} onKeyPress={this.handleKeyPress} placeholder={t('Password')} type="password" />
             <div className="checkbox">
                 <input type="checkbox" disabled={!this.state.appReady} checked={this.state.saveCredentials} onChange={this.handleChangeSaveCredentials} id="saveCredentials" />
                 <label htmlFor="saveCredentials">
-                    <p>Remember my username and password</p>
+                    <p>{t('Remember my username and password')}</p>
                 </label>
             </div>
           </section>
 
           <section>
-            <h1 className="title">Servers</h1>
+            <h1 className="title">{t('Servers')}</h1>
             <Select
                     disabled={!this.state.appReady}
                     name="server"
                     value={this.state.server}
                     options={this.state.servers}
                     onChange={this.handleServer}
-					placeholder="Select server"
+					placeholder={t('Select server')}
 					optionComponent={ServerOption}
 					valueComponent={ServerItem}
                     searchable={false}
