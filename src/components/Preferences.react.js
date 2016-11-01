@@ -207,33 +207,39 @@ var Preferences = React.createClass({
 
                 <div className="checkbox">
                     <input id="reportAnon" type="checkbox" checked={this.state.metricsEnabled} onChange={this.handleChangeMetricsEnabled}/>
-                    <label htmlFor="reportAnon"> </label>
-                    <p>Report anonymous usage analytics</p>
+                    <label htmlFor="reportAnon">
+                        <p>Report anonymous usage analytics</p>
+                    </label>
                 </div>
                 <div className="checkbox">
                     <input id="saveCredentials" disabled={!this.state.saveCredentials}  type="checkbox" checked={this.state.connectLaunch && this.state.saveCredentials} onChange={this.handleChangeConnectLaunch}/>
-                    <label htmlFor="saveCredentials"> </label>
-                    <p>Auto-connect after launch (requires a saved user/pass)</p>
+                    <label htmlFor="saveCredentials">
+                        <p>Auto-connect after launch (requires a saved user/pass)</p>
+                    </label>
                 </div>
                 <div className="checkbox">
                     <input id="launchStartup" type="checkbox" checked={this.state.launchStartup} onChange={this.handleChangeLaunchStartup}/>
-                    <label htmlFor="launchStartup"> </label>
-                    <p>Launch on operating system startup</p>
+                    <label htmlFor="launchStartup">
+                        <p>Launch on operating system startup</p>
+                    </label>
                 </div>
                 <div className="checkbox">
                     <input id="launchStartupHidden" type="checkbox" checked={this.state.launchStartupHidden} onChange={this.handleChangeLaunchStartupHidden}/>
-                    <label htmlFor="launchStartupHidden"> </label>
-                    <p>Launch on operating system startup hidden</p>
+                    <label htmlFor="launchStartupHidden">
+                        <p>Launch on operating system startup hidden</p>
+                    </label>
                 </div>
                 <div className="checkbox">
                     <input id="disableSmartdns" type="checkbox" checked={this.state.disableSmartdns} onChange={this.handleChangeDisableSmartdns}/>
-                    <label htmlFor="disableSmartdns"> </label>
-                    <p>Disable SmartDNS</p>
+                    <label htmlFor="disableSmartdns">
+                        <p>Disable SmartDNS</p>
+                    </label>
                 </div>
                 <div className="checkbox">
                     <input id="minToTaskbar" type="checkbox" checked={this.state.minToTaskbar} onChange={this.handleChangeMinToTaskbar}/>
-                    <label htmlFor="minToTaskbar"> </label>
-                    <p>Minimize to taskbar</p>
+                    <label htmlFor="minToTaskbar">
+                        <p>Minimize to taskbar</p>
+                    </label>
                 </div>
         </section>
         <section className="preferences">
@@ -254,8 +260,9 @@ var Preferences = React.createClass({
             <h1 className="title">Auto Path</h1>
             <div className="checkbox">
                 <input type="checkbox" id="autopath" checked={this.state.autoPath} onChange={this.handleChangeAutoPath} />
-                <label htmlFor="autopath"> </label>
-                <p>{this.state.autoPath ? 'Enabled' : 'Disabled'}</p>
+                <label htmlFor="autopath">
+                    <p>{this.state.autoPath ? 'Enabled' : 'Disabled'}</p>
+                </label>
                 <p className="info">Feature that tries alternate ports in order to resolve certain types of connections issues.</p>
             </div>
         </section>

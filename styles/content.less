@@ -205,12 +205,12 @@ section label {
     position: absolute;
     width: 18px;
     height: 18px;
+    white-space: nowrap;
     background-color: white;
     border: 1px solid #ccc;
 }
 
 section .checkbox p {
-    cursor: pointer;
     margin-left: 30px;
     color: #1b1b1b;
     font-size: 14px;
@@ -228,6 +228,7 @@ section .checkbox p.info {
     border-left-style: solid;
     position: relative;
     border-left-width: 1px;
+    float: right;
 }
 
 section label:after {
@@ -238,7 +239,8 @@ section label:after {
     color: #1eb7b5;
     font-size: 38px;
     margin-left: 2px;
-    position: relative;
+    position: absolute;
+    left: 0;
     top: -9px;
     transform: rotate(-10deg);
 }
