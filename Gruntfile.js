@@ -152,9 +152,21 @@ module.exports = function(grunt) {
                     dest: 'build/translations'
                 }, {
                     cwd: 'node_modules/',
-                    src: Object.keys(packagejson.dependencies).map(function(dep) {
-                        return dep + '/**/*';
-                    }),
+                    src: Object.keys(packagejson.dependencies).map(function (dep) { return dep + '/**/*';}),
+                    dest: 'build/node_modules/',
+                    expand: true
+                }]
+            },
+            release: {
+                files: [{
+                    cwd: 'node_modules/',
+                    src: [
+                        '**/*',
+                        '!*grunt*',
+                        '!*babel*',
+                        '!*gulp*',
+                        '!*yargs*'
+                    ],
                     dest: 'build/node_modules/',
                     expand: true
                 }]
@@ -330,12 +342,12 @@ module.exports = function(grunt) {
     grunt.registerTask('default', ['newer:babel', 'less', 'newer:copy:dev', 'shell:electron', 'watchChokidar']);
 
     if (process.platform === 'win32') {
-        grunt.registerTask('release', ['clean:release', 'babel', 'less', 'copy:dev', 'electron:windows', 'copy:windows', 'rcedit:exes', 'compress']);
+        grunt.registerTask('release', ['clean:release', 'babel', 'less', 'copy:dev', 'copy:release', 'electron:windows', 'copy:windows', 'rcedit:exes', 'compress']);
     } else {
-        grunt.registerTask('release', ['clean:release', 'babel', 'less', 'copy:dev', 'electron:osx', 'copy:osx', 'shell:sign', 'shell:zip', 'shell:macdist']);
+        grunt.registerTask('release', ['clean:release', 'babel', 'less', 'copy:dev', 'copy:release', 'electron:osx', 'copy:osx', 'shell:sign', 'shell:zip', 'shell:macdist']);
     }
 
-    grunt.registerTask('ci', ['clean:release', 'babel', 'less', 'copy:dev', 'electron:osx', 'electron:windows', 'copy:osx', 'copy:windows', 'rcedit:exes', 'shell:sign', 'shell:macdistci', 'shell:makensis']);
+    grunt.registerTask('ci', ['clean:release', 'babel', 'less', 'copy:dev', 'copy:release', 'electron:osx', 'electron:windows', 'copy:osx', 'copy:windows', 'rcedit:exes', 'shell:sign', 'shell:macdistci', 'shell:makensis']);
 
     process.on('SIGINT', function() {
         grunt.task.run(['shell:electron:kill']);
