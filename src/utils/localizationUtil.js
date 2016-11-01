@@ -1,3 +1,5 @@
+import {ipcRenderer} from 'electron';
+
 const localization = {
     init: function () {
         let availableLocales = ['en', 'fr'],
@@ -24,6 +26,9 @@ const localization = {
             }
         }
         sessionStorage.locale = detectedLocale;
+
+        // build tray
+        ipcRenderer.send('localization.ready', sessionStorage[detectedLocale]);
     },
     t: function translate (str) {
         let tr = str;
