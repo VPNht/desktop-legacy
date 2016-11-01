@@ -161,9 +161,9 @@ module.exports = Object.assign(currentOSLib, {
 
   connect: function (args) {
 
-    _args = args;
+    _args = args; // don't remove
 
-    log.info("\n\n----------------------\nConnecting to "+ args.server.label + "\n");
+    log.info("\n\n----------------------\nConnecting to "+ args.server.value + "\n");
 
     return helpers.checkRunning()
         .then(this.stopProcess)
