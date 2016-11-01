@@ -105,8 +105,22 @@ var DashboardConnect = React.createClass({
       saveCredentials: checked
     });
 
+    // clear username/pw
+    if (!checked) {
+        this.setState({
+            username: '',
+            password: ''
+        });
+    }
+
     // save for future use
     Settings.save('saveCredentials', !!checked);
+  },
+
+  handleKeyPress: function (e) {
+    if (e.key === 'Enter') {
+      this.handleConnect(e);
+    }
   },
 
   render: function () {
@@ -136,7 +150,7 @@ var DashboardConnect = React.createClass({
           <section>
             <h1 className="title">Login</h1>
             <input name="username" disabled={!this.state.appReady} value={this.state.username || ''} onChange={this.handleChange('username')} placeholder="Username" type="text" />
-            <input name="password" disabled={!this.state.appReady} value={this.state.password || ''} onChange={this.handleChange('password')} placeholder="Password" type="password" />
+            <input name="password" disabled={!this.state.appReady} value={this.state.password || ''} onChange={this.handleChange('password')} onKeyPress={this.handleKeyPress} placeholder="Password" type="password" />
             <div className="checkbox">
                 <input type="checkbox" disabled={!this.state.appReady} checked={this.state.saveCredentials} onChange={this.handleChangeSaveCredentials} id="saveCredentials" />
                 <label htmlFor="saveCredentials">
