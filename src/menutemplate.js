@@ -2,6 +2,7 @@ import {remote, shell} from 'electron';
 import router from './router';
 import metrics from './utils/MetricsUtil';
 import util from './utils/Util';
+import {t} from './utils/localizationUtil';
 
 var dialog = remote.dialog;
 var app = remote.app;
@@ -11,7 +12,7 @@ var MenuTemplate = function() {
     return [{
         label: 'VPN.ht',
         submenu: [{
-            label: 'About' + ' VPN.ht',
+            label: t('About'),
             accelerator: util.CommandOrCtrl() + '+I',
             click: function() {
                 metrics.track('Opened About', {
@@ -22,42 +23,42 @@ var MenuTemplate = function() {
         }, {
             type: 'separator'
         }, {
-            label: 'Hide' + ' VPN.ht',
+            label: t('Hide') + ' VPN.ht',
             accelerator: util.CommandOrCtrl() + '+H',
             selector: 'hide:'
         }, {
-            label: 'Hide Others',
+            label: t('Hide Others'),
             accelerator: util.CommandOrCtrl() + '+Shift+H',
             selector: 'hideOtherApplications:'
         }, {
-            label: 'Show All',
+            label: t('Show All'),
             selector: 'unhideAllApplications:'
         }, {
             type: 'separator'
         }, {
-            label: 'Quit',
+            label: t('Quit'),
             accelerator: util.CommandOrCtrl() + '+Q',
             click: function() {
                 app.quit();
             }
         }]
     }, {
-        label: 'View',
+        label: t('View'),
         submenu: [{
-            label: 'Toggle DevTools',
+            label: t('Toggle DevTools'),
             accelerator: 'Alt+' + util.CommandOrCtrl() + '+I',
             click: function() {
                 remote.getCurrentWindow().toggleDevTools();
             }
         }]
     }, {
-        label: 'Window',
+        label: t('Window'),
         submenu: [{
-            label: 'Minimize',
+            label: t('Minimize'),
             accelerator: util.CommandOrCtrl() + '+M',
             selector: 'performMiniaturize:'
         }, {
-            label: 'Close',
+            label: t('Close'),
             accelerator: util.CommandOrCtrl() + '+W',
             click: function() {
                 remote.getCurrentWindow().hide();
@@ -65,13 +66,13 @@ var MenuTemplate = function() {
         }, {
             type: 'separator'
         }, {
-            label: 'Bring All to Front',
+            label: t('Bring All to Front'),
             selector: 'arrangeInFront:'
         }]
     }, {
-        label: 'Help',
+        label: t('Help'),
         submenu: [{
-            label: 'Report Issue or Suggest Feedback',
+            label: t('Report Issue or Suggest Feedback'),
             click: function() {
                 metrics.track('Opened Issue Reporter', {
                     from: 'menu'

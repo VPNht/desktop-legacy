@@ -48,12 +48,12 @@ app.on('ready', function() {
 
     var windowSize = {
         width: 800,
-        height: 870
-    }
+        height: process.platform === 'win32' ? 900 : 870
+    };
 
     if (size.height < 870) {
-        windowSize.width = '800';
-        windowSize.height = '600';
+        windowSize.width = 800;
+        windowSize.height = 600;
     }
 
     var mainWindow = new BrowserWindow({
@@ -61,7 +61,7 @@ app.on('ready', function() {
         height: windowSize.height,
         'standard-window': false,
         resizable: false,
-        frame: false,
+        frame: process.platform === 'win32', //only on Windows
         show: false
     });
 
@@ -161,6 +161,7 @@ app.on('ready', function() {
 
         console.log('ready')
         mainWindow.setTitle('VPN.ht');
+
         if (!args.hide) {
             mainWindow.show();
             mainWindow.focus();

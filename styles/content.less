@@ -11,6 +11,11 @@
     position: relative;
 }
 
+.win32 .content-container,
+.win32 .content-scroller {
+    height: calc(~"100vh - 102px");
+}
+
 section {
     float: right;
     padding-top: 25px;
@@ -37,7 +42,7 @@ section .title {
 
 section .connectionstatus {
     float: left;
-    min-width: 30vw;
+    min-width: 29vw;
 }
 
 section .connectionstatus p {
@@ -81,7 +86,6 @@ section button {
 }
 
 section button:hover {
-    height: 41px;
     background-color: #00a3a2;
 }
 

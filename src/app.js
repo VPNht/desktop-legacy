@@ -46,6 +46,9 @@ routerContainer.set(router);
 router.transitionTo('dashboard');
 ipcRenderer.on('application:quitting', () => {});
 
+// Define styles
+document.getElementById('root').classList = [process.platform];
+
 // Event fires when the app receives a vpnht:// URL
 ipcRenderer.on('application:open-url', opts => {
     console.log('open', opts);

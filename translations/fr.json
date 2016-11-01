@@ -19,8 +19,10 @@
     "Hide Others": "Cacher les autres",
     "Show All": "Montrer tout",
     "View": "Affichage",
+    "Toggle DevTools": "Outils de développement",
     "Window": "Fenêtre",
     "Close": "Fermer",
+    "Minimize": "Réduire",
     "Bring All to Front": "Mettre à l'avant-plan",
     "Help": "Aide",
     "Report Issue or Suggest Feedback": "Signaler un problème ou une suggestion",
@@ -72,7 +74,7 @@
     "Launch on operating system startup": "Lancer au démarrage du système",
     "Launch on operating system startup hidden": "Lancer minimisé au démarrage du système",
     "Disable SmartDNS": "Désactiver les DNS intelligents",
-    "Minimize to taskbar": "Minimiser dans la barre des tâches",
+    "Minimize to taskbar": "Réduire dans la barre des tâches",
     "Encryption": "Chiffrement",
     "Auto Path": "Connectivité automatique",
     "Enabled": "Activé",
@@ -83,9 +85,9 @@
     "preferences": "Paramètres",
 
     "connected!": "connecté !",
-    "Your internet traffic is now encrypted! and your online identity has become anonymous.": "Le trafic Internet est chiffré ! Votre identité en ligne est anonyme.",
+    "Your internet traffic is now encrypted! and your online identity has become anonymous.": "Le trafic Internet est chiffré et anonyme ! Votre identité en ligne est protégée.",
     "not connected!": "non connecté !",
-    "Your internet traffic is unencrypted and your online identity is exposed.": "Le trafic Internet n'est pas chiffré, votre identité en ligne est exposée.",
+    "Your internet traffic is unencrypted and your online identity is exposed.": "Le trafic Internet n'est pas chiffré, votre identité en ligne est vulnérable.",
 
     "Nearest Server (Random)": "Le plus proche (au hasard)"
 }
