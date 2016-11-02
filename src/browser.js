@@ -70,7 +70,7 @@ app.on('ready', function() {
         }
     });
 
-    mainWindow.webContents.openDevTools();
+    //DEBUG: mainWindow.webContents.openDevTools();
 
     var preventMultipleInstances = function() {
         var socket = (process.platform === 'win32') ? '\\\\.\\pipe\\vpnht-sock' : path.join(os.tmpdir(), 'vpnht.sock');
