@@ -15,6 +15,7 @@
     "No": "Non",
 
     "About": "À propos",
+    "Manage Account": "Gestion de compte",
     "Hide": "Cacher",
     "Hide Others": "Cacher les autres",
     "Show All": "Montrer tout",
@@ -25,6 +26,7 @@
     "Minimize": "Réduire",
     "Bring All to Front": "Mettre à l'avant-plan",
     "Help": "Aide",
+    "Support": "Assistance",
     "Report Issue or Suggest Feedback": "Signaler un problème ou une suggestion",
 
     "Username should not be left blank": "Le nom d'utilisateur ne peut pas être vide",
@@ -89,5 +91,10 @@
     "not connected!": "non connecté !",
     "Your internet traffic is unencrypted and your online identity is exposed.": "Le trafic Internet n'est pas chiffré, votre identité en ligne est vulnérable.",
 
-    "Nearest Server (Random)": "Le plus proche (au hasard)"
+    "Nearest Server (Random)": "Le plus proche (au hasard)",
+
+    "Plug and play!": "Plug & play!",
+    "You can start using our service, and start surfing in privacy, as soon as you create an account.": "Vous pouvez commencer à utiliser nos services et surfer en tout anonymat dès que votre compte est créé.",
+    "No logs": "Pas de traces",
+    "You value your privacy. So do we. We don’t keep logs, we don’t know the sites you have visited or the applications you’ve used.": "Vous tenez à votre vie privée. Nous aussi. Nous ne conservons aucunes données, nous ne connaissons donc pas les sites que vous avez consultés ou les applications que vous avez utilisées."
 }

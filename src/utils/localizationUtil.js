@@ -33,7 +33,7 @@ const localization = {
     t: function translate(str) {
         let tr = str;
         try {
-            tr = JSON.parse(sessionStorage[sessionStorage.locale])[str];
+            tr = JSON.parse(sessionStorage[sessionStorage.locale])[str] || tr;
         } catch (e) {
             console.error('Unable to translate "' + str + '" because', e);
         }

@@ -15,6 +15,7 @@
     "No": "No",
 
     "About": "About",
+    "Manage Account": "Manage Account",
     "Hide": "Hide",
     "Hide Others": "Hide Others",
     "Show All": "Show All",
@@ -25,6 +26,7 @@
     "Minimize": "Minimize",
     "Bring All to Front": "Bring All to Front",
     "Help": "Help",
+    "Support": "Support",
     "Report Issue or Suggest Feedback": "Report Issue or Suggest Feedback",
 
     "Username should not be left blank": "Username should not be left blank",
@@ -89,5 +91,10 @@
     "not connected!": "not connected!",
     "Your internet traffic is unencrypted and your online identity is exposed.": "Your internet traffic is unencrypted and your online identity is exposed.",
 
-    "Nearest Server (Random)": "Nearest Server (Random)"
+    "Nearest Server (Random)": "Nearest Server (Random)",
+
+    "Plug and play!": "Plug and play!",
+    "You can start using our service, and start surfing in privacy, as soon as you create an account.": "You can start using our service, and start surfing in privacy, as soon as you create an account.",
+    "No logs": "No logs",
+    "You value your privacy. So do we. We don’t keep logs, we don’t know the sites you have visited or the applications you’ve used.": "You value your privacy. So do we. We don’t keep logs, we don’t know the sites you have visited or the applications you’ve used."
 }

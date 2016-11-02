@@ -12,17 +12,25 @@ var MenuTemplate = function() {
     return [{
         label: 'VPN.ht',
         submenu: [{
-            label: t('About'),
-            accelerator: util.CommandOrCtrl() + '+I',
+            label: t('Manage Account'),
             click: function() {
-                metrics.track('Opened About', {
+                metrics.track('Opened Billing on VPN.ht', {
                     from: 'menu'
                 });
-                router.get().transitionTo('about');
+                shell.openExternal('https://billing.vpn.ht/clientarea.php?action=services');
             }
         }, {
             type: 'separator'
         }, {
+            label: t('Quit'),
+            accelerator: util.CommandOrCtrl() + '+Q',
+            click: function() {
+                app.quit();
+            }
+        }]
+    }, {
+        label: t('View'),
+        submenu: [{
             label: t('Hide') + ' VPN.ht',
             accelerator: util.CommandOrCtrl() + '+H',
             selector: 'hide:'
@@ -36,15 +44,6 @@ var MenuTemplate = function() {
         }, {
             type: 'separator'
         }, {
-            label: t('Quit'),
-            accelerator: util.CommandOrCtrl() + '+Q',
-            click: function() {
-                app.quit();
-            }
-        }]
-    }, {
-        label: t('View'),
-        submenu: [{
             label: t('Toggle DevTools'),
             accelerator: 'Alt+' + util.CommandOrCtrl() + '+I',
             click: function() {
@@ -72,12 +71,31 @@ var MenuTemplate = function() {
     }, {
         label: t('Help'),
         submenu: [{
+            label: t('Support'),
+            click: function() {
+                metrics.track('Opened Support on VPN.ht', {
+                    from: 'menu'
+                });
+                shell.openExternal('https://billing.vpn.ht/knowledgebase.php');
+            }
+        }, {
             label: t('Report Issue or Suggest Feedback'),
             click: function() {
                 metrics.track('Opened Issue Reporter', {
                     from: 'menu'
                 });
                 shell.openExternal('https://github.com/vpnht/desktop/issues/new');
+            }
+        }, {
+            type: 'separator'
+        }, {
+            label: t('About'),
+            accelerator: util.CommandOrCtrl() + '+I',
+            click: function() {
+                metrics.track('Opened About', {
+                    from: 'menu'
+                });
+                router.get().transitionTo('about');
             }
         }]
     }];
