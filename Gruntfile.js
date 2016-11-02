@@ -164,8 +164,7 @@ module.exports = function(grunt) {
                         '**/*',
                         '!*grunt*',
                         '!*babel*',
-                        '!*gulp*',
-                        '!*yargs*'
+                        '!*gulp*'
                     ],
                     dest: 'build/node_modules/',
                     expand: true
