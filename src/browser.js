@@ -62,7 +62,12 @@ app.on('ready', function() {
         'standard-window': false,
         resizable: false,
         frame: process.platform === 'win32', //only on Windows
-        show: false
+        show: false,
+        titleBarStyle: 'hidden-inset',
+        backgroundColor: '#ededed', // to enable subpixel anti-aliasing, since electron 0.37.3
+        webPreferences: {
+            backgroundThrottling: false // disable throttling rendering when not focused
+        }
     });
 
     mainWindow.webContents.openDevTools();
