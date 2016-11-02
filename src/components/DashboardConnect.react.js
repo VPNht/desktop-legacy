@@ -126,7 +126,7 @@ var DashboardConnect = React.createClass({
     },
 
     render: function () {
-        var currentStatus = 'Loading...';
+        var currentStatus = t('Loading...');
         if (this.state.appReady) {
             if (this.state.connecting) {
                     currentStatus = t('Connecting...');
