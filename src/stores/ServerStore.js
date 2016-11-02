@@ -2,15 +2,21 @@ import alt from '../alt';
 import ServerActions from '../actions/ServerActions';
 
 class ServerStore {
-  constructor () {
+    constructor() {
 
-    this.bindActions(ServerActions);
-    this.servers = [{ value: 'hub.vpn.ht', label: 'Nearest Server (Random)', country: 'blank' }];
-  }
+        this.bindActions(ServerActions);
+        this.servers = [{
+            value: 'hub.vpn.ht',
+            label: 'Nearest Server (Random)',
+            country: 'blank'
+        }];
+    }
 
-  onReceiveAll (servers) {
-    this.setState({servers});
-  }
+    onReceiveAll(servers) {
+        this.setState({
+            servers
+        });
+    }
 
 }
 

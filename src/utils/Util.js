@@ -1,6 +1,5 @@
-import exec from 'exec';
-import child_process from 'child_process';
-import Promise from 'bluebird';
+import {exec, execFile} from 'child_process';
+import {remote} from 'electron';
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
@@ -18,16 +17,22 @@ module.exports = {
             }
         }
 
-        let fn = Array.isArray(args) ? exec : child_process.exec;
         return new Promise((resolve, reject) => {
-            fn(args, options, (stderr, stdout, code) => {
+            let cmd = Array.isArray(args) ? args.join(' ') : args;
+            let cb = function(stderr, stdout, code) {
                 if (code) {
-                    var cmd = Array.isArray(args) ? args.join(' ') : args;
-                    reject(new Error(cmd + ' returned non zero exit code. Stderr: ' + stderr));
+                    reject(new Error(cmd + ' returned non-zero exit code. Stderr: ' + stderr));
                 } else {
                     resolve(stdout);
                 }
-            });
+            };
+
+            if (Array.isArray(args)) {
+                let file = args.shift();
+                execFile(file, args, options, cb);
+            } else {
+                exec(args, options, cb);
+            }
         });
     },
     killTask: function(name) {
@@ -86,14 +91,14 @@ module.exports = {
         return str.replace(/ /g, '\\ ').replace(/\(/g, '\\(').replace(/\)/g, '\\)');
     },
     home: function() {
-        return require('remote').require('app').getPath('home');
+        return remote.app.getPath('home');
     },
     documents: function() {
         // TODO: fix me for windows 7
         return 'Documents';
     },
     supportDir: function() {
-        return require('remote').require('app').getPath('userData');
+        return remote.app.getPath('userData');
     },
     CommandOrCtrl: function() {
         return this.isWindows() ? 'Ctrl' : 'Command';

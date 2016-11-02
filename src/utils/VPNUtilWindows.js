@@ -2,11 +2,11 @@ import resources from './ResourcesUtil';
 import util from './Util';
 import path from 'path';
 import Winreg from 'winreg';
-import Promise from 'bluebird';
 import fs from 'fs';
 import helpers from './VPNHelpers';
 import log from '../stores/LogStore';
 import ps from 'xps';
+import {remote} from 'electron';
 
 import serviceManager from 'windows-service-manager';
 
@@ -95,7 +95,7 @@ module.exports = {
     },
     enableStartOnBoot: function(hidden) {
         return new Promise((resolve) => {
-            regKey.set('VPNht', Winreg.REG_SZ, "\"" + require('remote').require('app').getPath('exe') + (hidden ? ' --hide' : '') + "\"", function() {
+            regKey.set('VPNht', Winreg.REG_SZ, "\"" + remote.app.getPath('exe') + (hidden ? ' --hide' : '') + "\"", function() {
                 resolve();
             });
         });

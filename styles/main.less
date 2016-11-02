@@ -5,13 +5,14 @@
 @import "subheader.less";
 @import "sidebar.less";
 @import "content.less";
+@import "about.less";
 @import "footer.less";
 @import "responsive.less";
 @import "ionicons.less";
 @import "flags.less";
 @import "fonts.less";
 
-html, body {
+html, body, #root {
   margin:0px;
   font-family: 'Roboto', sans-serif;
   font-smooth: always;
@@ -24,9 +25,7 @@ html, body {
   height: 100%;
   width: 100%;
   background-color: #edeced;
-  -webkit-font-smoothing: subpixel-antialiased;
   text-rendering: optimizelegibility;
-  //-webkit-font-smoothing: antialiased;
   img {
     pointer-events: none;
   }

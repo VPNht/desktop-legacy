@@ -11,6 +11,11 @@
     position: relative;
 }
 
+.win32 .content-container,
+.win32 .content-scroller {
+    height: calc(~"100vh - 102px");
+}
+
 section {
     float: right;
     padding-top: 25px;
@@ -37,7 +42,7 @@ section .title {
 
 section .connectionstatus {
     float: left;
-    min-width: 30vw;
+    min-width: 29vw;
 }
 
 section .connectionstatus p {
@@ -81,7 +86,6 @@ section button {
 }
 
 section button:hover {
-    height: 41px;
     background-color: #00a3a2;
 }
 
@@ -136,6 +140,7 @@ section textarea.logs {
   background-color: #ffffff;
   padding: 15px 15px;;
   -webkit-user-select: all;
+  resize: none;
 }
 
 section .console-output p {
@@ -204,6 +209,7 @@ section label {
     position: absolute;
     width: 18px;
     height: 18px;
+    white-space: nowrap;
     background-color: white;
     border: 1px solid #ccc;
 }
@@ -226,6 +232,7 @@ section .checkbox p.info {
     border-left-style: solid;
     position: relative;
     border-left-width: 1px;
+    float: right;
 }
 
 section label:after {
@@ -236,7 +243,8 @@ section label:after {
     color: #1eb7b5;
     font-size: 38px;
     margin-left: 2px;
-    position: relative;
+    position: absolute;
+    left: 0;
     top: -9px;
     transform: rotate(-10deg);
 }

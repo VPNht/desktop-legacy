@@ -1,7 +1,5 @@
-import app from 'app';
-import BrowserWindow from 'browser-window';
+import {app, BrowserWindow, ipcMain, screen, dialog} from 'electron';
 import os from 'os';
-import ipc from 'ipc';
 import net from 'net';
 import fs from 'fs';
 import path from 'path';
@@ -9,6 +7,7 @@ import child_process from 'child_process';
 import trayTemplate from './app-tray'
 import Updater from 'autoupdater'
 import yargs from 'yargs';
+import util from './utils/Util';
 
 let args = yargs(process.argv.slice(1)).wrap(100).argv;
 
@@ -42,7 +41,6 @@ app.on('ready', function() {
 
     var checkingQuit = false;
     var canQuit = false;
-    var screen = require('screen');
     var size = screen.getPrimaryDisplay().workAreaSize;
     var autoUpdater = new Updater({
         currentVersion: app.getVersion()
@@ -50,12 +48,12 @@ app.on('ready', function() {
 
     var windowSize = {
         width: 800,
-        height: 870
-    }
+        height: process.platform === 'win32' ? 900 : 870
+    };
 
-    if (size.height < 870) {
-        windowSize.width = '800';
-        windowSize.height = '600';
+    if (size.height !== 870) {
+        windowSize.width = 800;
+        windowSize.height = 600;
     }
 
     var mainWindow = new BrowserWindow({
@@ -63,9 +61,16 @@ app.on('ready', function() {
         height: windowSize.height,
         'standard-window': false,
         resizable: false,
-        frame: false,
-        show: false
+        frame: process.platform === 'win32', //only on Windows
+        show: false,
+        titleBarStyle: 'hidden-inset',
+        backgroundColor: '#ededed', // to enable subpixel anti-aliasing, since electron 0.37.3
+        webPreferences: {
+            backgroundThrottling: false // disable throttling rendering when not focused
+        }
     });
+
+    //DEBUG: mainWindow.webContents.openDevTools();
 
     var preventMultipleInstances = function() {
         var socket = (process.platform === 'win32') ? '\\\\.\\pipe\\vpnht-sock' : path.join(os.tmpdir(), 'vpnht.sock');
@@ -73,13 +78,13 @@ app.on('ready', function() {
             path: socket
         }, function() {
             var errorMessage = 'Another instance of VPN.ht is already running. Only one instance of the app can be open at a time.'
-            require('dialog').showMessageBox(mainWindow, {
+            dialog.showMessageBox(mainWindow, {
                 'type': 'error',
                 message: errorMessage,
                 buttons: ['OK']
             }, function() {
                 client.end();
-                app.terminate();
+                process.exit(0);
             })
         }).on('error', function(err) {
 
@@ -103,7 +108,7 @@ app.on('ready', function() {
             });
 
             server.listen(socket);
-            mainWindow.loadUrl(path.normalize('file://' + path.join(__dirname, 'index.html')));
+            mainWindow.loadURL(path.normalize('file://' + path.join(__dirname, 'index.html')));
         });
     }
 
@@ -115,7 +120,7 @@ app.on('ready', function() {
             if (!checkingQuit) {
                 checkingQuit = true;
                 mainWindow.webContents.send('application:vpn-check-disconnect');
-                ipc.on('vpn.disconnected', () => {
+                ipcMain.on('vpn.disconnected', () => {
                     canQuit = true;
                     app.quit();
                 });
@@ -123,7 +128,8 @@ app.on('ready', function() {
         }
     });
 
-    require('power-monitor').on('resume', function() {
+    // powerMonitor cannot be required before 'ready' event is fired: https://github.com/electron/electron/blob/master/docs/api/power-monitor.md
+    require('electron').powerMonitor.on('resume', function() {
         mainWindow.webContents.send('application:vpn-check-sleep');
     });
 
@@ -158,7 +164,9 @@ app.on('ready', function() {
 
     mainWindow.webContents.on('did-finish-load', function() {
 
+        console.log('ready')
         mainWindow.setTitle('VPN.ht');
+
         if (!args.hide) {
             mainWindow.show();
             mainWindow.focus();
@@ -184,7 +192,7 @@ app.on('ready', function() {
 
     autoUpdater.on("updateReady", function(updaterPath) {
         console.log("Launching " + updaterPath);
-        require('dialog').showMessageBox(mainWindow, {
+        dialog.showMessageBox(mainWindow, {
             'type': 'info',
             message: 'A new version is available, do you want to install now ?',
             buttons: ['Yes', 'No']
@@ -192,16 +200,16 @@ app.on('ready', function() {
 
             if (response === 0) {
                 if (process.platform == 'win32') {
-                    require('./utils/Util').exec('start ' + updaterPath).then(function(stdOut) {
+                    util.exec('start ' + updaterPath).then(function(stdOut) {
                         console.log(stdOut);
-                        app.terminate();
+                        process.exit(0);
                     });
                 } else {
                     child_process.spawn('open', [updaterPath], {
                         detached: true,
                         stdio: ['ignore', 'ignore', 'ignore']
                     });
-                    app.terminate();
+                    process.exit(0);
                 }
             }
 

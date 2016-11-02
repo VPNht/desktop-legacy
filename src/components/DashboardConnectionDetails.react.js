@@ -1,7 +1,8 @@
-import React from 'react/addons';
+import React from 'react';
 import Router from 'react-router';
 import VPN from '../actions/VPNActions';
 import util from '../utils/Util';
+import {t} from '../utils/localizationUtil';
 import Logs from './DashboardLogs.react';
 
 import accountStore from '../stores/AccountStore';
@@ -43,8 +44,8 @@ var DashboardConnectionDetails = React.createClass({
     var download = util.bytesToSize(this.state.bytecount[0]);
     var upload = util.bytesToSize(this.state.bytecount[1]);
 
-    var location = 'Loading...';
-    var myip = this.state.myip.ip || 'Loading...';
+    var location = t('Loading...');
+    var myip = this.state.myip.ip || t('Loading...');
 
     if (this.state.myip.advanced) {
         var city = this.state.myip.advanced.city || false;
@@ -65,30 +66,30 @@ var DashboardConnectionDetails = React.createClass({
     return (
         <div>
             <section>
-                <h1 className="title">VPN connection status</h1>
+                <h1 className="title">{t('VPN connection status')}</h1>
                 <div className="connectionstatus">
                     <i className="ion-ios-checkmark-empty connected"></i>
-                    <p>Connected - {duration}</p>
+                    <p>{t('Connected')} - {duration}</p>
                 </div>
                 <button className="right" onClick={this.handleDisconnect}>
-                    <p>disconnect vpn</p>
+                    <p>{t('disconnect vpn')}</p>
                 </button>
             </section>
 
             <section className="ipOverview">
-                <h1 className="title">IP and Country Overview</h1>
-                <p>Your New IP Address:</p><span>{myip}</span>
+                <h1 className="title">{t('IP and Country Overview')}</h1>
+                <p>{t('Your New IP Address:')}</p><span>{myip}</span>
                 <div></div>
-                <p>Your New ISP Location:</p><i className={countryFlag}></i><span>{location}</span>
+                <p>{t('Your New ISP Location:')}</p><i className={countryFlag}></i><span>{location}</span>
             </section>
 
             <section>
-                <h1 className="title">Quick IP Address Management</h1>
+                <h1 className="title">{t('Quick IP Address Management')}</h1>
                 <button className="left">
-                    <p>Change IP Address</p>
+                    <p>{t('Change IP Address')}</p>
                 </button>
                 <button className="left">
-                    <p>Verify new IP Address</p>
+                    <p>{t('Verify new IP Address')}</p>
                 </button>
             </section>
 

@@ -1,4 +1,4 @@
-import React from 'react/addons';
+import React from 'react';
 
 import Framework from './components/Framework.react';
 import Dashboard from './components/Dashboard.react';
@@ -11,21 +11,19 @@ var Route = Router.Route;
 var RouteHandler = Router.RouteHandler;
 
 var App = React.createClass({
-  render: function () {
-    return (
-      <RouteHandler/>
-    );
-  }
+    render: function() {
+        return ( < RouteHandler / > );
+    }
 });
 
 var routes = (
-  <Route name="app" path="/" handler={App}>
-    <Route name="framework" handler={Framework}>
-      <Route name="dashboard" path="/dashboard" handler={Dashboard}/>
-      <Route name="preferences" path="/dashboard/preferences" handler={Preferences}/>
-      <Route name="about" path="/dashboard/about" handler={About}/>
+    <Route name="app" path="/" handler={App}>
+        <Route name="framework" handler={Framework}>
+            <Route name="dashboard" path="/dashboard" handler={Dashboard}/>
+            <Route name="preferences" path="/dashboard/preferences" handler={Preferences}/>
+            <Route name="about" path="/dashboard/about" handler={About}/>
+        </Route>
     </Route>
-  </Route>
 );
 
 module.exports = routes;
