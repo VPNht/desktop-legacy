@@ -51,7 +51,7 @@ app.on('ready', function() {
         height: process.platform === 'win32' ? 900 : 870
     };
 
-    if (size.height !== 870) {
+    if (size.height < 870) {
         windowSize.width = 800;
         windowSize.height = 600;
     }
