@@ -32,6 +32,7 @@
         "mixpanel": "kitematic/mixpanel-node",
         "node-openvpn": "VPNht/node-openvpn",
         "node-uuid": "1.4.7",
+        "object-assign": "4.1.0",
         "osx-release": "1.1.0",
         "react": "15.x.x",
         "react-bootstrap": "0.30.x",

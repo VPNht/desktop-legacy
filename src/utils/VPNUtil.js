@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import path from 'path';
+import assign from 'object-assign';
 import request from 'request';
 import fs from 'fs';
 
@@ -30,7 +31,7 @@ switch (process.platform) {
         break;
 };
 
-module.exports = Object.assign(currentOSLib, {
+module.exports = assign(currentOSLib, {
 
     generateConfig: function(managementPort) {
         return new Promise((resolve, reject) => {
