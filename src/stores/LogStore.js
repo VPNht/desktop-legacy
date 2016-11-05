@@ -1,12 +1,13 @@
 import {EventEmitter} from 'events';
+import assign from 'object-assign';
 import _ from 'lodash';
 import os from 'os';
 
 var _logs = [];
 var MAX_LOG_SIZE = 3000;
 
-module.exports = Object.assign(Object.create(EventEmitter.prototype), {
-    SERVER_LOGS_EVENT: 'server_logs_event',
+module.exports = assign(Object.create(EventEmitter.prototype), {
+  SERVER_LOGS_EVENT: 'server_logs_event',
 
     error: function(line, obj) {
         var d = new Date();
