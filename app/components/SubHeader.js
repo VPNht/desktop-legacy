@@ -1,6 +1,18 @@
+import { connect } from 'react-redux';
 import React, { Component, PropTypes } from 'react';
 
+import { translate } from '../utils/localizationUtil';
+
+@connect(store => {
+  return {
+    connected: store.accountReducer.connected
+  };
+})
 export default class SubHeader extends Component {
+
+  static propTypes = {
+    connected: PropTypes.bool.isRequired
+  };
 
   render() {
     let status;
@@ -9,9 +21,9 @@ export default class SubHeader extends Component {
     if (this.props.connected) {
       status = (
         <div className="status">
-          <p className="connected">connected!</p>
+          <p className="connected">{translate('connected!')}</p>
           <span>
-            Your internet traffic is now encrypted!and your online identity has become anonymous.
+            {translate('Your internet traffic is now encrypted!and your online identity has become anonymous.')}
           </span>
         </div>
       );
@@ -19,8 +31,8 @@ export default class SubHeader extends Component {
     } else {
       status = (
         <div className="status" >
-          <p className="disconnected">not connected!</p>
-          <span>Your internet traffic is unencrypted and your online identity is exposed.</span>
+          <p className="disconnected">{translate('not connected!')}</p>
+          <span>{translate('Your internet traffic is unencrypted and your online identity is exposed.')}</span>
         </div>
       );
     }
@@ -35,7 +47,3 @@ export default class SubHeader extends Component {
   }
 
 }
-
-SubHeader.propTypes = {
-  connected: PropTypes.bool
-};

@@ -1,8 +1,10 @@
 import SettingsUtil from '../utils/SettingsUtil';
 import { types } from '../actions/serverActions';
 
+const server = SettingsUtil.get('server');
+
 const defaultState = {
-  server: SettingsUtil.get('server') ? SettingsUtil.get('server') : {
+  server: server !== null ? server : {
     value: 'hub.vpn.ht',
     label: 'Nearest Server (Random)',
     country: 'blank'
@@ -10,10 +12,6 @@ const defaultState = {
   servers: [{
     value: 'hub.vpn.ht',
     label: 'Nearest Server (Random)',
-    country: 'blank'
-  }, {
-    value: 'hub.vpn.ht',
-    label: 'Nearest Server (Random)2',
     country: 'blank'
   }],
   error: null
@@ -30,12 +28,12 @@ export default function ServerReducer(state = defaultState, action) {
       return {
         ...state,
         error: action.payload
-      }
+      };
     case types.CHANGE_SERVER:
       return {
         ...state,
         server: action.payload
-      }
+      };
     default:
       return state;
   }

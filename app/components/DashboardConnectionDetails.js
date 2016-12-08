@@ -1,8 +1,14 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 
+import { toHHMMSS } from '../utils';
 import Logs from './DashboardLogs';
 
 export default class DashboardConnectionDetails extends Component {
+
+  static propTypes = {
+    myip: PropTypes.object, // isRequired,
+    connectionTime: PropTypes.number // isRequired
+  };
 
   handleDisconnect() {
     console.log('handleDisconnect');
@@ -36,8 +42,7 @@ export default class DashboardConnectionDetails extends Component {
     //   }
     // }
 
-    // const duration = util.toHHMMSS(this.props.connectionTime);
-    const duration = 123;
+    const duration = toHHMMSS(this.props.connectionTime);
 
     return (
       <div>

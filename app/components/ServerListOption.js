@@ -2,20 +2,28 @@ import React, { Component, PropTypes } from 'react';
 
 export default class Option extends Component {
 
+  static propTypes = {
+    className: PropTypes.string.isRequired,
+    isFocused: PropTypes.bool.isRequired,
+    onFocus: PropTypes.func.isRequired,
+    onSelect: PropTypes.func.isRequired,
+    option: PropTypes.object.isRequired
+  };
+
   handleMouseDown(event) {
     event.preventDefault();
     event.stopPropagation();
     this.props.onSelect(this.props.option, event);
-  };
+  }
 
   handleMouseEnter(event) {
     this.props.onFocus(this.props.option, event);
-  };
+  }
 
   handleMouseMove(event) {
     if (this.props.isFocused) return;
     this.props.onFocus(this.props.option, event);
-  };
+  }
 
   render() {
     const obj = this.props.option;
@@ -47,11 +55,3 @@ export default class Option extends Component {
   }
 
 }
-
-Option.propTypes = {
-  className: PropTypes.string,
-  isFocused: PropTypes.bool,
-  onFocus: PropTypes.func,
-  onSelect: PropTypes.func,
-  option: PropTypes.object.isRequired
-};

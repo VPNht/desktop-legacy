@@ -1,19 +1,11 @@
+export default class SettingsUtil {
 
-let instance = null;
-
-class SettingsUtil {
-
-  static get instance() {
-    if (!insance) instance = this;
-    return insance;
-  }
-
-  get(item) {
+  static get(item) {
     let value = localStorage.getItem(`settings.${item}`);
 
     try {
       value = JSON.parse(value);
-    } catch (e) {
+    } catch (err) {
       if (value === 'true' || 'false') value = (value === 'true') ? true : false;
     }
 
@@ -22,10 +14,8 @@ class SettingsUtil {
     return value;
   }
 
-  save(key, value) {
+  static save(key, value) {
     localStorage.setItem(`settings.${key}`, JSON.stringify(value));
   }
 
 }
-
-export default new SettingsUtil;

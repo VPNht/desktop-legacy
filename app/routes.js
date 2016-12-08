@@ -1,5 +1,5 @@
 import React from 'react';
-import { IndexRoute, Route } from 'react-router';
+import { IndexRedirect, Route } from 'react-router';
 
 import App from './containers/App';
 import About from './components/About';
@@ -8,7 +8,7 @@ import Preferences from './components/Preferences';
 
 export default (
   <Route path="/" component={App}>
-    <IndexRoute name="dashboard" component={Dashboard} />
+    <IndexRedirect to="/dashboard" />
     <Route name="dashboard" path="/dashboard" component={Dashboard} />
     <Route name="preferences" path="/preferences" component={Preferences} />
     <Route name="about" path="/about" component={About} />

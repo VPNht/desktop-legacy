@@ -12,63 +12,63 @@ export const types = {
 
 export function toggleAutoPath(autoPath) {
   return {
-    type: TOGGLE_AUTO_PATH,
+    type: types.TOGGLE_AUTO_PATH,
     payload: !autoPath
   };
 }
 
 export function toggleConnectLaunch(connectLaunch) {
   return {
-    type: TOGGLE_CONNECT_LAUNCH,
+    type: types.TOGGLE_CONNECT_LAUNCH,
     payload: !connectLaunch
   };
 }
 
 export function toggleSmartDNS(disableSmartdns) {
   return {
-    type: TOGGLE_SMART_DNS,
+    type: types.TOGGLE_SMART_DNS,
     payload: !disableSmartdns
   };
 }
 
 export function changeEncryption(encryption) {
   return {
-    type: CHANGE_ENCRYPTION,
+    type: types.CHANGE_ENCRYPTION,
     payload: encryption
   };
 }
 
 export function toggleLaunchStartup(launchStartup) {
   return {
-    type: TOGGLE_LAUNCH_STARTUP,
+    type: types.TOGGLE_LAUNCH_STARTUP,
     payload: !launchStartup
   };
 }
 
 export function toggleStartupHidden(launchStartupHidden) {
   return {
-    type: TOGGLE_STARTUP_HIDDEN,
+    type: types.TOGGLE_STARTUP_HIDDEN,
     payload: !launchStartupHidden
   };
 }
 
 export function toggleMetrics(metricsEnabled) {
   return {
-    type: TOGGLE_METRICS,
+    type: types.TOGGLE_METRICS,
     payload: !metricsEnabled
   };
 }
 
 export function toggleMinTaskbar(minToTaskbar) {
   return {
-    type: TOGGLE_MIN_TASKBAR,
+    type: types.TOGGLE_MIN_TASKBAR,
     payload: !minToTaskbar
   };
 }
 
 export function toggleSaveCredentials(saveCredentials) {
   return {
-    type: TOGGLE_SAVE_CREDENTIALS,
+    type: types.TOGGLE_SAVE_CREDENTIALS,
     payload: !saveCredentials
   };
 }

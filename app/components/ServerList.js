@@ -1,27 +1,40 @@
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import React, { Component, PropTypes } from 'react';
-
 import Select from 'react-select';
 
-import * as ServerActions from '../actions/serverActions';
+import { fetchServers, changeServer } from '../actions/serverActions';
+import { onAppReady } from '../actions/accountActions';
+import { translate } from '../utils/localizationUtil';
 import ServerItem from './ServerListItem';
 import ServerOption from './ServerListOption';
 
-class ServerList extends Component {
+@connect(store => {
+  return {
+    server: store.serverReducer.server,
+    servers: store.serverReducer.servers,
+    error: store.serverReducer.error
+  };
+})
+export default class ServerList extends Component {
+
+  static propTypes = {
+    server: PropTypes.object,
+    servers: PropTypes.array.isRequired,
+    error: PropTypes.string
+  };
 
   componentWillMount() {
-    this.props.actions.fetchServers();
+    this.props.dispatch(fetchServers());
   }
 
   handleServer(server) {
-    this.props.actions.changeServer(server);
+    this.props.dispatch(changeServer(server));
   }
 
   render() {
     return (
       <section>
-        <h1 className="title">Servers</h1>
+        <h1 className="title">{translate('Servers')}</h1>
         <Select
           name="server"
           value={this.props.server}
@@ -36,28 +49,3 @@ class ServerList extends Component {
   }
 
 }
-
-ServerList.propTypes = {
-  server: PropTypes.object.isRequired,
-  servers: PropTypes.array.isRequired
-};
-
-
-function mapStateToProps(state) {
-  return {
-    server: state.serverReducer.server,
-    servers: state.serverReducer.servers,
-    error: state.serverReducer.error
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    actions: bindActionCreators(ServerActions, dispatch)
-  };
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ServerList);

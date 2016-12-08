@@ -1,16 +1,29 @@
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import React, { Component, PropTypes } from 'react';
 
-// import { toggleSaveCredentials } from '../actions/settingsActions';
-import * as SettingsActions from '../actions/settingsActions';
+import { toggleSaveCredentials } from '../actions/settingsActions';
+import { translate } from '../utils/localizationUtil';
 import SettingsUtil from '../utils/SettingsUtil';
 
-class Credentials extends Component {
+@connect(store => {
+  return {
+    appReady: store.accountReducer.appReady,
+    password: store.accountReducer.password,
+    saveCredentials: store.settingsReducer.saveCredentials,
+    username: store.accountReducer.username
+  };
+})
+export default class Credentials extends Component {
+
+  static propTypes = {
+    appReady: PropTypes.bool.isRequired,
+    password: PropTypes.string.isRequired,
+    saveCredentials: PropTypes.bool.isRequired,
+    username: PropTypes.string.isRequired
+  }
 
   handleChangeSaveCredentials() {
-    console.log(this.props);
-    this.props.actions.toggleSaveCredentials(this.props.saveCredentials);
+    this.props.dispatch(toggleSaveCredentials(this.props.saveCredentials));
     SettingsUtil.save('saveCredentials', this.props.saveCredentials);
   }
 
@@ -18,42 +31,15 @@ class Credentials extends Component {
     return (
       <section>
         <h1 className="title">Login</h1>
-        <input name="username" disabled={!this.props.appReady} valueLink={this.props.username} placeholder="Username" type="text" />
-        <input name="password" disabled={!this.props.appReady} valueLink={this.props.password} placeholder="Password" type="password" />
+        <input name="username" disabled={!this.props.appReady} value={this.props.username} placeholder={translate('Username')} type="text" />
+        <input name="password" disabled={!this.props.appReady} value={this.props.password} placeholder={translate('Password')} type="password" />
         <div className="checkbox">
-          <input type="checkbox" checked={this.props.saveCredentials} onChange={this.handleChangeSaveCredentials.bind(this)} />
+          <input type="checkbox" disabled={!this.props.appReady} checked={this.props.saveCredentials} onChange={this.handleChangeSaveCredentials.bind(this)} id="saveCredentials" />
           <label htmlFor="saveCredentials" />
-          <p>Remember my username and password</p>
+          <p>{translate('Remember my username and password')}</p>
         </div>
       </section>
     )
   }
 
 }
-
-Credentials.propTypes = {
-  appReady: PropTypes.bool,
-  password: PropTypes.string,
-  saveCredentials: PropTypes.bool,
-  username: PropTypes.string
-}
-
-// function mapStateToProps(state) {
-//   return {
-//     appReady: state.settingsReducer.autoPath,
-//     password: state.settingsReducer.connectLaunch,
-//     saveCredentials: state.settingsReducer.disableSmartdns,
-//     username: state.settingsReducer.encryption,
-//   };
-// }
-
-function mapDispatchToProps(dispatch) {
-  return {
-    actions: bindActionCreators(SettingsActions, dispatch)
-  };
-}
-
-export default connect(
-  // mapStateToProps,
-  mapDispatchToProps
-)(Credentials);

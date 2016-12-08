@@ -1,9 +1,10 @@
 import { createStore, applyMiddleware, compose } from 'redux';
-import { persistState } from 'redux-devtools';
-import thunk from 'redux-thunk';
-import Logger from 'redux-logger';
 import { hashHistory } from 'react-router';
+import { persistState } from 'redux-devtools';
 import { routerMiddleware } from 'react-router-redux';
+import Logger from 'redux-logger';
+import thunk from 'redux-thunk';
+
 import rootReducer from '../reducers';
 
 const router = routerMiddleware(hashHistory);

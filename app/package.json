@@ -1,9 +1,9 @@
 {
-  "name": "",
-  "description": "",
-  "homepage": "",
-  "version": "",
-  "author": "",
-  "license": "",
-  "main": "./main.js"
+  "name": "VPN.ht",
+  "version": "0.0.4",
+  "author": "VPN.ht",
+  "description": "Simple VPN.ht Client.",
+  "homepage": "https://vpn.ht/",
+  "license": "GPL-3.0",
+  "main": "./index.js"
 }

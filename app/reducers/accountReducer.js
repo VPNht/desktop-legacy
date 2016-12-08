@@ -1,3 +1,5 @@
+import { types } from '../actions/accountActions';
+
 const defaultState = {
   errors: {},
   connected: false,
@@ -5,15 +7,17 @@ const defaultState = {
   appReady: false,
   myip: false,
   bytecount: [0, 0],
-  connectionTime: 0
+  connectionTime: 0,
+  username: '',
+  password: ''
 };
 
 export default function AccountReducer(state = defaultState, action) {
   switch (action.type) {
-    case 'APP_READY':
+    case types.APP_READY:
       return {
         ...state,
-        apReady: action.payload
+        appReady: action.payload
       };
     default:
       return state;

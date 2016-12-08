@@ -1,21 +1,22 @@
 import classNames from 'classnames';
 import React, { Component, PropTypes } from 'react';
 
-import Util from '../utils/Util';
+import { isWindows } from '../utils';
 
 export default class Header extends Component {
 
+  static propTypes = {
+    hideLogin: PropTypes.bool
+  };
+
   constructor(props) {
     super(props);
-
-    this.util = new Util();
   }
 
   renderWindowButtons() {
     let buttons;
 
-    if (this.util.isWindows()) {
-    // if (true) {
+    if (isWindows()) {
       buttons = (
         <div className="windows-buttons">
           <div className="windows-button button-minimize enabled" />
@@ -43,23 +44,17 @@ export default class Header extends Component {
       'no-drag': true
     });
 
-    const isWindows = this.util.isWindows();
-    // const isWindows = true;
     const buttons = this.renderWindowButtons();
     return (
       <div className={headerClasses}>
         <div className="left-header">
-          {isWindows ? null : buttons}
+          {isWindows() ? null : buttons}
         </div>
         <div className="right-header">
-          {isWindows ? buttons : null}
+          {isWindows() ? buttons : null}
         </div>
       </div>
     );
   }
 
 }
-
-Header.propTypes = {
-  hideLogin: PropTypes.bool
-};

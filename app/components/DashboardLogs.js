@@ -1,8 +1,26 @@
+import { connect } from 'react-redux';
+import { remote } from 'electron';
 import fs from 'fs';
 import React, { Component, PropTypes } from 'react';
-import { remote } from 'electron';
 
+import { translate } from '../utils/localizationUtil';
+
+const { clipboard, dialog } = remote;
+
+@connect(store => {
+  return {
+    logs: store.logReducer.logs
+  }
+})
 export default class DashboardLogs extends Component {
+
+  static propTypes = {
+    logs: PropTypes.array.isRequired
+  };
+
+  static defaultProps = {
+    logs: []
+  };
 
   componentDidMount() {
     this.scrollToBottom();
@@ -13,27 +31,27 @@ export default class DashboardLogs extends Component {
   }
 
   handleExportLogs() {
-    console.log('handleExportLogs');
-
     const args = {
-      title: 'Select path for log file',
+      title: translate('Select path for log file'),
       filters: [{
-        name: 'Log files',
+        name: translate('Log files'),
         extensions: ['log']
       }]
     };
 
     remote.dialog.showSaveDialog(args, (filename) => {
-      // fs.writeFile(filename, this.props.logs.join("\n"), err => {
-      fs.writeFile(filename, 'logs', (err) => {
+      fs.writeFile(filename, this.props.logs.join('\n'), err => {
         if (err) {
-          remote.dialog.showErrorBox('Unable to save log path', 'Looks like we can\'t save the log file. Try again with another path.');
+          dialog.showErrorBox(
+            translate('Unable to save log path'),
+            translate('Looks like we can\'t save the log file. Try again with another path.')
+          );
         } else {
-          remote.dialog.showMessageBox({
+          dialog.showMessageBox({
             type: 'info',
-            title: 'Log saved !',
-            buttons: ['OK'],
-            message: 'Your log file has been saved successfully.'
+            title: translate('Log saved !'),
+            buttons: [translate('OK')],
+            message: translate('Your log file has been saved successfully.')
           });
         }
       });
@@ -41,14 +59,12 @@ export default class DashboardLogs extends Component {
   }
 
   handleCopyClipboard() {
-    console.log('handleCopyClipboard');
-
-    remote.clipboard.writeText(this.props.logs.join('\n'));
-    remote.dialog.showMessageBox({
+    clipboard.writeText(this.props.logs.join('\n'));
+    dialog.showMessageBox({
       type: 'info',
-      title: 'Log Copied',
-      buttons: ['OK'],
-      message: 'Your log file has been copied successfully.'
+      title: translate('Log Copied'),
+      buttons: [translate('OK')],
+      message: translate('Your log file has been copied successfully.')
     });
   }
 
@@ -58,24 +74,18 @@ export default class DashboardLogs extends Component {
   }
 
   render() {
-    const logs = 'logs';
-
     return (
       <section>
         <h1 className="title">Connection report</h1>
-        <textarea ref="logsTextarea" className="logs" name="description" value={logs} readOnly />
+        <textarea ref="logsTextarea" className="logs" name="description" value={this.props.logs.join('\n')} readOnly />
         <button className="left" type="submit" onClick={this.handleExportLogs.bind(this)}>
-          <p>Export</p>
+          <p>{translate('Export')}</p>
         </button>
         <button className="left" type="submit" onClick={this.handleCopyClipboard.bind(this)}>
-          <p>Copy to clipboard</p>
+          <p>{translate('Copy to clipboard')}</p>
         </button>
       </section>
     );
   }
 
 }
-
-DashboardLogs.propTypes = {
-  logs: PropTypes.string
-};

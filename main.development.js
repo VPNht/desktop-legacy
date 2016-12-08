@@ -1,13 +1,23 @@
-import { app, autoUpdater, BrowserWindow, Menu, powerMonitor, screen, shell, Tray } from 'electron';
+import {
+  app,
+  autoUpdater,
+  BrowserWindow,
+  ipcMain,
+  Menu,
+  powerMonitor,
+  screen,
+  shell,
+  Tray
+} from 'electron';
 
-let menu;
-let template;
-let tray;
+let menu = null;
+let template = null;
+let tray = null;
 let mainWindow = null;
 let checkingQuit = false;
 let canQuit = false;
-// var autoUpdater = new Updater({
-//     currentVersion: app.getVersion()
+// const autoUpdater = new Updater({
+//   currentVersion: app.getVersion()
 // });
 
 if (process.env.NODE_ENV === 'development') require('electron-debug')();
@@ -50,10 +60,15 @@ app.on('ready', async () => {
   mainWindow = new BrowserWindow({
     width: windowSize.width,
     height: windowSize.height,
-    // 'standard-window': false,
-    // resizable: false,
-    // frame: false,
-    show: false
+    'standard-window': false,
+    resizable: process.env.NODE_ENV === 'development',
+    frame: process.platform === 'win32' || process.env.NODE_ENV === 'development',
+    show: false,
+    titleBarStyle: 'hidden-inset',
+    backgroundColor: '#ededed',
+    webPreferences: {
+      backgroundThrottling: false
+    }
   });
 
   mainWindow.loadURL(`file://${__dirname}/app/app.html`);
@@ -90,12 +105,27 @@ app.on('ready', async () => {
     });
   });
 
+  // app.on('before-quit', event => {
+  //   if (!canQuit) {
+  //     event.preventDefault();
+  //     if (!checkingQuit) {
+  //       checkingQuit = true;
+  //       mainWindow.webContents.send('application:vpn-check-disconnect');
+  //     }
+  //   }
+  // });
+
   app.on('before-quit', event => {
     if (!canQuit) {
       event.preventDefault();
       if (!checkingQuit) {
+        console.log('test2');
         checkingQuit = true;
         mainWindow.webContents.send('application:vpn-check-disconnect');
+        ipcMain.on('vpn.disconnected', () => {
+          canQuit = true;
+          app.quit();
+        });
       }
     }
   });

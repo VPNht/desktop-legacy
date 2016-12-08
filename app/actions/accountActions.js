@@ -1,7 +1,16 @@
+export const types = {
+  CONNECTING: 'CONNECTING',
+  CONNECTED: 'CONNECTED',
+  DISCONNECTING: 'DISCONNECTING',
+  DISCONNECTED: 'DISCONNECTED',
+  NEW_IP: 'NEW_IP',
+  APP_READY: 'APP_READY',
+  BYTE_COUNT: 'BYTE_COUNT'
+};
 
 export function onConnect() {
   return {
-    type: 'CONNECTING',
+    type: types.CONNECTING,
     payload: {
       connected: false,
       connecting: true,
@@ -12,7 +21,7 @@ export function onConnect() {
 
 export function onConnected() {
   return {
-    type: 'CONNECTED',
+    type: types.CONNECTED,
     payload: {
       connected: true,
       connecting: false
@@ -22,7 +31,7 @@ export function onConnected() {
 
 export function onDisconnect() {
   return {
-    type: 'DISCONNECTING',
+    type: types.DISCONNECTING,
     payload: {
       connected: false,
       disconnecting: true
@@ -32,7 +41,7 @@ export function onDisconnect() {
 
 export function onDisconnected() {
   return {
-    type: 'DISCONNECTED',
+    type: types.DISCONNECTED,
     payload: {
       disonnected: true,
       disconecting: false
@@ -40,53 +49,23 @@ export function onDisconnected() {
   };
 }
 
-// export function onNewIp(ip) {
-//   return {
-//     type: 'NEW_IP',
-//     payload: ip
-//   };
-// };
-//
-// export function onAppReady() {
-//   return {
-//     type: 'APP_READY',
-//     payload: true
-//   };
-// };
-//
-// export function onBytecount(bytes) {
-//   return {
-//     type: 'BYTE_COUNT',
-//     payload: bytes
-//   };
-// };
+export function onNewIp(ip) {
+  return {
+    type: types.NEW_IP,
+    payload: ip
+  };
+}
 
-// export function onConnected() {
-//   this.setState({
-//     connected: true,
-//     connecting: false
-//   });
-//
-//   const self = this;
-//   _connectionTimer = setInterval(function() {
-//     self.setState({
-//       connectionTime: self.connectionTime + 1
-//     });
-//   }, 1000);
-// };
-//
-// export function onDisconnect() {
-//   if (_connectionTimer) clearTimeout(_connectionTimer);
-// };
-//
-// export function onDisconnected() {
-//   this.setState({
-//     connected: false,
-//     connecting: false,
-//     connectionTime: 0
-//   });
-// };
+export function onAppReady() {
+  return {
+    type: types.APP_READY,
+    payload: true
+  };
+}
 
-// errors({ errors }) {
-//   this.setState({ errors });
-// };
+export function onBytecount(bytes) {
+  return {
+    type: types.BYTE_COUNT,
+    payload: bytes
+  };
+}

@@ -2,6 +2,11 @@ import React, { Component, PropTypes } from 'react';
 
 export default class SingleValue extends Component {
 
+  static propTypes = {
+    placeholder: PropTypes.string,
+    value: PropTypes.object.isRequired
+  };
+
   render() {
     const obj = this.props.value;
     const flagStyle = {
@@ -34,8 +39,3 @@ export default class SingleValue extends Component {
   }
 
 }
-
-SingleValue.propTypes = {
-  placeholder: React.PropTypes.string,
-  value: React.PropTypes.object.isRequired
-};

@@ -6,6 +6,10 @@ import SubHeader from '../components/SubHeader';
 
 export default class App extends Component {
 
+  static propTypes = {
+    children: PropTypes.element
+  };
+
   render() {
     return (
       <div>
@@ -23,7 +27,3 @@ export default class App extends Component {
   }
 
 }
-
-App.propTypes = {
-  children: PropTypes.element
-};

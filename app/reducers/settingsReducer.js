@@ -1,19 +1,29 @@
 import SettingsUtil from '../utils/SettingsUtil';
 import { types } from '../actions/settingsActions';
 
+const autoPath = SettingsUtil.get('autoPath');
+const connectLaunch = SettingsUtil.get('connectLaunch');
+const disableSmartdns = SettingsUtil.get('disableSmartdns');
+const encryption = SettingsUtil.get('encryption');
+const launchStartup = SettingsUtil.get('launchStartup');
+const launchStartupHidden = SettingsUtil.get('launchStartupHidden');
+const metricsEnabled = SettingsUtil.get('metricsEnabled');
+const minToTaskbar = SettingsUtil.get('minToTaskbar');
+const saveCredentials = SettingsUtil.get('saveCredentials');
+
 const defaultState = {
-  autoPath: SettingsUtil.get('autoPath') ? SettingsUtil.get('autoPath') : true,
-  connectLaunch: SettingsUtil.get('connectLaunch') ? SettingsUtil.get('connectLaunch') : false,
-  disableSmartdns: SettingsUtil.get('disableSmartdns') ? SettingsUtil.get('disableSmartdns') : false,
-  encryption: SettingsUtil.get('encryption') ? SettingsUtil.get('encryption') : {
+  autoPath: autoPath !== null ? autoPath : true,
+  connectLaunch: connectLaunch !== null ? connectLaunch : false,
+  disableSmartdns: disableSmartdns !== null ? disableSmartdns : false,
+  encryption: encryption !== null ? encryption : {
     value: 256,
     label: '256 BIT AES'
   },
-  launchStartup: SettingsUtil.get('launchStartup') ? SettingsUtil.get('launchStartup') : false,
-  launchStartupHidden: SettingsUtil.get('launchStartupHidden') ? SettingsUtil.get('launchStartupHidden') : true,
-  metricsEnabled: SettingsUtil.get('metricsEnabled') ? SettingsUtil.get('metricsEnabled') : false,
-  minToTaskbar: SettingsUtil.get('minToTaskbar') ? SettingsUtil.get('minToTaskbar') : true,
-  saveCredentials: SettingsUtil.get('saveCredentials') ? SettingsUtil.get('saveCredentials')  : false
+  launchStartup: launchStartup !== null ? launchStartup : false,
+  launchStartupHidden: launchStartupHidden !== null ? launchStartupHidden : true,
+  metricsEnabled: metricsEnabled !== null ? metricsEnabled : false,
+  minToTaskbar: minToTaskbar !== null ? minToTaskbar : true,
+  saveCredentials: saveCredentials !== null ? saveCredentials : false
 };
 
 export default function SettingsReducer(state = defaultState, action) {

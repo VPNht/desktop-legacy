@@ -1,27 +1,27 @@
-
 import request from 'request';
 
 export default class ServerAPI {
 
   constructor() {
-    this.request = request.defaults({
+    this._request = request.defaults({
       baseUrl: 'https://myip.ht/'
     });
   }
 
-  _handleRequest(err, res, body) {
-    if (err) {
-      return reject(err);
-    } else if (!body || res.statusCode >= 400) {
-      return reject(new Error(`No data found on uri: ${uri}, qs: ${qs}, statuscode: ${res.statusCode}`))
-    } else {
-      return resolve(body);
-    }
-  }
-
   _get(uri, qs) {
     return new Promise((resolve, reject) => {
-      request.get({ uri, qs }, this._handleRequest);
+      return this._request.get({ uri, qs }, (err, res, body) => {
+        if (err) {
+          return reject(err);
+        } else if (!body || res.statusCode >= 400) {
+          const statuscode = res.statusCode;
+          const msg = `No data found on uri: ${uri}, qs: ${qs}, statuscode: ${statuscode}`;
+          const error = new Error(msg);
+          return reject(error);
+        }
+
+        return resolve(body);
+      });
     });
   }
 
@@ -32,28 +32,30 @@ export default class ServerAPI {
       country: 'blank'
     }];
 
-    return this._get('servers-geo.json').then(res => {
-        const servers = JSON.parse(servers);
+    return this._get('servers-geo.json').then(() => {
+      const servers = JSON.parse(servers);
 
-        servers.map(server => {
-          const distance = Math.round(server.distance);
-          const { ip as value, country} = server;
+      servers.map(server => {
+        const distance = Math.round(server.distance);
+        const country = server.country;
+        const value = server.ip;
 
-          const label = `${server.countryName} - ${distance} KM - LOC ${server.host.toUpperCase().replace( /^\D+/g, '')}`;
+        const loc = server.host.toUpperCase().replace(/^\D+/g, '');
+        let label = `${server.countryName} - ${distance} KM - LOC ${loc}`;
 
-          if (server.regionName) label = `${server.regionName}, ${label}`;
-          if (server.city) label = `${server.city}, ${label}`;
+        if (server.regionName) label = `${server.regionName}, ${label}`;
+        if (server.city) label = `${server.city}, ${label}`;
 
-          options.push({
-            country,
-            distance,
-            label,
-            value
-          });
+        return options.push({
+          country,
+          distance,
+          label,
+          value
         });
-
-        return options;
       });
+
+      return options;
+    });
   }
 
   status() {
