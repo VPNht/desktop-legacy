@@ -8,8 +8,6 @@ import ConnectionDetails from './DashboardConnectionDetails.react';
 import accountStore from '../stores/AccountStore';
 
 var Preferences = React.createClass({
-    mixins: [Router.Navigation],
-
     getInitialState: function() {
         return {
             connected: accountStore.getState().connected

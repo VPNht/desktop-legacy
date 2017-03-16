@@ -9,9 +9,6 @@ import template from './menutemplate';
 import webUtil from './utils/WebUtil';
 import request from 'request';
 import path from 'path';
-import Router from 'react-router';
-import routes from './routes';
-import routerContainer from './router';
 import log from './stores/LogStore';
 import accountStore from './stores/AccountStore';
 import utils from './utils/Util';
@@ -35,15 +32,7 @@ metrics.track('app heartbeat');
 setInterval(function() {
     metrics.track('app heartbeat');
 }, 14400000);
-var router = Router.create({
-    routes: routes
-});
 
-router.run(Handler => ReactDOM.render( < Handler / > , document.getElementById('root')));
-routerContainer.set(router);
-
-// Default Route
-router.transitionTo('dashboard');
 ipcRenderer.on('application:quitting', () => {});
 
 // Define styles
@@ -94,7 +83,3 @@ ipcRenderer.on('application:vpn-check-sleep', () => {
 ipcRenderer.on('application:vpn-disconnect', () => {
     vpnActions.disconnect();
 });
-
-module.exports = {
-    router: router
-};

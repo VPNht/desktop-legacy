@@ -95,7 +95,8 @@ var MenuTemplate = function() {
                 metrics.track('Opened About', {
                     from: 'menu'
                 });
-                router.get().transitionTo('about');
+
+                window.location.hash = "#/about";
             }
         }]
     }];

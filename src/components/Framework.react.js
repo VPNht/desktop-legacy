@@ -1,7 +1,6 @@
 import $ from 'jquery';
 import _ from 'lodash';
 import React from 'react';
-import Router from 'react-router';
 import Sidebar from './Sidebar.react';
 import Header from './Header.react';
 import SubHeader from './SubHeader.react';
@@ -10,13 +9,20 @@ import {
     shell
 }
 from 'electron';
+
 import RetinaImage from 'react-retina-image';
 
-var Client = React.createClass({
-    contextTypes: {
-        router: React.PropTypes.func
-    },
+import {
+  HashRouter as Router,
+  Route,
+  Link
+} from 'react-router-dom';
 
+import Dashboard from './Dashboard.react';
+import Preferences from './Preferences.react';
+import About from './About.react';
+
+var Client = React.createClass({
     getInitialState: function() {
         return {
             sidebarOffset: 0
@@ -39,7 +45,6 @@ var Client = React.createClass({
         metrics.track('Opened Preferences', {
             from: 'app'
         });
-        this.context.router.transitionTo('preferences');
     },
 
     handleClickReportIssue: function() {
@@ -79,19 +84,24 @@ var Client = React.createClass({
             sidebarHeaderClass += ' sep';
         }
 
-        var container = this.context.router.getCurrentParams().name ? this.state.containers[this.context.router.getCurrentParams().name] : {};
         return (
-            <div>
-                <Header />
-                <SubHeader />
-                <div className="content-container">
-                    <Sidebar />
-                    <Router.RouteHandler />
+            <Router basename="" >
+                <div>
+                    <Header />
+                    <SubHeader />
+
+                    <div className="content-container">
+                        <Sidebar />
+                        <Route exact path="/" component={Dashboard} />
+                        <Route exact path="/preferences" component={Preferences} />
+                        <Route exact path="/about" component={About}/>
+                    </div>
+
+                    <footer>
+                        <RetinaImage className="footerimg" src="FooterIllustration.png"/>
+                    </footer>
                 </div>
-                <footer>
-                    <RetinaImage className="footerimg" src="FooterIllustration.png"/>
-                </footer>
-            </div>
+            </Router>
         );
     }
 });

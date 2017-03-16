@@ -10,7 +10,6 @@ import {
 from '../utils/localizationUtil';
 
 var Preferences = React.createClass({
-    mixins: [Router.Navigation],
     getInitialState: function() {
         return {
             metricsEnabled: metrics.enabled(),

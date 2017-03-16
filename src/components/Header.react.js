@@ -13,7 +13,6 @@ var Menu = remote.menu;
 var MenuItem = remote.menuItem;
 
 var Header = React.createClass({
-    mixins: [Router.Navigation],
     getInitialState: function () {
         return {
             fullscreen: false,
