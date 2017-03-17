@@ -1,9 +1,9 @@
 import $ from 'jquery';
 import _ from 'lodash';
 import React from 'react';
-import Sidebar from './Sidebar.react';
-import Header from './Header.react';
-import SubHeader from './SubHeader.react';
+import Sidebar from './Sidebar';
+import Header from './Header';
+import SubHeader from './SubHeader';
 import metrics from '../utils/MetricsUtil';
 import {
     shell
@@ -18,9 +18,9 @@ import {
   Link
 } from 'react-router-dom';
 
-import Dashboard from './Dashboard.react';
-import Preferences from './Preferences.react';
-import About from './About.react';
+import Dashboard from './Dashboard';
+import Preferences from './Preferences';
+import About from './About';
 
 var Client = React.createClass({
     getInitialState: function() {

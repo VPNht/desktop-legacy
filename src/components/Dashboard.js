@@ -2,8 +2,8 @@ import React from 'react';
 import metrics from '../utils/MetricsUtil';
 import Router from 'react-router';
 
-import Connect from './DashboardConnect.react';
-import ConnectionDetails from './DashboardConnectionDetails.react';
+import Connect from './DashboardConnect';
+import ConnectionDetails from './DashboardConnectionDetails';
 
 import accountStore from '../stores/AccountStore';
 
