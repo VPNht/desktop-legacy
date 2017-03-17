@@ -22,7 +22,7 @@ import Dashboard from './Dashboard';
 import Preferences from './Preferences';
 import About from './About';
 
-var Client = React.createClass({
+var App = React.createClass({
     getInitialState: function() {
         return {
             sidebarOffset: 0
@@ -106,4 +106,4 @@ var Client = React.createClass({
     }
 });
 
-module.exports = Client;
+export default App;
