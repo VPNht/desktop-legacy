@@ -5,6 +5,7 @@ import Sidebar from './Sidebar';
 import Header from './Header';
 import SubHeader from './SubHeader';
 import metrics from '../utils/MetricsUtil';
+import readPackageInfo from 'pkginfo';
 import {
     shell
 }
@@ -22,10 +23,15 @@ import Dashboard from './Dashboard';
 import Preferences from './Preferences';
 import About from './About';
 
+import packageInfo from '../package.json';
+
 var App = React.createClass({
     getInitialState: function() {
         return {
-            sidebarOffset: 0
+            sidebarOffset: 0,
+            name: packageInfo.name,
+            version: packageInfo.version,
+            homepageURL: packageInfo.homepage
         };
     },
 
@@ -79,6 +85,8 @@ var App = React.createClass({
     },
 
     render: function() {
+        const { name, version, homepageURL } = this.state;
+
         var sidebarHeaderClass = 'sidebar-header';
         if (this.state.sidebarOffset) {
             sidebarHeaderClass += ' sep';
@@ -92,9 +100,11 @@ var App = React.createClass({
 
                     <div className="content-container">
                         <Sidebar />
-                        <Route exact path="/" component={Dashboard} />
+                        <Route exact path="/" render={() => (<Dashboard />)} />
                         <Route exact path="/preferences" component={Preferences} />
-                        <Route exact path="/about" component={About}/>
+                        <Route exact path="/about" render={() => (
+                            <About packageName={name} packageVersion={version} homepageURL={homepageURL} />
+                        )}/>
                     </div>
 
                     <footer>

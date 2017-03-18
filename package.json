@@ -34,6 +34,7 @@
     "node-uuid": "1.4.7",
     "object-assign": "4.1.0",
     "osx-release": "1.1.0",
+    "pkginfo": "^0.4.0",
     "react": "^15.0.0",
     "react-bootstrap": "0.30.x",
     "react-dom": "15.x.x",

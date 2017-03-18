@@ -1,37 +1,26 @@
-import {shell} from 'electron';
+import { shell } from 'electron';
 import React from 'react';
-import metrics from '../utils/MetricsUtil';
-import utils from '../utils/Util';
-import {t} from '../utils/localizationUtil';
-import Router from 'react-router';
 import RetinaImage from 'react-retina-image';
-import pkJson from '../package';
-var packages;
+import metrics from '../utils/MetricsUtil';
+import {t} from '../utils/localizationUtil';
 
-try {
-    packages = utils.packagejson();
-} catch (err) {
-    packages = {};
-}
+class About extends React.Component {
+    constructor( props ) {
+        super( props );
+    }
 
-var Preferences = React.createClass({
-    getInitialState: function () {
-        return {
-            metricsEnabled: metrics.enabled()
-        };
-    },
-    handleGoBackClick: function () {
+    goBack() {
         history.back();
         metrics.track('Went Back From About');
-    },
-    handleExternal: function () {
-        shell.openExternal(pkJson.homepage);
-    },
-    render: function () {
+    }
+
+    render() {
+        const { packageName, packageVersion, homepageURL } = this.props;
+
         return (
             <div className="preferences">
                 <div className="about-content">
-                    <a className="goback ion-android-arrow-back" onClick={this.handleGoBackClick}></a>
+                    <a className="goback ion-android-arrow-back" onClick={() => this.goBack()}></a>
 
                     <div className="items">
                         <div className="item">
@@ -47,12 +36,12 @@ var Preferences = React.createClass({
                     </div>
 
                     <div className="foot">
-                        {packages.name} v{packages.version} - <a onClick={this.handleExternal}>{pkJson.homepage}</a>
+                        {packageName} v{packageVersion} - <a onClick={() => shell.openExternal(homepageURL)}>{homepageURL}</a>
                     </div>
                 </div>
             </div>
         );
     }
-});
+}
 
-module.exports = Preferences;
+module.exports = About;
