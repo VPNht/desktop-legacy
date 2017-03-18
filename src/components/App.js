@@ -1,81 +1,26 @@
+import { shell } from 'electron';
 import $ from 'jquery';
 import _ from 'lodash';
-import React from 'react';
+import React, { Component } from 'react';
+import { HashRouter as Router, Route, Link } from 'react-router-dom';
+import RetinaImage from 'react-retina-image';
 import Sidebar from './Sidebar';
 import Header from './Header';
 import SubHeader from './SubHeader';
-import metrics from '../utils/MetricsUtil';
-import readPackageInfo from 'pkginfo';
-import {
-    shell
-}
-from 'electron';
-
-import RetinaImage from 'react-retina-image';
-
-import {
-  HashRouter as Router,
-  Route,
-  Link
-} from 'react-router-dom';
-
 import Dashboard from './Dashboard';
 import Preferences from './Preferences';
 import About from './About';
 
-import packageInfo from '../package.json';
+class App extends Component {
+    constructor( props ) {
+        super( props );
+    }
 
-var App = React.createClass({
-    getInitialState: function() {
-        return {
-            name: packageInfo.name,
-            version: packageInfo.version,
-            homepageURL: packageInfo.homepage
-        };
-    },
-
-    handleClickPreferences: function() {
-        metrics.track('Opened Preferences', {
-            from: 'app'
-        });
-    },
-
-    handleClickReportIssue: function() {
-        metrics.track('Opened Issue Reporter', {
-            from: 'app'
-        });
-        shell.openExternal('https://github.com/vpnht/desktop/issues/new');
-    },
-
-    handleMouseEnterReportIssue: function() {
-        this.setState({
-            currentButtonLabel: 'Report an issue or suggest feedback.'
-        });
-    },
-
-    handleMouseLeaveReportIssue: function() {
-        this.setState({
-            currentButtonLabel: ''
-        });
-    },
-
-    handleMouseEnterPreferences: function() {
-        this.setState({
-            currentButtonLabel: 'Change app preferences.'
-        });
-    },
-
-    handleMouseLeavePreferences: function() {
-        this.setState({
-            currentButtonLabel: ''
-        });
-    },
-
-    render: function() {
-        const { name, version, homepageURL } = this.state;
+    render() {
+        const { name, version, homepage } = this.props;
 
         return (
-            <Router basename="" >
+            <Router>
                 <div>
                     <Header />
                     <SubHeader />
@@ -85,7 +30,7 @@ var App = React.createClass({
                         <Route exact path="/" render={() => (<Dashboard />)} />
                         <Route exact path="/preferences" component={Preferences} />
                         <Route exact path="/about" render={() => (
-                            <About packageName={name} packageVersion={version} homepageURL={homepageURL} />
+                            <About packageName={name} packageVersion={version} homepageURL={homepage} />
                         )}/>
                     </div>
 
@@ -96,6 +41,6 @@ var App = React.createClass({
             </Router>
         );
     }
-});
+}
 
 export default App;
