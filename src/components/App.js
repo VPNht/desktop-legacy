@@ -28,23 +28,10 @@ import packageInfo from '../package.json';
 var App = React.createClass({
     getInitialState: function() {
         return {
-            sidebarOffset: 0,
             name: packageInfo.name,
             version: packageInfo.version,
             homepageURL: packageInfo.homepage
         };
-    },
-
-    handleScroll: function(e) {
-        if (e.target.scrollTop > 0 && !this.state.sidebarOffset) {
-            this.setState({
-                sidebarOffset: e.target.scrollTop
-            });
-        } else if (e.target.scrollTop === 0 && this.state.sidebarOffset) {
-            this.setState({
-                sidebarOffset: 0
-            });
-        }
     },
 
     handleClickPreferences: function() {
@@ -86,11 +73,6 @@ var App = React.createClass({
 
     render: function() {
         const { name, version, homepageURL } = this.state;
-
-        var sidebarHeaderClass = 'sidebar-header';
-        if (this.state.sidebarOffset) {
-            sidebarHeaderClass += ' sep';
-        }
 
         return (
             <Router basename="" >
