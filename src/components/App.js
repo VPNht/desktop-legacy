@@ -22,7 +22,6 @@ class App extends Component {
         return (
             <Router>
                 <div>
-                    <Header />
                     <SubHeader />
 
                     <div className="content-container">
