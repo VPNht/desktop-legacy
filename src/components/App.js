@@ -4,7 +4,7 @@ import _ from 'lodash';
 import React, { Component } from 'react';
 import { HashRouter as Router, Route, Link } from 'react-router-dom';
 import RetinaImage from 'react-retina-image';
-import Sidebar from './Sidebar';
+import Menu from './Menu';
 import Header from './Header';
 import SubHeader from './SubHeader';
 import Dashboard from './Dashboard';
@@ -26,7 +26,7 @@ class App extends Component {
                     <SubHeader />
 
                     <div className="content-container">
-                        <Sidebar />
+                        <Menu />
                         <Route exact path="/" render={() => (<Dashboard />)} />
                         <Route exact path="/preferences" component={Preferences} />
                         <Route exact path="/about" render={() => (
