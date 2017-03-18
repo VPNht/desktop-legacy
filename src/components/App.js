@@ -6,7 +6,6 @@ import { HashRouter as Router, Route, Link } from 'react-router-dom';
 import RetinaImage from 'react-retina-image';
 import Menu from './Menu';
 import Header from './Header';
-import SubHeader from './SubHeader';
 import Dashboard from './Dashboard';
 import Preferences from './Preferences';
 import About from './About';
@@ -22,7 +21,7 @@ class App extends Component {
         return (
             <Router>
                 <div>
-                    <SubHeader />
+                    <Header />
 
                     <div className="content-container">
                         <Menu />
