@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './app';
-import App from './components/App';
+import App from './ui/components/App';
 
 const { name, version, homepage } = require( '../package.json' );
 
