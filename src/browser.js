@@ -4,8 +4,7 @@ import net from 'net';
 import fs from 'fs';
 import path from 'path';
 import child_process from 'child_process';
-import trayTemplate from './app-tray'
-import Updater from 'autoupdater'
+import trayTemplate from './tray';
 import yargs from 'yargs';
 import util from './utils/Util';
 
@@ -38,13 +37,9 @@ app.on('open-url', function(event, url) {
 });
 
 app.on('ready', function() {
-
     var checkingQuit = false;
     var canQuit = false;
     var size = screen.getPrimaryDisplay().workAreaSize;
-    var autoUpdater = new Updater({
-        currentVersion: app.getVersion()
-    });
 
     var windowSize = {
         width: 800,
@@ -184,45 +179,6 @@ app.on('ready', function() {
         });
     });
 
-
-    // auto update
-    autoUpdater.on("download", function(version) {
-        console.log("Downloading " + version)
-    });
-
-    autoUpdater.on("updateReady", function(updaterPath) {
-        console.log("Launching " + updaterPath);
-        dialog.showMessageBox(mainWindow, {
-            'type': 'info',
-            message: 'A new version is available, do you want to install now ?',
-            buttons: ['Yes', 'No']
-        }, function(response) {
-
-            if (response === 0) {
-                if (process.platform == 'win32') {
-                    util.exec('start ' + updaterPath).then(function(stdOut) {
-                        console.log(stdOut);
-                        process.exit(0);
-                    });
-                } else {
-                    child_process.spawn('open', [updaterPath], {
-                        detached: true,
-                        stdio: ['ignore', 'ignore', 'ignore']
-                    });
-                    process.exit(0);
-                }
-            }
-
-
-        })
-
-    });
-
-    autoUpdater.on('error', function(err) {
-        console.log('An error occured while checking for updates.');
-        console.log(err);
-    });
-
     var helper = {
         toggleVisibility: function() {
             if (mainWindow) {
@@ -258,11 +214,6 @@ app.on('ready', function() {
             app.quit();
         }
     };
-
-    // do not trigger for nothing
-    if (process.env.NODE_ENV !== 'development') {
-        autoUpdater.update();
-    }
 
     trayTemplate.init(helper);
 });
