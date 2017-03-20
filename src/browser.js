@@ -4,7 +4,7 @@ import net from 'net';
 import fs from 'fs';
 import path from 'path';
 import child_process from 'child_process';
-import trayTemplate from './tray';
+import trayTemplate from './app-tray';
 import yargs from 'yargs';
 import util from './utils/Util';
 
