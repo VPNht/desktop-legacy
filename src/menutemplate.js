@@ -1,7 +1,6 @@
 import {remote, shell} from 'electron';
-import router from './router';
-import metrics from './utils/MetricsUtil';
-import util from './utils/Util';
+import metrics from './ui/utils/MetricsUtil';
+import util from './ui/utils/Util';
 import T from 'i18n-react';
 
 var dialog = remote.dialog;
