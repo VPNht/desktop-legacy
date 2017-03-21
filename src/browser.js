@@ -4,9 +4,9 @@ import net from 'net';
 import fs from 'fs';
 import path from 'path';
 import child_process from 'child_process';
-import trayTemplate from './app-tray';
 import yargs from 'yargs';
 import util from './ui/utils/Util';
+import Tray from './tray';
 
 let args = yargs(process.argv.slice(1)).wrap(100).argv;
 
@@ -179,41 +179,39 @@ app.on('ready', function() {
         });
     });
 
-    var helper = {
-        toggleVisibility: function() {
-            if (mainWindow) {
-                var isVisible = mainWindow.isVisible();
-                if (isVisible) {
-                    if (process.platform == 'darwin') {
-                        app.dock.hide();
-                    }
-                    mainWindow.hide();
-                } else {
-                    if (process.platform == 'darwin') {
-                        app.dock.show();
-                    }
-                    mainWindow.show();
-                }
-            }
-        },
-        disconnect: function() {
-            var isVisible = mainWindow.isVisible();
-            if (!isVisible) {
-                helper.toggleVisibility();
-            }
-            mainWindow.webContents.send('application:vpn-disconnect');
-        },
-        connect: function() {
-            var isVisible = mainWindow.isVisible();
-            if (!isVisible) {
-                helper.toggleVisibility();
-            }
-            mainWindow.webContents.send('application:vpn-connect');
-        },
-        quit: function() {
-            app.quit();
-        }
-    };
+    // Initialize application tray
+    const tray = new Tray();
+    tray.setMenu( 'disconnected' );
 
-    trayTemplate.init(helper);
+    tray.on( 'show', () => {
+        mainWindow.show();
+        app.dock.show();
+    });
+
+    tray.on( 'hide', () => {
+        mainWindow.hide();
+        app.dock.hide();
+    });
+
+    tray.on( 'toggle', () => {
+        tray.emit( mainWindow.isVisible() ? 'hide' : 'show' );
+    });
+
+    tray.on( 'connect', () => {
+        tray.emit( 'show' );
+        mainWindow.webContents.send( 'application:vpn-connect' );
+    });
+
+    tray.on( 'disconnect', () => {
+        tray.emit( 'show' );
+        mainWindow.webContents.send( 'application:vpn-disconnect' );
+    });
+
+    tray.on( 'quit', () => {
+        app.quit();
+    });
+
+    ipcMain.on( 'vpn.connected', () => tray.setMenu( 'connected' ) );
+    ipcMain.on( 'vpn.connecting', () => tray.setMenu( 'connecting' ) );
+    ipcMain.on( 'vpn.disconnected', () => tray.setMenu( 'disconnected' ) );
 });

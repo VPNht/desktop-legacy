@@ -6,7 +6,7 @@
     "Show Window": "Montrer la fenêtre",
     "Cancel connecting...": "Interrompre la connexion...",
     "Connected": "Connecté",
-    "Disconnected": "Déconnecté",
+    "disconnected": "Déconnecté",
 
     "Another instance of VPN.ht is already running. Only one instance of the app can be open at a time": "VPN.ht est déjà en cours d'utilisation. L'application ne peut être ouverte qu'une seule fois",
     "OK": "OK",
@@ -33,7 +33,7 @@
     "Password should not be left blank": "Le mot de passe ne peut pas être vide",
     "You should select a server": "Un serveur doit être sélectionné",
     "Loading...": "Chargement...",
-    "Connecting...": "Connexion...",
+    "connecting": "Connexion...",
     "VPN connection status": "Statut de la connexion VPN",
     "cancel": "annuler",
     "connect to vpn": "se connecter au vpn",
