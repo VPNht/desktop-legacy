@@ -4,10 +4,7 @@ import Router from 'react-router';
 import Select from 'react-select';
 import VPN from '../utils/VPNUtil';
 import Settings from '../utils/SettingsUtil';
-import {
-    t
-}
-from '../utils/localizationUtil';
+import T from 'i18n-react';
 
 var Preferences = React.createClass({
     getInitialState: function() {
@@ -178,12 +175,12 @@ var Preferences = React.createClass({
         if (this.state.encryption == 64) {
             ports = [{
                 value: 'default',
-                label: 'UDP - ' + t('Default')
+                label: 'UDP - ' + T.translate('Default')
             }];
         } else if (this.state.encryption == 128) {
             ports = [{
                 value: 'default',
-                label: 'UDP - ' + t('Default')
+                label: 'UDP - ' + T.translate('Default')
             }, {
                 value: 53,
                 label: 'UDP - 53'
@@ -197,7 +194,7 @@ var Preferences = React.createClass({
         } else if (this.state.encryption == 256) {
             ports = [{
                 value: 'default',
-                label: 'UDP - ' + t('Default')
+                label: 'UDP - ' + T.translate('Default')
             }, {
                 value: 3389,
                 label: 'UDP - 3389'
@@ -209,7 +206,7 @@ var Preferences = React.createClass({
         if (!this.state.autoPath) {
             customPort = (
                 <section className="preferences">
-                    <h1 className="title">{t('Custom Port')}</h1>
+                    <h1 className="title">{T.translate('Custom Port')}</h1>
                     <div className="selectbox">
                         <Select
                             name="customPort"
@@ -227,46 +224,46 @@ var Preferences = React.createClass({
         return (
             <div className="content-scroller" id="content">
                 <section>
-                        <h1 className="title">{t('General')}</h1>
+                        <h1 className="title">{T.translate('General')}</h1>
                         <div className="checkbox">
                             <input id="reportAnon" type="checkbox" checked={this.state.metricsEnabled} onChange={this.handleChangeMetricsEnabled}/>
                             <label htmlFor="reportAnon">
-                                <p>{t('Report anonymous usage analytics')}</p>
+                                <p>{T.translate('Report anonymous usage analytics')}</p>
                             </label>
                         </div>
                         <div className="checkbox">
                             <input id="saveCredentials" disabled={!this.state.saveCredentials}  type="checkbox" checked={this.state.connectLaunch && this.state.saveCredentials} onChange={this.handleChangeConnectLaunch}/>
                             <label htmlFor="saveCredentials">
-                                <p>{t('Auto-connect after launch (requires a saved user/pass)')}</p>
+                                <p>{T.translate('Auto-connect after launch (requires a saved user/pass)')}</p>
                             </label>
                         </div>
                         <div className="checkbox">
                             <input id="launchStartup" type="checkbox" checked={this.state.launchStartup} onChange={this.handleChangeLaunchStartup}/>
                             <label htmlFor="launchStartup">
-                                <p>{t('Launch on operating system startup')}</p>
+                                <p>{T.translate('Launch on operating system startup')}</p>
                             </label>
                         </div>
                         <div className="checkbox">
                             <input id="launchStartupHidden" type="checkbox" checked={this.state.launchStartupHidden} onChange={this.handleChangeLaunchStartupHidden}/>
                             <label htmlFor="launchStartupHidden">
-                                <p>{t('Launch on operating system startup hidden')}</p>
+                                <p>{T.translate('Launch on operating system startup hidden')}</p>
                             </label>
                         </div>
                         <div className="checkbox">
                             <input id="disableSmartdns" type="checkbox" checked={this.state.disableSmartdns} onChange={this.handleChangeDisableSmartdns}/>
                             <label htmlFor="disableSmartdns">
-                                <p>{t('Disable SmartDNS')}</p>
+                                <p>{T.translate('Disable SmartDNS')}</p>
                             </label>
                         </div>
                         <div className="checkbox">
                             <input id="minToTaskbar" type="checkbox" checked={this.state.minToTaskbar} onChange={this.handleChangeMinToTaskbar}/>
                             <label htmlFor="minToTaskbar">
-                                <p>{t('Minimize to taskbar')}</p>
+                                <p>{T.translate('Minimize to taskbar')}</p>
                             </label>
                         </div>
                 </section>
                 <section className="preferences">
-                    <h1 className="title">{t('Encryption')}</h1>
+                    <h1 className="title">{T.translate('Encryption')}</h1>
                     <div className="selectbox">
                         <Select
                             name="encryption"
@@ -280,13 +277,13 @@ var Preferences = React.createClass({
                 </section>
                 {customPort}
                 <section className="preferences">
-                    <h1 className="title">{t('Auto Path')}</h1>
+                    <h1 className="title">{T.translate('Auto Path')}</h1>
                     <div className="checkbox">
                         <input type="checkbox" id="autopath" checked={this.state.autoPath} onChange={this.handleChangeAutoPath} />
                         <label htmlFor="autopath">
-                            <p>{this.state.autoPath ? t('Enabled') : t('Disabled')}</p>
+                            <p>{this.state.autoPath ? T.translate('Enabled') : T.translate('Disabled')}</p>
                         </label>
-                        <p className="info">{t('Feature that tries alternate ports in order to resolve certain types of connections issues.')}</p>
+                        <p className="info">{T.translate('Feature that tries alternate ports in order to resolve certain types of connections issues.')}</p>
                     </div>
                 </section>
             </div>

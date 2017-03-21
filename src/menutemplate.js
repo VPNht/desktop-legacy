@@ -2,7 +2,7 @@ import {remote, shell} from 'electron';
 import router from './router';
 import metrics from './utils/MetricsUtil';
 import util from './utils/Util';
-import {t} from './utils/localizationUtil';
+import T from 'i18n-react';
 
 var dialog = remote.dialog;
 var app = remote.app;
@@ -12,7 +12,7 @@ var MenuTemplate = function() {
     return [{
         label: 'VPN.ht',
         submenu: [{
-            label: t('Manage Account'),
+            label: T.translate('Manage Account'),
             click: function() {
                 metrics.track('Opened Billing on VPN.ht', {
                     from: 'menu'
@@ -22,42 +22,42 @@ var MenuTemplate = function() {
         }, {
             type: 'separator'
         }, {
-            label: t('Quit'),
+            label: T.translate('Quit'),
             accelerator: util.CommandOrCtrl() + '+Q',
             click: function() {
                 app.quit();
             }
         }]
     }, {
-        label: t('View'),
+        label: T.translate('View'),
         submenu: [{
-            label: t('Hide') + ' VPN.ht',
+            label: T.translate('Hide') + ' VPN.ht',
             accelerator: util.CommandOrCtrl() + '+H',
             selector: 'hide:'
         }, {
-            label: t('Hide Others'),
+            label: T.translate('Hide Others'),
             accelerator: util.CommandOrCtrl() + '+Shift+H',
             selector: 'hideOtherApplications:'
         }, {
-            label: t('Show All'),
+            label: T.translate('Show All'),
             selector: 'unhideAllApplications:'
         }, {
             type: 'separator'
         }, {
-            label: t('Toggle DevTools'),
+            label: T.translate('Toggle DevTools'),
             accelerator: 'Alt+' + util.CommandOrCtrl() + '+I',
             click: function() {
                 remote.getCurrentWindow().toggleDevTools();
             }
         }]
     }, {
-        label: t('Window'),
+        label: T.translate('Window'),
         submenu: [{
-            label: t('Minimize'),
+            label: T.translate('Minimize'),
             accelerator: util.CommandOrCtrl() + '+M',
             selector: 'performMiniaturize:'
         }, {
-            label: t('Close'),
+            label: T.translate('Close'),
             accelerator: util.CommandOrCtrl() + '+W',
             click: function() {
                 remote.getCurrentWindow().hide();
@@ -65,13 +65,13 @@ var MenuTemplate = function() {
         }, {
             type: 'separator'
         }, {
-            label: t('Bring All to Front'),
+            label: T.translate('Bring All to Front'),
             selector: 'arrangeInFront:'
         }]
     }, {
-        label: t('Help'),
+        label: T.translate('Help'),
         submenu: [{
-            label: t('Support'),
+            label: T.translate('Support'),
             click: function() {
                 metrics.track('Opened Support on VPN.ht', {
                     from: 'menu'
@@ -79,7 +79,7 @@ var MenuTemplate = function() {
                 shell.openExternal('https://billing.vpn.ht/knowledgebase.php');
             }
         }, {
-            label: t('Report Issue or Suggest Feedback'),
+            label: T.translate('Report Issue or Suggest Feedback'),
             click: function() {
                 metrics.track('Opened Issue Reporter', {
                     from: 'menu'
@@ -89,7 +89,7 @@ var MenuTemplate = function() {
         }, {
             type: 'separator'
         }, {
-            label: t('About'),
+            label: T.translate('About'),
             accelerator: util.CommandOrCtrl() + '+I',
             click: function() {
                 metrics.track('Opened About', {

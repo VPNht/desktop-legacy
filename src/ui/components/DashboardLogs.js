@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import T from 'i18n-react';
 import Router from 'react-router';
 import {remote} from 'electron';
 import fs from 'fs';
-import {t} from '../utils/localizationUtil';
 
 import LogStore from '../stores/LogStore';
 
@@ -54,17 +54,17 @@ var DashboardLogs = React.createClass({
             .dialog
             .showMessageBox({
                 type: 'info',
-                title: t('Log Copied'),
-                buttons: [t('OK')],
-                message: t('Your log file has been copied successfully.')
+                title: T.translate('Log Copied'),
+                buttons: [T.translate('OK')],
+                message: T.translate('Your log file has been copied successfully.')
             });
     },
 
     handleExportLogs: function() {
         var args = {
-            title: t('Select path for log file'),
+            title: T.translate('Select path for log file'),
             filters: [{
-                name: t('Log files'),
+                name: T.translate('Log files'),
                 extensions: ['log']
             }]
         };
@@ -75,13 +75,13 @@ var DashboardLogs = React.createClass({
         dialog.showSaveDialog(args, function(filename) {
             fs.writeFile(filename, self.state.logs.join("\n"), function(err) {
                 if (err) {
-                    dialog.showErrorBox(t('Unable to save log path'), t("Looks like we can't save the log file. Try again with another path."))
+                    dialog.showErrorBox(T.translate('Unable to save log path'), t("Looks like we can't save the log file. Try again with another path."))
                 } else {
                     dialog.showMessageBox({
                         type: 'info',
-                        title: t('Log saved!'),
-                        buttons: [t('OK')],
-                        message: t('Your log file has been saved successfully.')
+                        title: T.translate('Log saved!'),
+                        buttons: [T.translate('OK')],
+                        message: T.translate('Your log file has been saved successfully.')
                     });
                 }
 
@@ -95,10 +95,10 @@ var DashboardLogs = React.createClass({
 
         return (
             <section>
-                <h1 className="title">{t('Connection report')}</h1>
+                <h1 className="title">{T.translate('Connection report')}</h1>
                 <textarea ref="logsTextarea" className="logs" name="description" value={logs} readOnly />
-                <button className="left" type="submit" onClick={this.handleExportLogs}><p>{t('Export')}</p></button>
-                <button className="left" type="submit" onClick={this.handleCopyClipboard}><p>{t('Copy to clipboard')}</p></button>
+                <button className="left" type="submit" onClick={this.handleExportLogs}><p>{T.translate('Export')}</p></button>
+                <button className="left" type="submit" onClick={this.handleCopyClipboard}><p>{T.translate('Copy to clipboard')}</p></button>
             </section>
         );
 

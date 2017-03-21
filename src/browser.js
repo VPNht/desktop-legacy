@@ -6,7 +6,7 @@ import path from 'path';
 import child_process from 'child_process';
 import trayTemplate from './app-tray';
 import yargs from 'yargs';
-import util from './utils/Util';
+import util from './ui/utils/Util';
 
 let args = yargs(process.argv.slice(1)).wrap(100).argv;
 

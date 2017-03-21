@@ -1,7 +1,7 @@
 import _ from 'lodash';
+import T from 'i18n-react';
 import request from 'request';
 import metrics from './MetricsUtil';
-import {t} from './localizationUtil';
 import log from '../stores/LogStore';
 import ServerActions from '../actions/ServerActions';
 
@@ -40,7 +40,7 @@ var MyipUtil = {
 
         var options = [{
             value: 'hub.vpn.ht',
-            label: t('Nearest Server (Random)'),
+            label: T.translate('Nearest Server (Random)'),
             country: 'blank'
         }];
         var serverName;

@@ -14,7 +14,6 @@ import accountStore from './stores/AccountStore';
 import utils from './utils/Util';
 import Credentials from './utils/CredentialsUtil';
 import Settings from './utils/SettingsUtil';
-import Localization from './utils/localizationUtil';
 
 var app = remote.app;
 var Menu = remote.Menu;

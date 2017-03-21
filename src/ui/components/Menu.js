@@ -1,20 +1,20 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Image from 'react-retina-image';
-import {t} from '../utils/localizationUtil';
+import T from 'i18n-react';
 
 const Menu = () => (
     <ul className="sidebar">
         <Link to="/">
             <li>
                 <Image src="icons/Dashboard%20Icon.png"/>
-                <p>{t('dashboard')}</p>
+                <p>{T.translate('dashboard')}</p>
             </li>
         </Link>
         <Link to="/preferences">
             <li>
                 <Image src="icons/Country%20Selection.png"/>
-                <p>{t('preferences')}</p>
+                <p>{T.translate('preferences')}</p>
             </li>
         </Link>
     </ul>
