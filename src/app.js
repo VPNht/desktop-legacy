@@ -1,11 +1,12 @@
 require.main.paths.splice(0, 0, process.env.NODE_PATH);
-import {remote, ipcRenderer} from 'electron';
+import {remote, ipcRenderer, shell} from 'electron';
+import _ from 'lodash';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import metrics from './ui/utils/MetricsUtil';
 import VPN from './ui/utils/VPNUtil';
 import vpnActions from './ui/actions/VPNActions';
-import template from './menutemplate';
+import Menu from './menu';
 import webUtil from './ui/utils/WebUtil';
 import request from 'request';
 import path from 'path';
@@ -16,7 +17,6 @@ import Credentials from './ui/utils/CredentialsUtil';
 import Settings from './ui/utils/SettingsUtil';
 
 var app = remote.app;
-var Menu = remote.Menu;
 
 // Init process
 log.initLogs(app.getVersion());
@@ -24,7 +24,54 @@ VPN.initCheck();
 webUtil.addLiveReload();
 webUtil.addBugReporting();
 webUtil.disableGlobalBackspace();
-Menu.setApplicationMenu(Menu.buildFromTemplate(template()));
+
+// Initialize application menu
+const menu = new Menu();
+
+const AVAILABLE_PAGES = {
+    account: {
+        action: 'Opened Billing on VPN.ht',
+        url: 'https://billing.vpn.ht/clientarea.php?action=services'
+    },
+    support: {
+        action: 'Opened Support on VPN.ht',
+        url: 'https://billing.vpn.ht/knowledgebase.php'
+    },
+    help: {
+        action: 'Opened Support on VPN.ht',
+        url: 'https://billing.vpn.ht/knowledgebase.php'
+    },
+    issue: {
+        action: 'Opened Issue Reporter',
+        url: 'https://github.com/vpnht/desktop/issues/new'
+    },
+    about: {
+        action: 'Opened About',
+        url: '#/about'
+    }
+};
+
+menu.on( 'open', (name, openInBrowser) => {
+    const { action, url } = _.get( AVAILABLE_PAGES, name, {} );
+
+    if( !action || !url ) {
+        return;
+    }
+
+    if( openInBrowser ) {
+        shell.openExternal( url );
+    }
+    else {
+        window.location = url;
+    }
+
+    metrics.track( action, { from: 'menu' });
+});
+
+menu.on( 'quit', () => {
+    app.quit();
+});
+
 metrics.track('Started App');
 metrics.track('app heartbeat');
 setInterval(function() {
