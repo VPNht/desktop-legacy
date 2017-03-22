@@ -25,19 +25,19 @@ webUtil.addLiveReload();
 webUtil.addBugReporting();
 webUtil.disableGlobalBackspace();
 
-// Initialize application menu
-const menu = new Menu();
+metrics.track('Started App');
+metrics.track('app heartbeat');
+setInterval(function() {
+    metrics.track('app heartbeat');
+}, 14400000);
 
+//
 const AVAILABLE_PAGES = {
     account: {
         action: 'Opened Billing on VPN.ht',
         url: 'https://billing.vpn.ht/clientarea.php?action=services'
     },
     support: {
-        action: 'Opened Support on VPN.ht',
-        url: 'https://billing.vpn.ht/knowledgebase.php'
-    },
-    help: {
         action: 'Opened Support on VPN.ht',
         url: 'https://billing.vpn.ht/knowledgebase.php'
     },
@@ -51,7 +51,7 @@ const AVAILABLE_PAGES = {
     }
 };
 
-menu.on( 'open', (name, openInBrowser) => {
+ipcRenderer.on( 'open', (e, name, openInBrowser) => {
     const { action, url } = _.get( AVAILABLE_PAGES, name, {} );
 
     if( !action || !url ) {
@@ -68,15 +68,27 @@ menu.on( 'open', (name, openInBrowser) => {
     metrics.track( action, { from: 'menu' });
 });
 
-menu.on( 'quit', () => {
-    app.quit();
+ipcRenderer.on( 'toggle', () => {
+    ipcRenderer.emit( remote.getCurrentWindow().isVisible() ? 'hide': 'show' );
 });
 
-metrics.track('Started App');
-metrics.track('app heartbeat');
-setInterval(function() {
-    metrics.track('app heartbeat');
-}, 14400000);
+ipcRenderer.on( 'show', () => {
+    remote.getCurrentWindow().show();
+});
+
+ipcRenderer.on( 'hide', () => {
+    remote.getCurrentWindow().hide();
+});
+
+ipcRenderer.on( 'connect', () => {
+});
+
+ipcRenderer.on( 'disconnect', () => {
+});
+
+ipcRenderer.on( 'quit', () => {
+    app.quit();
+});
 
 ipcRenderer.on('application:quitting', () => {});
 

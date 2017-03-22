@@ -1,43 +1,42 @@
-import { webContents, ipcMain, Tray, Menu } from 'electron';
+import { ipcMain, Tray, Menu } from 'electron';
 import T from 'i18n-react';
-import EventEmitter from 'events';
 
 const createDisconnectedMenu = (emitter) => Menu.buildFromTemplate([
     {
         label: `${T.translate( 'Toggle' )} VPN.ht`,
-        click: () => emitter.emit( 'toggle' )
+        click: () => emitter.send( 'toggle' )
     },
     {
         type: 'separator'
     },
     {
         label: T.translate( 'Connect' ),
-        click: () => emitter.emit( 'connect' )
+        click: () => emitter.send( 'connect' )
     },
     {
         label: T.translate( 'Disconnect' ),
-        click: () => emitter.emit( 'disconnect' )
+        click: () => emitter.send( 'disconnect' )
     },
     {
         type: 'separator'
     },
     {
         label: T.translate( 'Quit' ),
-        click: () => emitter.emit( 'quit' )
+        click: () => emitter.send( 'quit' )
     }
 ]);
 
 const createConnectingMenu = (emitter) => Menu.buildFromTemplate([
     {
         label: T.translate( 'Show Window' ),
-        click: () => emitter.emit( 'show' )
+        click: () => emitter.send( 'show' )
     },
     {
         type: 'separator'
     },
     {
         label: T.translate( 'Cancel Connecting...' ),
-        click: () => emitter.emit( 'disconnect' )
+        click: () => emitter.send( 'disconnect' )
     },
     {
         label: T.translate( 'Disconnect' ),
@@ -48,14 +47,14 @@ const createConnectingMenu = (emitter) => Menu.buildFromTemplate([
     },
     {
         label: T.translate( 'Quit' ),
-        click: () => emitter.emit( 'quit' )
+        click: () => emitter.send( 'quit' )
     }
 ]);
 
 const createConnectedMenu = (emitter) => Menu.buildFromTemplate([
     {
         label: T.translate( 'Show Window' ),
-        click: () => emitter.emit( 'show' )
+        click: () => emitter.send( 'show' )
     },
     {
         type: 'separator'
@@ -66,34 +65,32 @@ const createConnectedMenu = (emitter) => Menu.buildFromTemplate([
     },
     {
         label: T.translate( 'Disconnect' ),
-        click: () => emitter.emit( 'disconnect' )
+        click: () => emitter.send( 'disconnect' )
     },
     {
         type: 'separator'
     },
     {
         label: T.translate( 'Quit' ),
-        click: () => emitter.emit( 'quit' )
+        click: () => emitter.send( 'quit' )
     }
 ]);
 
-class ApplicationTray extends EventEmitter {
-    constructor() {
-        super();
+const initialize = (mainWindow) => {
+    const menus = {
+        "disconnected": createDisconnectedMenu( mainWindow.webContents ),
+        "connecting": createConnectingMenu( mainWindow.webContents ),
+        "connected": createConnectedMenu( mainWindow.webContents )
+    };
 
-        this.tray = new Tray( __dirname + '/tray_disconnected.png' );
-        this.menus = {
-            "disconnected": createDisconnectedMenu( this ),
-            "connecting": createConnectingMenu( this ),
-            "connected": createConnectedMenu( this )
-        };
-    }
+    const tray = new Tray( `${__dirname}/tray_disconnected.png` );
 
-    setMenu( status ) {
-        this.tray.setContextMenu( this.menus[status] );
-        this.tray.setImage( __dirname + '/tray_disconnected.png' );
-        this.tray.setToolTip( T.translate( status ) );
-    }
+    ipcMain.on( 'tray:set', (status) => {
+        const menu = menus[status];
+        tray.setContextMenu( menu );
+        tray.setImage( `${__dirname}/tray_disconnected.png` );
+        tray.setToolTip( T.translate( status ) );
+    });
 }
 
-export default ApplicationTray;
+export default initialize;

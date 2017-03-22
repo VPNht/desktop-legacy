@@ -1,10 +1,7 @@
-import { remote, shell } from 'electron';
-import EventEmitter from 'events';
+import { app, shell, ipcMain, ipcRenderer, BrowserWindow, Menu } from 'electron';
 import T from 'i18n-react';
 
-const SPECIAL_KEY = process.platform == 'darwin' ? 'Command' : 'Ctrl';
-
-const { Menu } = remote;
+const specialKey = process.platform == 'darwin' ? 'Command' : 'Ctrl';
 
 const createMenu = (emitter) => Menu.buildFromTemplate([
     {
@@ -12,14 +9,14 @@ const createMenu = (emitter) => Menu.buildFromTemplate([
         submenu: [
             {
                 label: T.translate( 'Manage account' ),
-                click: () => emitter.emit( 'open', 'account', true )
+                click: () => emitter.send( 'open', 'account', true )
             },
             {
                 type: 'separator'
             },
             {
                 label: T.translate( 'Quit' ),
-                click: () => emitter.emit( 'quit' )
+                click: () => emitter.send( 'quit' )
             }
         ]
     },
@@ -28,11 +25,11 @@ const createMenu = (emitter) => Menu.buildFromTemplate([
         submenu: [
             {
                 label: T.translate( 'Hide' ) + ' VPN.ht',
-                accelerator: `${SPECIAL_KEY}+H`,
+                accelerator: `${specialKey}+H`,
                 selector: 'hide:'
             }, {
                 label: T.translate( 'Hide Others' ),
-                accelerator: `${SPECIAL_KEY}+Shift+H`,
+                accelerator: `${specialKey}+Shift+H`,
                 selector: 'hideOtherApplications:'
             }, {
                 label: T.translate( 'Show All' ),
@@ -41,8 +38,8 @@ const createMenu = (emitter) => Menu.buildFromTemplate([
                 type: 'separator'
             }, {
                 label: T.translate( 'Toggle DevTools' ),
-                accelerator: `Alt+${SPECIAL_KEY}+I`,
-                click: () => remote.getCurrentWindow().toggleDevTools()
+                accelerator: `Alt+${specialKey}+I`,
+                click: () => emitter.send( 'debug' )
             }
         ]
     },
@@ -55,7 +52,7 @@ const createMenu = (emitter) => Menu.buildFromTemplate([
             },
             {
                 label: T.translate( 'Close' ),
-                click: () => emitter.emit( 'quit' )
+                click: () => emitter.send( 'quit' )
             },
             {
                 type: 'separator'
@@ -71,31 +68,27 @@ const createMenu = (emitter) => Menu.buildFromTemplate([
         submenu: [
             {
                 label: T.translate( 'Support' ),
-                click: () => emitter.emit( 'open', 'support', true )
+                click: () => emitter.send( 'open', 'support', true )
             },
             {
                 label: T.translate( 'Report Issue or Suggest Feedback' ),
-                click: () => emitter.emit( 'open', 'issue', true )
+                click: () => emitter.send( 'open', 'issue', true )
             },
             {
                 type: 'separator'
             },
             {
                 label: T.translate( 'About' ),
-                accelerator: `${SPECIAL_KEY}+I`,
-                click: () => emitter.emit( 'open', 'about', false )
+                accelerator: `${specialKey}+I`,
+                click: () => emitter.send( 'open', 'about', false )
             }
         ]
     }
 ]);
 
-class ApplicationMenu extends EventEmitter {
-    constructor() {
-        super();
-
-        this.menu = createMenu( this );
-        Menu.setApplicationMenu( this.menu );
-    }
+const initialize = (mainWindow) => {
+    const menu = createMenu( mainWindow.webContents );
+    Menu.setApplicationMenu( menu );
 }
 
-export default ApplicationMenu;
+export default initialize;

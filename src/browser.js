@@ -1,16 +1,14 @@
-import {app, BrowserWindow, ipcMain, screen, dialog} from 'electron';
-import os from 'os';
-import net from 'net';
-import fs from 'fs';
+import { app, ipcMain, BrowserWindow } from 'electron';
 import path from 'path';
-import child_process from 'child_process';
 import yargs from 'yargs';
-import util from './ui/utils/Util';
-import Tray from './tray';
+import createApplicationMenu from './menu';
+import createApplicationTray from './tray';
 
+// Update application paths
 let args = yargs(process.argv.slice(1)).wrap(100).argv;
 
 process.env.NODE_PATH = path.join(__dirname, 'node_modules');
+
 if (process.env.NODE_ENV !== 'development') {
     process.env.BIN_PATH = path.join(__dirname, '/../bin');
     process.env.LOG_PATH = path.join(__dirname, '/../log');
@@ -25,39 +23,31 @@ if (process.env.NODE_ENV !== 'development') {
     process.env.LOG_PATH = path.join(__dirname, '/../resources/log');
 }
 
-var settingsjson = {};
-try {
-    settingsjson = JSON.parse(fs.readFileSync(path.join(__dirname, 'settings.json'), 'utf8'));
-} catch (err) {}
+// Prevent more than single instance running at the same time
+let mainWindow = null;
 
-var openURL = null;
-app.on('open-url', function(event, url) {
-    event.preventDefault();
-    openURL = url;
+const isAnotherInstanceRunning = app.makeSingleInstance( (commandLine, workingDirectory) => {
+  if( mainWindow ) {
+      mainWindow.restore();
+      mainWindow.focus();
+  }
 });
 
-app.on('ready', function() {
-    var checkingQuit = false;
-    var canQuit = false;
-    var size = screen.getPrimaryDisplay().workAreaSize;
+if( isAnotherInstanceRunning ) {
+    app.quit();
+}
 
-    var windowSize = {
-        width: 800,
-        height: process.platform === 'win32' ? 900 : 870
-    };
+app.on( 'ready', () => {
+    if( isAnotherInstanceRunning ) return;
 
-    if (size.height < 870) {
-        windowSize.width = 800;
-        windowSize.height = 600;
-    }
-
-    var mainWindow = new BrowserWindow({
-        width: windowSize.width,
-        height: windowSize.height,
-        'standard-window': false,
-        resizable: false,
-        frame: process.platform === 'win32', //only on Windows
+    // Create the window
+    mainWindow = new BrowserWindow({
         show: false,
+        width: 800,
+        height: process.platform === 'win32' ? 900 : 870,
+        resizable: false,
+        frame: process.platform === 'win32',
+        title: 'VPN.ht',
         titleBarStyle: 'hidden-inset',
         backgroundColor: '#ededed', // to enable subpixel anti-aliasing, since electron 0.37.3
         webPreferences: {
@@ -65,153 +55,53 @@ app.on('ready', function() {
         }
     });
 
-    //DEBUG: mainWindow.webContents.openDevTools();
+    // Load the initial page
+    const initialPageURL = path.join( __dirname, 'index.html' );
+    mainWindow.loadURL( path.normalize( `file://${initialPageURL}` ) );
+    mainWindow.webContents.openDevTools();
 
-    var preventMultipleInstances = function() {
-        var socket = (process.platform === 'win32') ? '\\\\.\\pipe\\vpnht-sock' : path.join(os.tmpdir(), 'vpnht.sock');
-        var client = net.connect({
-            path: socket
-        }, function() {
-            var errorMessage = 'Another instance of VPN.ht is already running. Only one instance of the app can be open at a time.'
-            dialog.showMessageBox(mainWindow, {
-                'type': 'error',
-                message: errorMessage,
-                buttons: ['OK']
-            }, function() {
-                client.end();
-                process.exit(0);
-            })
-        }).on('error', function(err) {
-
-            if (process.platform !== 'win32') {
-                // try to unlink older socket if it exists, if it doesn't,
-                // ignore ENOENT errors
-                try {
-                    fs.unlinkSync(socket);
-                } catch (e) {
-                    if (e.code !== 'ENOENT') {
-                        throw e;
-                    }
-                }
-            }
-
-            var server = net.createServer(function(connection) {
-                connection.on('data', function(data) {
-                    mainWindow.focus();
-                    mainWindow.webContents.send('options', JSON.parse(data));
-                });
-            });
-
-            server.listen(socket);
-            mainWindow.loadURL(path.normalize('file://' + path.join(__dirname, 'index.html')));
-        });
-    }
-
-    preventMultipleInstances(mainWindow);
-
-    app.on('before-quit', function(event) {
-        if (!canQuit) {
-            event.preventDefault();
-            if (!checkingQuit) {
-                checkingQuit = true;
-                mainWindow.webContents.send('application:vpn-check-disconnect');
-                ipcMain.on('vpn.disconnected', () => {
-                    canQuit = true;
-                    app.quit();
-                });
-            }
-        }
-    });
-
-    // powerMonitor cannot be required before 'ready' event is fired: https://github.com/electron/electron/blob/master/docs/api/power-monitor.md
-    require('electron').powerMonitor.on('resume', function() {
-        mainWindow.webContents.send('application:vpn-check-sleep');
-    });
-
-    app.on('activate-with-no-open-windows', function() {
-        if (mainWindow) {
-            mainWindow.show();
-        }
-        return false;
-    });
-
-    var updating = false;
-
-    if (os.platform() === 'win32') {
-        mainWindow.on('close', function() {
-            mainWindow.webContents.send('application:quitting');
-            return true;
-        });
-        app.on('window-all-closed', function() {
-            app.quit();
-        });
-    }
-
-    mainWindow.webContents.on('new-window', function(e) {
-        e.preventDefault();
-    });
-
-    mainWindow.webContents.on('will-navigate', function(e, url) {
-        if (url.indexOf('build/index.html#') < 0) {
-            e.preventDefault();
-        }
-    });
-
-    mainWindow.webContents.on('did-finish-load', function() {
-
-        console.log('ready')
-        mainWindow.setTitle('VPN.ht');
-
-        if (!args.hide) {
+    mainWindow.on( 'did-finish-load', () => {
+        if( !args.hide ) {
             mainWindow.show();
             mainWindow.focus();
         }
-        if (openURL) {
-            mainWindow.webContents.send('application:open-url', {
-                url: openURL
-            });
-        }
-        app.on('open-url', function(event, url) {
-            event.preventDefault();
-            mainWindow.webContents.send('application:open-url', {
-                url: url
-            });
-        });
     });
 
-    // Initialize application tray
-    const tray = new Tray();
-    tray.setMenu( 'disconnected' );
+    // Resume after OS wakes up
+    const { powerMonitor } = require( 'electron' );
 
-    tray.on( 'show', () => {
-        mainWindow.show();
-        app.dock.show();
+    powerMonitor.on( 'resume', () => {
+        mainWindow.webContents.send( 'application:vpn-check-sleep' );
     });
 
-    tray.on( 'hide', () => {
-        mainWindow.hide();
-        app.dock.hide();
-    });
+    createApplicationMenu( mainWindow );
+    createApplicationTray( mainWindow );
 
-    tray.on( 'toggle', () => {
-        tray.emit( mainWindow.isVisible() ? 'hide' : 'show' );
-    });
+    ipcMain.emit( 'tray:set', 'disconnected' );
+});
 
-    tray.on( 'connect', () => {
-        tray.emit( 'show' );
-        mainWindow.webContents.send( 'application:vpn-connect' );
-    });
+// Show the window after the page has been loaded
+app.on( 'browser-window-created', (e, instance) => {
+    instance.show();
+});
 
-    tray.on( 'disconnect', () => {
-        tray.emit( 'show' );
-        mainWindow.webContents.send( 'application:vpn-disconnect' );
-    });
+// Follow the MacOS standard and hide the application when all windows have been closed
+app.on( 'window-all-closed', () => {
+  if( process.platform != 'darwin' ) {
+    app.quit();
+  }
+});
 
-    tray.on( 'quit', () => {
-        app.quit();
-    });
+// Disconnect before quitting
+let isDisconnected = true;
+ipcMain.on( 'vpn.connected', () => isDisconnected = false );
+ipcMain.on( 'vpn.connecting', () => isDisconnected = false );
+ipcMain.on( 'vpn.disconnected', () => isDisconnected = true );
 
-    ipcMain.on( 'vpn.connected', () => tray.setMenu( 'connected' ) );
-    ipcMain.on( 'vpn.connecting', () => tray.setMenu( 'connecting' ) );
-    ipcMain.on( 'vpn.disconnected', () => tray.setMenu( 'disconnected' ) );
+app.on( 'before-quit', (e) =>  {
+    if( !isDisconnected ) {
+        e.preventDefault();
+        mainWindow.webContents.send( 'application:vpn-check-disconnect' );
+        ipcMain.once( 'vpn.disconnected', () => app.quit() );
+    }
 });
