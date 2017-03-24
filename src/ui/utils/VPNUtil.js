@@ -8,7 +8,7 @@ import openvpnmanager from 'node-openvpn';
 
 import util from './Util';
 import myip from './MyipUtil';
-import Settings from '../utils/SettingsUtil';
+import config from '../../config';
 import helpers from './VPNHelpers';
 
 import log from '../stores/LogStore';
@@ -38,12 +38,12 @@ module.exports = assign(currentOSLib, {
 
             let server = _args.server;
 
-            let encryption = Settings.get('encryption');
-            let autoPath = Settings.get('autoPath');
-            let port = Settings.get('customPort');
+            let encryption = config.get('encryption');
+            let autoPath = config.get('autoPath');
+            let port = config.get('customPort');
             let smartdns = true;
             let platform = process.platform;
-            let disableSmartdns = Settings.get('disableSmartdns');
+            let disableSmartdns = config.get('disableSmartdns');
 
             if (disableSmartdns) {
                 smartdns = 'disable';

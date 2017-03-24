@@ -14,7 +14,7 @@ import log from './ui/stores/LogStore';
 import accountStore from './ui/stores/AccountStore';
 import utils from './ui/utils/Util';
 import Credentials from './ui/utils/CredentialsUtil';
-import Settings from './ui/utils/SettingsUtil';
+import config from './config';
 
 var app = remote.app;
 
@@ -105,7 +105,7 @@ ipcRenderer.on('application:vpn-connect', () => {
         vpnActions.connect({
             username: Credentials.get().username,
             password: Credentials.get().password,
-            server: Settings.get('server') || 'hub.vpn.ht'
+            server: config.get('server') || 'hub.vpn.ht'
         });
     } else {
         log.error('No user/pass saved in the hash.\n\nTIPS: Try to connect manually first to save your data.')
@@ -128,7 +128,7 @@ ipcRenderer.on('application:vpn-check-sleep', () => {
             vpnActions.connect({
                 username: Credentials.get().username,
                 password: Credentials.get().password,
-                server: Settings.get('server') || 'hub.vpn.ht'
+                server: config.get('server') || 'hub.vpn.ht'
             });
         } else {
             log.info('No user/pass saved in the hash. Disconnecting.');

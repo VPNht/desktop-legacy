@@ -3,7 +3,7 @@ var vpnUtil;
 import {ipcRenderer} from 'electron';
 import alt from '../alt';
 import log from '../stores/LogStore';
-import Settings from '../utils/SettingsUtil';
+import config from '../../config';
 import Credentials from '../utils/CredentialsUtil';
 
 class VPNActions {
@@ -89,12 +89,12 @@ class VPNActions {
     appReady() {
         return function(dispatch) {
             dispatch();
-            if (Settings.get('connectLaunch') === 'true' && Credentials._config()) {
+            if (config.get('connectLaunch') === 'true' && Credentials._config()) {
                 log.info('Auto-connect on launch');
                 this.connect({
                     username: Credentials.get().username,
                     password: Credentials.get().password,
-                    server: Settings.get('server') || 'hub.vpn.ht'
+                    server: config.get('server') || 'hub.vpn.ht'
                 });
             }
         };

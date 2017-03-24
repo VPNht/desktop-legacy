@@ -3,22 +3,22 @@ import metrics from '../utils/MetricsUtil';
 import Router from 'react-router';
 import Select from 'react-select';
 import VPN from '../utils/VPNUtil';
-import Settings from '../utils/SettingsUtil';
+import config from '../../config';
 import T from 'i18n-react';
 
 var Preferences = React.createClass({
     getInitialState: function() {
         return {
             metricsEnabled: metrics.enabled(),
-            launchStartup: Settings.get('launchStartup'),
-            launchStartupHidden: Settings.get('launchStartupHidden'),
-            connectLaunch: Settings.get('connectLaunch'),
-            saveCredentials: Settings.get('saveCredentials'),
-            autoPath: Settings.get('autoPath'),
-            disableSmartdns: Settings.get('disableSmartdns'),
-            encryption: Settings.get('encryption') || 128,
-            customPort: Settings.get('customPort') || 'default',
-            minToTaskbar: Settings.get('minToTaskbar')
+            launchStartup: config.get('launchStartup'),
+            launchStartupHidden: config.get('launchStartupHidden'),
+            connectLaunch: config.get('connectLaunch'),
+            saveCredentials: config.get('saveCredentials'),
+            autoPath: config.get('autoPath'),
+            disableSmartdns: config.get('disableSmartdns'),
+            encryption: config.get('encryption') || 128,
+            customPort: config.get('customPort') || 'default',
+            minToTaskbar: config.get('minToTaskbar')
         };
     },
 
@@ -47,7 +47,7 @@ var Preferences = React.createClass({
         }
 
         // save for future use
-        Settings.save('launchStartup', checked);
+        config.set('launchStartup', checked);
 
     },
 
@@ -66,7 +66,7 @@ var Preferences = React.createClass({
         }
 
         // save for future use
-        Settings.save('launchStartupHidden', checked);
+        config.set('launchStartupHidden', checked);
 
     },
 
@@ -78,7 +78,7 @@ var Preferences = React.createClass({
         });
 
         // save for future use
-        Settings.save('disableSmartdns', checked);
+        config.set('disableSmartdns', checked);
 
     },
 
@@ -90,7 +90,7 @@ var Preferences = React.createClass({
         });
 
         // save for future use
-        Settings.save('minToTaskbar', checked);
+        config.set('minToTaskbar', checked);
 
     },
 
@@ -103,7 +103,7 @@ var Preferences = React.createClass({
         });
 
         // save for future use
-        Settings.save('connectLaunch', checked);
+        config.set('connectLaunch', checked);
 
     },
 
@@ -120,7 +120,7 @@ var Preferences = React.createClass({
         }
 
         // save for future use
-        Settings.save('autoPath', checked);
+        config.set('autoPath', checked);
 
     },
 
@@ -130,7 +130,7 @@ var Preferences = React.createClass({
             encryption: encryption.value
         });
         this.handlePortChange({value:'default'});
-        Settings.save('encryption', encryption.value);
+        config.set('encryption', encryption.value);
 
     },
 
@@ -139,7 +139,7 @@ var Preferences = React.createClass({
         this.setState({
             customPort: customPort.value
         });
-        Settings.save('customPort', customPort.value);
+        config.set('customPort', customPort.value);
 
     },
 

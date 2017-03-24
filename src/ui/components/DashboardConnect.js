@@ -11,7 +11,7 @@ import log from '../stores/LogStore';
 import ServerOption from './ServerListOption';
 import ServerItem from './ServerListItem';
 import Logs from './DashboardLogs';
-import Settings from '../utils/SettingsUtil';
+import config from '../../config';
 import Credentials from '../utils/CredentialsUtil';
 import T from 'i18n-react';
 
@@ -23,8 +23,8 @@ var DashboardConnect = React.createClass({
             appReady: accountStore.getState().appReady,
             username: Credentials.get().username,
             password: Credentials.get().password,
-            saveCredentials: Settings.get('saveCredentials'),
-            server: Settings.get('server') || 'hub.vpn.ht',
+            saveCredentials: config.get('saveCredentials'),
+            server: config.get('server') || 'hub.vpn.ht',
             servers: serverStore.getState().servers
         };
     },
@@ -97,7 +97,7 @@ var DashboardConnect = React.createClass({
         });
 
         // save for future use
-        Settings.save('server', val, val.value);
+        config.set('server', val, val.value);
     },
 
     handleChangeSaveCredentials: function (e) {
@@ -116,7 +116,7 @@ var DashboardConnect = React.createClass({
         }
 
         // save for future use
-        Settings.save('saveCredentials', !!checked);
+        config.set('saveCredentials', !!checked);
     },
 
     handleKeyPress: function (e) {
