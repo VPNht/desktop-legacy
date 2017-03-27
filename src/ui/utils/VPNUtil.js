@@ -11,7 +11,7 @@ import myip from './MyipUtil';
 import config from '../../config';
 import helpers from './VPNHelpers';
 
-import log from '../stores/LogStore';
+import LogActions from '../actions/LogActions';
 import vpnActions from '../actions/VPNActions';
 
 let GENCONFIG_ENDPOINT = process.env.GENCONFIG_ENDPOINT || 'https://vpn.ht/openvpn-desktop';
@@ -101,14 +101,14 @@ module.exports = assign(currentOSLib, {
                     // update IP
                     vpnActions.checkIp();
 
-                    log.info('Connection successful');
+                    LogActions.addInfo( 'Connection successful');
                     resolve();
 
                 } else if (state[1] == 'EXITING') {
 
                     // auth failed
                     if (state[2] == 'auth-failure') {
-                        log.error('Invalid credentials');
+                        LogActions.addError( 'Invalid credentials');
                         vpnActions.invalidCredentials();
                         openvpn.removeAllListeners();
                         openvpnmanager.destroy();
@@ -117,12 +117,12 @@ module.exports = assign(currentOSLib, {
 
                     // process killed
                     if (state[2] == 'exit-with-notification') {
-                        log.info('Disconnected');
+                        LogActions.addInfo( 'Disconnected');
                         openvpn.removeAllListeners();
                         openvpnmanager.destroy();
                         vpnActions.disconnected();
                         if (process.platform == 'win32') {
-                            log.info('Stopping windows service');
+                            LogActions.addInfo( 'Stopping windows service');
                             util.exec(['net', 'stop', 'openvpnservice']);
                         }
                     }
@@ -150,7 +150,7 @@ module.exports = assign(currentOSLib, {
             });
 
             openvpn.on('console-output', function(output) {
-                log.info(output);
+                LogActions.addInfo( output );
             });
 
             openvpn.on('bytecount', function(bytes) {
@@ -164,7 +164,7 @@ module.exports = assign(currentOSLib, {
 
         _args = args; // don't remove
 
-        log.info("\n\n----------------------\nConnecting to " + args.server.value + "\n");
+        LogActions.addInfo( "\n\n----------------------\nConnecting to " + args.server.value + "\n" );
 
         return helpers.checkRunning()
             .then(this.stopProcess)
@@ -181,7 +181,7 @@ module.exports = assign(currentOSLib, {
     initCheck: function() {
         var self = this;
 
-        log.info("\n\n----------------------\nWaiting app to be ready\n");
+        LogActions.addInfo( "\n\n----------------------\nWaiting app to be ready\n" );
 
         return helpers.checkRunning()
             .then(this.stopProcess)
@@ -197,21 +197,21 @@ module.exports = assign(currentOSLib, {
                             if (status) {
                                 util.exec(['net', 'stop', 'openvpnservice'])
                                     .then(function() {
-                                        log.info('VPNUtil.init - App ready');
+                                        LogActions.addInfo( 'VPNUtil.init - App ready');
                                         vpnActions.appReady();
                                     })
                                     .catch(function() {
-                                        log.warn('VPNUtil.init - App ready with error');
+                                        LogActions.addWarning( 'VPNUtil.init - App ready with error');
                                         vpnActions.appReady();
                                     });
                             } else {
-                                log.info('VPNUtil.init - App ready');
+                                LogActions.addInfo( 'VPNUtil.init - App ready');
                                 vpnActions.appReady();
                             }
                         });
 
                 } else {
-                    log.info('VPNUtil.init - App ready');
+                    LogActions.addInfo( 'VPNUtil.init - App ready');
                     vpnActions.appReady();
                 }
 

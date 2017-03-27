@@ -2,7 +2,7 @@ var vpnUtil;
 
 import {ipcRenderer} from 'electron';
 import alt from '../alt';
-import log from '../stores/LogStore';
+import LogActions from '../actions/LogActions';
 import config from '../../config';
 import Credentials from '../utils/CredentialsUtil';
 
@@ -27,14 +27,14 @@ class VPNActions {
 
             vpnUtil.connect(args)
                 .then(() => {
-                    log.info('VPNAction.connect() done');
+                    LogActions.addInfo( 'VPNAction.connect() done');
                     // update tray
                     ipcRenderer.send('vpn.connected');
                     this.connected();
                 })
                 .catch((error) => {
                     console.log(error);
-                    log.error('Unable to launch process');
+                    LogActions.addError( 'Unable to launch process');
                     this.disconnected();
 
                 });
@@ -48,12 +48,12 @@ class VPNActions {
             vpnUtil.disconnect()
                 .then(() => {
 
-                    log.info('Waiting EXITING state');
+                    LogActions.addInfo( 'Waiting EXITING state');
 
                 })
                 .catch((error) => {
 
-                    log.error('Unable to disconnect');
+                    LogActions.addError( 'Unable to disconnect');
                     console.log(error);
 
                 });
@@ -67,12 +67,12 @@ class VPNActions {
             helpers.updateIp()
                 .then(() => {
 
-                    log.info('IP Updated');
+                    LogActions.addInfo( 'IP Updated');
 
                 })
                 .catch((error) => {
 
-                    log.error('Unable to update IP');
+                    LogActions.addError( 'Unable to update IP');
                     console.log(error);
 
                 });
@@ -90,7 +90,7 @@ class VPNActions {
         return function(dispatch) {
             dispatch();
             if (config.get('connectLaunch') === 'true' && Credentials._config()) {
-                log.info('Auto-connect on launch');
+                LogActions.addInfo( 'Auto-connect on launch');
                 this.connect({
                     username: Credentials.get().username,
                     password: Credentials.get().password,

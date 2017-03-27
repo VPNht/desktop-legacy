@@ -1,5 +1,5 @@
 import fs from 'fs';
-import log from '../stores/LogStore';
+import LogActions from '../actions/LogActions';
 import vpnActions from '../actions/VPNActions';
 import getPort from 'get-port';
 import myip from './MyipUtil';
@@ -27,7 +27,7 @@ module.exports = {
             timeout: 1500
         };
 
-        log.info('VPNUtil.softDisconnect - Trying to stop previous process');
+        LogActions.addInfo( 'VPNUtil.softDisconnect - Trying to stop previous process');
 
         return new Promise((resolve, reject) => {
 
@@ -75,7 +75,7 @@ module.exports = {
             } catch (err) {}
 
             if (pid && running(Number(pid))) {
-                log.info('Previous openvpn status still running, PID: ' + pid);
+                LogActions.addInfo( 'Previous openvpn status still running, PID: ' + pid);
                 resolve(true);
             } else {
                 resolve(false);

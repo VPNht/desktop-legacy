@@ -1,5 +1,5 @@
 import accountServerActions from '../actions/AccountServerActions';
-import log from '../stores/LogStore';
+import LogActions from '../actions/LogActions';
 
 var CredentialsUtil = {
 
@@ -21,7 +21,7 @@ var CredentialsUtil = {
     },
 
     save: function(username, password) {
-        log.info('Username and password saved for future use');
+        LogActions.addInfo( 'Username and password saved for future use');
         localStorage.setItem('auth.username', username);
         localStorage.setItem('auth.config', new Buffer(username + ':' + password).toString('base64'));
         accountServerActions.loggedin({username});

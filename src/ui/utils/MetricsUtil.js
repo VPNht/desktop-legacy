@@ -53,7 +53,7 @@ var Metrics = {
 
         mixpanel.track(name, assign({
             distinct_id: id,
-            version: util.packagejson().version,
+            version: "1" || util.packagejson().version,
             'Operating System': osName,
             'Operating System Version': osVersion,
             'Operating System Architecture': os.arch()

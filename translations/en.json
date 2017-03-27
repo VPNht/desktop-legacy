@@ -57,7 +57,7 @@
     "Select path for log file": "Select path for log file",
     "Log files": "Log files",
     "Unable to save log path": "Unable to save log path",
-    "Looks like we can't save the log file. Try again with another path.": "Looks like we can't save the log file. Try again with another path.",
+    "Looks like we can't save the log file. Try again with another path.": "Looks like we can't save the log file.\n\nTry again with another path.",
     "Log saved!": "Log saved!",
     "Your log file has been saved successfully.": "Your log file has been saved successfully.",
     "Export": "Export",

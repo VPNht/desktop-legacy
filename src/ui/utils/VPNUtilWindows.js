@@ -4,7 +4,7 @@ import path from 'path';
 import Winreg from 'winreg';
 import fs from 'fs';
 import helpers from './VPNHelpers';
-import log from '../stores/LogStore';
+import LogActions from '../actions/LogActions';
 import ps from 'xps';
 import {remote} from 'electron';
 
@@ -26,28 +26,28 @@ module.exports = {
 
             var pid = fs.readFileSync(path.join(util.supportDir(), 'openvpn.pid'));
             var port = fs.readFileSync(path.join(util.supportDir(), 'openvpn.port'));
-            log.info('Stopping previous openvpn service PID: ' + pid + ' PORT ' + port);
+            LogActions.addInfo( 'Stopping previous openvpn service PID: ' + pid + ' PORT ' + port);
 
             return new Promise((resolve) => {
 
                 // try softKill
                 helpers.softKill(Number(port))
                     .then(function() {
-                        log.info('Process stopped successfully');
+                        LogActions.addInfo( 'Process stopped successfully');
 
                         util.exec(['net', 'stop', 'openvpnservice'])
                             .then(function() {
-                                log.info('Service stopped successfully');
+                                LogActions.addInfo( 'Service stopped successfully');
                                 resolve();
                             })
                             .catch(function() {
-                                log.info('Service not running');
+                                LogActions.addInfo( 'Service not running');
                                 resolve();
                             });
 
                     })
                     .catch(function() {
-                        log.info('We have to stop the service manually');
+                        LogActions.addInfo( 'We have to stop the service manually');
                         module.exports.hardKillProcess('openvpnservice.exe')
                             .then(resolve)
                             .catch(reject);
@@ -68,7 +68,7 @@ module.exports = {
                             reject(error);
                         },
                         function() {
-                            log.info('FORCE KILLING: ' + task.name + ' PID: ' + task.pid);
+                            LogActions.addInfo( 'FORCE KILLING: ' + task.name + ' PID: ' + task.pid);
                             resolve();
                         }
                     );

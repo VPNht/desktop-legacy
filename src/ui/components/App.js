@@ -1,5 +1,6 @@
 import { shell } from 'electron';
 import $ from 'jquery';
+import app, { ipcMain, remote } from 'electron';
 import _ from 'lodash';
 import React, { Component } from 'react';
 import { HashRouter as Router, Route, Link } from 'react-router-dom';
@@ -13,6 +14,10 @@ import About from './About';
 class App extends Component {
     constructor( props ) {
         super( props );
+    }
+
+    componentDidMount() {
+        app.ipcRenderer.emit( 'ui.ready' );
     }
 
     render() {

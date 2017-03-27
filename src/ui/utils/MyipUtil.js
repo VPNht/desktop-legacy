@@ -2,7 +2,7 @@ import _ from 'lodash';
 import T from 'i18n-react';
 import request from 'request';
 import metrics from './MetricsUtil';
-import log from '../stores/LogStore';
+import LogActions from '../actions/LogActions';
 import ServerActions from '../actions/ServerActions';
 
 let MYIP_ENDPOINT = process.env.MYIP_ENDPOINT || 'https://myip.ht';
@@ -13,7 +13,7 @@ var MyipUtil = {
     fetch: function() {
         return MyipUtil._getRemoteServers()
             .then(function(servers) {
-                log.info('MyipUtil.fetch - ' + servers.length + ' servers')
+                LogActions.addInfo( 'MyipUtil.fetch - ' + servers.length + ' servers')
                 ServerActions.receiveAll(servers);
             });
     },

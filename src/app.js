@@ -1,5 +1,6 @@
 require.main.paths.splice(0, 0, process.env.NODE_PATH);
 import {remote, ipcRenderer, shell} from 'electron';
+import os from 'os';
 import _ from 'lodash';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -11,15 +12,19 @@ import webUtil from './ui/utils/WebUtil';
 import request from 'request';
 import path from 'path';
 import log from './ui/stores/LogStore';
+import LogActions from './ui/actions/LogActions';
 import accountStore from './ui/stores/AccountStore';
 import utils from './ui/utils/Util';
 import Credentials from './ui/utils/CredentialsUtil';
 import config from './config';
+import { render as prettifyObject } from 'prettyjson';
 
 var app = remote.app;
 
 // Init process
-log.initLogs(app.getVersion());
+
+
+
 VPN.initCheck();
 webUtil.addLiveReload();
 webUtil.addBugReporting();
@@ -30,6 +35,26 @@ metrics.track('app heartbeat');
 setInterval(function() {
     metrics.track('app heartbeat');
 }, 14400000);
+
+// React UI is fully initialized
+ipcRenderer.on( 'ui.ready', () => {
+    const interfaces = prettifyObject( os.networkInterfaces(), {noColor: true} );
+    const totalMemory = os.totalmem() / 1024 / 1024 / 1024;
+    const freeMemory = os.freemem() / 1024 / 1024 / 1024;
+    const system = prettifyObject({
+        'release': os.release(),
+        'type': os.type(),
+        'arch': os.arch(),
+        'loadAvg': os.loadavg(),
+        'total memory': `${totalMemory}GB`,
+        'free memory': `${freeMemory}GB`,
+        'cpus': os.cpus().length
+    }, {noColor: true});
+
+    LogActions.addInfo( `Launching VPN.ht Application ${app.getVersion()}` );
+    LogActions.addInfo( `Network Interfaces:\n${interfaces}` );
+    LogActions.addInfo( `Operating System ${system}`);
+});
 
 //
 const AVAILABLE_PAGES = {
@@ -108,13 +133,13 @@ ipcRenderer.on('application:vpn-connect', () => {
             server: config.get('server') || 'hub.vpn.ht'
         });
     } else {
-        log.error('No user/pass saved in the hash.\n\nTIPS: Try to connect manually first to save your data.')
+        LogActions.addError('No user/pass saved in the hash.\n\nTIPS: Try to connect manually first to save your data.')
     }
 });
 
 ipcRenderer.on('application:vpn-check-disconnect', () => {
     if (accountStore.getState().connecting || accountStore.getState().connected) {
-        log.info('Disconnecting before closing application');
+        LogActions.addInfo( 'Disconnecting before closing application' );
         vpnActions.disconnect();
     } else {
         vpnActions.disconnected();
@@ -123,7 +148,7 @@ ipcRenderer.on('application:vpn-check-disconnect', () => {
 
 ipcRenderer.on('application:vpn-check-sleep', () => {
     if (accountStore.getState().connected) {
-        log.info('Trying to reconnect after sleep');
+        LogActions.addInfo( 'Trying to reconnect after sleep' );
         if (Credentials._config()) {
             vpnActions.connect({
                 username: Credentials.get().username,
@@ -131,7 +156,7 @@ ipcRenderer.on('application:vpn-check-sleep', () => {
                 server: config.get('server') || 'hub.vpn.ht'
             });
         } else {
-            log.info('No user/pass saved in the hash. Disconnecting.');
+            LogActions.addInfo( 'No user/pass saved in the hash. Disconnecting.' );
             vpnActions.disconnect();
         }
     }

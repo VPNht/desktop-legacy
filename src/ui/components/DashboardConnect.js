@@ -7,16 +7,15 @@ import serverStore from '../stores/ServerStore';
 import VPN from '../actions/VPNActions';
 import Select from 'react-select';
 import _ from 'lodash';
-import log from '../stores/LogStore';
+import LogActions from '../actions/LogActions';
 import ServerOption from './ServerListOption';
 import ServerItem from './ServerListItem';
-import Logs from './DashboardLogs';
+import Logs from './Logs';
 import config from '../../config';
 import Credentials from '../utils/CredentialsUtil';
 import T from 'i18n-react';
 
 var DashboardConnect = React.createClass({
-
     getInitialState: function () {
         return {
             connecting: accountStore.getState().connecting,

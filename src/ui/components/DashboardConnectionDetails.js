@@ -3,7 +3,7 @@ import Router from 'react-router';
 import T from 'i18n-react';
 import VPN from '../actions/VPNActions';
 import util from '../utils/Util';
-import Logs from './DashboardLogs';
+import Logs from './Logs';
 
 import accountStore from '../stores/AccountStore';
 
