@@ -1,103 +1,83 @@
+import _ from 'lodash';
 import React from 'react';
 import Router from 'react-router';
 import T from 'i18n-react';
-import VPN from '../actions/VPNActions';
-import util from '../utils/Util';
-import Logs from './Logs';
+import ConnectionStore from '../stores/ConnectionStore';
+import ConnectionActions from '../actions/ConnectionActions';
 
-import accountStore from '../stores/AccountStore';
+const formatElapsedTime = ( timeInSeconds ) => {
+    timeInSeconds = _.ceil( timeInSeconds );
+    const hours = Math.floor( timeInSeconds / 3600);
+    const minutes = Math.floor( (timeInSeconds - (hours * 3600)) / 60 );
+    const seconds = timeInSeconds - (hours * 3600) - (minutes * 60);
+    return `${_.padStart( hours, 2, '0' )}:${_.padStart( minutes, 2, '0' )}:${_.padStart( seconds, 2, '0' )}`;
+}
 
-var DashboardConnectionDetails = React.createClass({
+const Connection = ({uptime = 0}) => (
+    <section>
+        <h1 className="title">{T.translate('VPN connection status')}</h1>
+        <div className="connectionstatus">
+            <i className="ion-ios-checkmark-empty connected"></i>
+            <p>{T.translate('Connected')} - {formatElapsedTime(uptime)}</p>
+        </div>
+        <button className="right" onClick={ConnectionActions.disconnect}>
+            <p>{T.translate('disconnect vpn')}</p>
+        </button>
+    </section>
+);
 
-  getInitialState: function () {
-    return {
-      bytecount: accountStore.getState().bytecount,
-      myip: accountStore.getState().myip,
-      connectionTime: accountStore.getState().connectionTime
-    };
-  },
+const IP = ({ip, location}) => (
+    <section className="ipOverview">
+        <h1 className="title">{T.translate( 'IP and Country Overview' )}</h1>
+        <p>{T.translate( 'Your New IP Address:' )}</p>
+        <span>{ip || T.translate( 'Loading...' )}</span>
+        <div />
+        <p>{T.translate('Your New ISP Location:')}</p>
+        <span>{location || T.translate( 'Loading...' )}</span>
+    </section>
+);
 
-  componentDidMount: function () {
-    accountStore.listen(this.update);
-  },
+class ConnectionDetails extends React.Component {
+    constructor( props ) {
+        super( props );
 
-  componentWillUnmount: function () {
-    accountStore.unlisten(this.update);
-  },
+        const { connectionTime } = ConnectionStore.getState();
 
-  update: function () {
-    if (this.isMounted()) {
-        this.setState({
-          bytecount: accountStore.getState().bytecount,
-          myip: accountStore.getState().myip,
-          connectionTime: accountStore.getState().connectionTime
+        this.state = {
+            connectionTime,
+            uptime: connectionTime ? (new Date().getTime() - connectionTime) / 1000 : 0,
+            ip: '127.0.0.1'
+        };
+
+        ConnectionStore.listen( ({connectionTime}) => {
+            this.setState({ connectionTime });
         });
     }
-  },
 
-  handleDisconnect: function (e) {
-    e.preventDefault();
-    VPN.disconnect();
-  },
+    componentDidMount() {
+        this.updateInterval = setInterval( () => {
+            const { connectionTime } = this.state;
 
-  render: function () {
-    var download = util.bytesToSize(this.state.bytecount[0]);
-    var upload = util.bytesToSize(this.state.bytecount[1]);
-
-    var location = T.translate('Loading...');
-    var myip = this.state.myip.ip || T.translate('Loading...');
-
-    if (this.state.myip.advanced) {
-        var city = this.state.myip.advanced.city || false;
-        var country = this.state.myip.advanced.countryName || false;
-        var countryFlag = this.state.myip.advanced.countryCode || false;
-        if (countryFlag) {
-            countryFlag = "flag-icon-" + countryFlag.toLowerCase();
-        }
-        if (city) {
-            location = city + " , " + country;
-        } else {
-            location = country;
-        }
+            this.setState({
+                uptime: connectionTime ? (new Date().getTime() - connectionTime) / 1000 : 0
+            });
+        }, 1000 );
     }
 
-    var duration = util.toHHMMSS(this.state.connectionTime);
+    componentWillUnmount() {
+        clearInterval( this.updateInterval );
+    }
 
-    return (
-        <div>
-            <section>
-                <h1 className="title">{T.translate('VPN connection status')}</h1>
-                <div className="connectionstatus">
-                    <i className="ion-ios-checkmark-empty connected"></i>
-                    <p>{T.translate('Connected')} - {duration}</p>
-                </div>
-                <button className="right" onClick={this.handleDisconnect}>
-                    <p>{T.translate('disconnect vpn')}</p>
-                </button>
-            </section>
+    render() {
+        const { uptime, ip, location } = this.state;
 
-            <section className="ipOverview">
-                <h1 className="title">{T.translate('IP and Country Overview')}</h1>
-                <p>{T.translate('Your New IP Address:')}</p><span>{myip}</span>
-                <div></div>
-                <p>{T.translate('Your New ISP Location:')}</p><i className={countryFlag}></i><span>{location}</span>
-            </section>
+        return (
+            <div>
+                <Connection uptime={uptime} />
+                <IP ip={ip} location={location} />
+            </div>
+        );
+    }
+}
 
-            <section>
-                <h1 className="title">{T.translate('Quick IP Address Management')}</h1>
-                <button className="left">
-                    <p>{T.translate('Change IP Address')}</p>
-                </button>
-                <button className="left">
-                    <p>{T.translate('Verify new IP Address')}</p>
-                </button>
-            </section>
-
-            <Logs />
-        </div>
-    );
-  }
-
-});
-
-module.exports = DashboardConnectionDetails;
+export default ConnectionDetails;
