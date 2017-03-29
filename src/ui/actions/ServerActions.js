@@ -1,9 +1,23 @@
-import alt from '../alt'
+import alt  from '../alt';
 
 class ServerActions {
-    constructor() {
-        this.generateActions('receiveAll')
-    }
+  clear() {
+    return {};
+  }
+
+  fetch() {
+    return {};
+  }
+
+  update( servers ) {
+    return {
+      servers
+    };
+  }
+
+  abort() {
+    return {};
+  }
 }
 
-module.exports = alt.createActions(ServerActions)
+export default alt.createActions( ServerActions );

@@ -7,7 +7,6 @@ import fs from 'fs';
 import openvpnmanager from 'node-openvpn';
 
 import util from './Util';
-import myip from './MyipUtil';
 import config from '../../config';
 import helpers from './VPNHelpers';
 
@@ -185,7 +184,6 @@ module.exports = assign(currentOSLib, {
 
         return helpers.checkRunning()
             .then(this.stopProcess)
-            .then(myip.fetch)
             .then(function() {
 
                 if (process.platform == 'win32') {

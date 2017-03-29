@@ -2,7 +2,6 @@ import fs from 'fs';
 import LogActions from '../actions/LogActions';
 import vpnActions from '../actions/VPNActions';
 import getPort from 'get-port';
-import myip from './MyipUtil';
 import openvpnmanager from 'node-openvpn';
 import util from './Util';
 import path from 'path';
@@ -58,12 +57,7 @@ module.exports = {
 
     updateIp: function() {
         return new Promise((resolve, reject) => {
-
-            myip.status(function(error, response, body) {
-                vpnActions.newIp(JSON.parse(body));
-                resolve();
-            });
-
+            // TODO: Add IP retrieval
         });
     },
 

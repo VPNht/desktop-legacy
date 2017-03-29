@@ -1,9 +1,8 @@
 import React from 'react';
 import Router from 'react-router';
-import myip from '../utils/MyipUtil';
 
 import accountStore from '../stores/AccountStore';
-import serverStore from '../stores/ServerStore';
+import ServerStore from '../stores/ServerStore';
 import VPN from '../actions/VPNActions';
 import Select from 'react-select';
 import _ from 'lodash';
@@ -17,6 +16,8 @@ import T from 'i18n-react';
 
 var DashboardConnect = React.createClass({
     getInitialState: function () {
+        const { servers } = ServerStore.getState();
+
         return {
             connecting: accountStore.getState().connecting,
             appReady: accountStore.getState().appReady,
@@ -24,18 +25,30 @@ var DashboardConnect = React.createClass({
             password: Credentials.get().password,
             saveCredentials: config.get('saveCredentials'),
             server: config.get('server') || 'hub.vpn.ht',
-            servers: serverStore.getState().servers
+            servers
         };
     },
 
     componentDidMount: function () {
+        ServerStore.listen( ({servers}) => {
+            servers = servers.map( item => {
+                const { name, ip, country } = item;
+
+                return {
+                    label: name,
+                    value: ip,
+                    country
+                };
+            });
+
+            this.setState({ servers });
+        });
+
         accountStore.listen(this.update);
-        serverStore.listen(this.updateServers);
     },
 
     componentWillUnmount: function () {
         accountStore.unlisten(this.update);
-        serverStore.unlisten(this.updateServers);
     },
 
     update: function () {
@@ -126,15 +139,17 @@ var DashboardConnect = React.createClass({
 
     render: function () {
         var currentStatus = T.translate('Loading...');
+
         if (this.state.appReady) {
             if (this.state.connecting) {
                     currentStatus = T.translate('Connecting...');
-            } else {
+            }
+            else {
                     currentStatus = T.translate('Disconnected');
             }
         }
 
-    return (
+        return (
             <div>
 
                 <section>

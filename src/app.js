@@ -13,21 +13,20 @@ import request from 'request';
 import path from 'path';
 import log from './ui/stores/LogStore';
 import LogActions from './ui/actions/LogActions';
+import ServerActions from './ui/actions/ServerActions';
 import accountStore from './ui/stores/AccountStore';
 import utils from './ui/utils/Util';
 import Credentials from './ui/utils/CredentialsUtil';
 import config from './config';
 import { render as prettifyObject } from 'prettyjson';
 
+import { fetchServers } from './ui/api/ip';
+
 var app = remote.app;
 
 // Init process
-
-
-
 VPN.initCheck();
 webUtil.addLiveReload();
-webUtil.addBugReporting();
 webUtil.disableGlobalBackspace();
 
 metrics.track('Started App');
@@ -37,7 +36,7 @@ setInterval(function() {
 }, 14400000);
 
 // React UI is fully initialized
-ipcRenderer.on( 'ui.ready', () => {
+ipcRenderer.on( 'ui.ready', async () => {
     const interfaces = prettifyObject( os.networkInterfaces(), {noColor: true} );
     const totalMemory = os.totalmem() / 1024 / 1024 / 1024;
     const freeMemory = os.freemem() / 1024 / 1024 / 1024;
@@ -54,6 +53,8 @@ ipcRenderer.on( 'ui.ready', () => {
     LogActions.addInfo( `Launching VPN.ht Application ${app.getVersion()}` );
     LogActions.addInfo( `Network Interfaces:\n${interfaces}` );
     LogActions.addInfo( `Operating System ${system}`);
+
+    ServerActions.fetch();
 });
 
 //
