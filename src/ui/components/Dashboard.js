@@ -1,49 +1,32 @@
 import React from 'react';
-import metrics from '../utils/MetricsUtil';
-import Router from 'react-router';
-
-import Connect from './DashboardConnect';
+import ConnectionStore from '../stores/ConnectionStore';
+import ConnectionPreferences from './DashboardConnect';
 import ConnectionDetails from './DashboardConnectionDetails';
 
-import accountStore from '../stores/AccountStore';
+class Dashboard extends React.Component {
+    constructor( props ) {
+        super( props );
 
-var Preferences = React.createClass({
-    getInitialState: function() {
-        return {
-            connected: accountStore.getState().connected
-        };
-    },
+        const { isConnected } = ConnectionStore.getState();
 
-    componentDidMount: function() {
-        accountStore.listen(this.update);
-    },
-
-    componentWillUnmount: function() {
-        accountStore.unlisten(this.update);
-    },
-
-    update: function() {
-        if (this.isMounted()) {
-            this.setState({
-                connected: accountStore.getState().connected
-            });
-        }
-    },
-
-    render: function() {
-
-        var toMount = < Connect / > ;
-        if (this.state.connected) {
-            toMount = < ConnectionDetails / > ;
-        }
-
-        return ( < div className = "content-scroller"
-            id = "content" > {toMount} < /div>
-        );
-
+        this.state = { isConnected };
     }
 
-});
+    componentDidMount() {
+        ConnectionStore.listen( ({isConnected}) => {
+            this.setState({ isConnected });
+        });
+    }
 
+    render() {
+        const { isConnected } = this.state;
 
-module.exports = Preferences;
+        return (
+            <div className="content-scroller" id="content">
+                {isConnected ? <ConnectionDetails /> : <ConnectionPreferences />}
+            </div>
+        );
+    }
+}
+
+export default Dashboard;

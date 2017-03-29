@@ -8,7 +8,7 @@ class AccountStore {
 
         this.errors = {};
 
-        this.connected = false;
+        this.isConnected = false;
         this.connecting = false;
         this.appReady = false;
         this.myip = false;
@@ -42,7 +42,7 @@ class AccountStore {
 
     onConnected() {
         this.setState({
-            connected: true,
+            isConnected: true,
             connecting: false
         });
         var self = this;
@@ -62,7 +62,7 @@ class AccountStore {
 
     onDisconnected() {
         this.setState({
-            connected: false,
+            isConnected: false,
             connecting: false,
             connectionTime: 0
         });
