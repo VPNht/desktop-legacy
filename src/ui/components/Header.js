@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import Image from 'react-retina-image';
-import accountStore from '../stores/AccountStore';
 import T from 'i18n-react';
+import Image from 'react-retina-image';
+import ConnectionStore from '../stores/ConnectionStore';
 
 const ConnectedStatus = () => (
     <div>
@@ -23,33 +23,22 @@ class Header extends Component {
     constructor( props ) {
         super( props );
 
-        this.state = {
-            connected: false
-        };
+        const { isConnected } = ConnectionStore.getState();
+        this.state = { isConnected };
 
-        this.update = () => {
-            this.setState({
-                connected: accountStore.getState().connected
-            });
-        }
-    }
-
-    componentWillMount() {
-        accountStore.listen( this.update );
-    }
-
-    componentWillUnmount() {
-        accountStore.unlisten( this.update );
+        ConnectionStore.listen( ({isConnected}) => {
+            this.setState({ isConnected });
+        });
     }
 
     render() {
-        let { connected  } = this.state;
+        let { isConnected  } = this.state;
 
         return (
             <header>
                 <Image className="logo" src="Logo.png"/>
                 <div className="status">
-                    {connected ? <ConnectedStatus /> : <DisconnectedStatus />}
+                    {isConnected ? <ConnectedStatus /> : <DisconnectedStatus />}
                 </div>
             </header>
         );
