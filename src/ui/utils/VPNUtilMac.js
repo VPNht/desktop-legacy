@@ -1,7 +1,7 @@
 import resources from './ResourcesUtil';
 import util from './Util';
 import path from 'path';
-import log from '../stores/LogStore';
+import LogActions from '../actions/LogActions';
 import fs from 'fs';
 import running from 'is-running';
 import helpers from './VPNHelpers';
@@ -25,7 +25,7 @@ module.exports = {
             var pid = fs.readFileSync(path.join(util.supportDir(), 'openvpn.pid'));
             var port = fs.readFileSync(path.join(util.supportDir(), 'openvpn.port'));
 
-            log.info('Stopping previous openvpn service PID: ' + pid + ' PORT ' + port);
+            LogActions.addInfo( 'Stopping previous openvpn service PID: ' + pid + ' PORT ' + port );
 
             return new Promise((resolve) => {
                 helpers.softKill(Number(port))
@@ -34,20 +34,20 @@ module.exports = {
                         // checking if process stopped as security
                         if (running(Number(pid))) {
                             // process running
-                            log.info('Process still running, running manual kill');
+                            LogActions.addInfo( 'Process still running, running manual kill' );
                             util.exec(['kill', '-9', Number(pid)])
                                 .then(function() {
-                                    log.info('Process stopped successfully');
+                                    LogActions.addInfo( 'Process stopped successfully' );
                                     resolve();
                                 });
                         } else {
                             // process stopped
-                            log.info('Process stopped successfully');
+                            LogActions.addInfo( 'Process stopped successfully' );
                             resolve();
                         }
                     })
                     .catch(function() {
-                        log.info('We have to kill the process manually');
+                        LogActions.addInfo( 'We have to kill the process manually' );
                         util.exec(['kill', '-9', Number(pid)])
                             .then(function() {
                                 resolve();
