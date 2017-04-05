@@ -1,6 +1,5 @@
 import {remote} from 'electron';
 import fs from 'fs';
-import util from './Util';
 import path from 'path';
 import metrics from './MetricsUtil';
 

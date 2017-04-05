@@ -2,7 +2,6 @@ import React from 'react';
 import metrics from '../utils/MetricsUtil';
 import Router from 'react-router';
 import Select from 'react-select';
-import VPN from '../utils/VPNUtil';
 import config from '../../config';
 import T from 'i18n-react';
 
@@ -41,9 +40,7 @@ var Preferences = React.createClass({
         });
 
         if (checked) {
-            VPN.enableStartOnBoot(this.state.launchStartupHidden);
         } else {
-            VPN.disableStartOnBoot();
         }
 
         // save for future use
@@ -60,9 +57,7 @@ var Preferences = React.createClass({
         });
 
         if (checked) {
-            VPN.enableStartOnBoot(true);
         } else {
-            VPN.disableStartOnBoot();
         }
 
         // save for future use

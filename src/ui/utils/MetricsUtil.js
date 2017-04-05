@@ -3,7 +3,6 @@ import Mixpanel from 'mixpanel';
 import uuid from 'node-uuid';
 import fs from 'fs';
 import path from 'path';
-import util from './Util';
 import os from 'os';
 import osxRelease from 'osx-release';
 var settings;
@@ -49,11 +48,11 @@ var Metrics = {
         }
 
         let osName = os.platform();
-        let osVersion = util.isWindows() ? os.release() : osxRelease(os.release()).version;
+        let osVersion = true ? os.release() : osxRelease(os.release()).version;
 
         mixpanel.track(name, assign({
             distinct_id: id,
-            version: "1" || util.packagejson().version,
+            version: "1",
             'Operating System': osName,
             'Operating System Version': osVersion,
             'Operating System Architecture': os.arch()
