@@ -1,18 +1,14 @@
 import _ from 'lodash';
 import alt from '../alt';
-import request from 'request';
-import promisify from 'es6-promisify';
 import ServerActions from '../actions/ServerActions';
-import axios from 'axios';
-
-const requestAsPromise = promisify( request.get );
+import request from 'axios';
 
 const endpointURL = process.env.MYIP_ENDPOINT || 'https://myip.ht';
 
 const SearchSource = {
   update: {
     async remote( state ) {
-      const { data } = await axios( `${endpointURL}/servers-geo.json` );
+      const { data } = await request( `${endpointURL}/servers-geo.json` );
       return data;
     },
 
