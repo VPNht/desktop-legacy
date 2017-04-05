@@ -1,10 +1,6 @@
 import alt  from '../alt';
 
 class ServerActions {
-  clear() {
-    return {};
-  }
-
   fetch() {
     return {};
   }

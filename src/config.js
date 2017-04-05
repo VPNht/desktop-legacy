@@ -1,6 +1,8 @@
 import Config from 'electron-config';
 
 const defaults = {
+    username: '',
+    password: '',
     launchStartup: false,
     launchStartupHidden: true,
     connectLaunch: false,

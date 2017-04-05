@@ -33,7 +33,7 @@
     "Password should not be left blank": "Le mot de passe ne peut pas être vide",
     "You should select a server": "Un serveur doit être sélectionné",
     "Loading...": "Chargement...",
-    "connecting": "Connexion...",
+    "Connecting": "Connexion...",
     "VPN connection status": "Statut de la connexion VPN",
     "cancel": "annuler",
     "connect to vpn": "se connecter au vpn",

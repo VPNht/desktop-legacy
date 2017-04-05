@@ -13,7 +13,7 @@ const formatElapsedTime = ( timeInSeconds ) => {
     return `${_.padStart( hours, 2, '0' )}:${_.padStart( minutes, 2, '0' )}:${_.padStart( seconds, 2, '0' )}`;
 }
 
-const Connection = ({uptime = 0}) => (
+const Status = ({uptime = 0}) => (
     <section>
         <h1 className="title">{T.translate('VPN connection status')}</h1>
         <div className="connectionstatus">
@@ -73,7 +73,7 @@ class ConnectionDetails extends React.Component {
 
         return (
             <div>
-                <Connection uptime={uptime} />
+                <Status uptime={uptime} />
                 <IP ip={ip} location={location} />
             </div>
         );

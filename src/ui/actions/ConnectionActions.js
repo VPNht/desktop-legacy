@@ -1,16 +1,16 @@
 import alt  from '../alt';
 
 class ConnectionActions {
-  clear() {
-    return {};
-  }
-
   connect() {
     return {};
   }
 
   disconnect() {
     return {};
+  }
+
+  updateCredentials( username, password, remember ) {
+    return { username, password, remember };
   }
 }
 

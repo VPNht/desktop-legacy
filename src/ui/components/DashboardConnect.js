@@ -1,201 +1,128 @@
-import React from 'react';
-import Router from 'react-router';
-
-import accountStore from '../stores/AccountStore';
-import ServerStore from '../stores/ServerStore';
-import VPN from '../actions/VPNActions';
-import Select from 'react-select';
 import _ from 'lodash';
-import LogActions from '../actions/LogActions';
-import ServerOption from './ServerListOption';
-import ServerItem from './ServerListItem';
-import Logs from './Logs';
-import config from '../../config';
-import Credentials from '../utils/CredentialsUtil';
+import React from 'react';
+import Select from 'react-select';
 import T from 'i18n-react';
+import ServerStore from '../stores/ServerStore';
+import ConnectionStore from '../stores/ConnectionStore';
+import ConnectionActions from '../actions/ConnectionActions';
+import Logs from './Logs';
 
-var DashboardConnect = React.createClass({
-    getInitialState: function () {
+const Status = ({isReady, isConnecting}) => {
+    let status = T.translate( 'Loading...' );
+
+    return (
+        <section>
+            <h1 className="title">{T.translate('VPN connection status')}</h1>
+            <div className="connectionstatus">
+                <i className={isConnecting ? 'ion-ios-loop spin' : 'ion-ios-close-empty disconnected'}></i>
+                <p>{T.translate( isConnecting ? 'Connecting' : 'Disconnected' )}</p>
+            </div>
+            <button className="right" onClick={() => {}}>
+                <p>{T.translate( isConnecting ? 'cancel' : 'connect to vpn')}</p>
+            </button>
+        </section>
+    );
+}
+
+const Login = ({username, password, remember, onUpdate}) => (
+    <section>
+        <h1 className="title">{T.translate('Login')}</h1>
+        <input name="username" value={username} onChange={({target}) => onUpdate( target.value, password, remember )} placeholder={T.translate('Username')} type="text" />
+        <input name="password" value={password} onChange={({target}) => onUpdate( username, target.value, remember )} placeholder={T.translate('Password')} type="password" />
+        <div className="checkbox">
+            <input type="checkbox" value={remember} checked={remember} onChange={() => onUpdate( username, password, !remember)} id="saveCredentials" />
+            <label htmlFor="saveCredentials">
+                <p>{T.translate('Remember my username and password')}</p>
+            </label>
+        </div>
+    </section>
+);
+
+class ServerItem extends React.Component {
+    constructor( props ) {
+        super();
+    }
+
+    render() {
+        const { className, onFocus, onSelect, option } = this.props;
+        const { name, country } = option;
+
+        return (
+            <div className={className} onClick={(e) => onSelect( option, e )} onMouseEnter={(e) => onFocus( option, e)}>
+                <i className={`flag-icon flag-icon-${country}`} />
+                {name}
+            </div>
+        );
+    }
+}
+
+const Servers = ({servers, selected, onSelect}) => {
+    servers = _.map( servers, item => _( item )
+        .set( 'value', item.ip )
+        .set( 'label', item.name )
+        .value()
+    );
+
+    return (
+        <section>
+            <h1 className="title">{T.translate('Servers')}</h1>
+            <Select
+                name="server"
+                placeholder={T.translate('Select server')}
+                options={servers}
+                optionComponent={ServerItem}
+                value={selected}
+                onChange={onSelect}
+                searchable={false}
+                clearable={false}
+            />
+        </section>
+    )
+}
+
+class DashboardConnect extends React.Component {
+    constructor( props ) {
+        super( props );
+
         const { servers } = ServerStore.getState();
+        const { username, password, remember } = ConnectionStore.getState();
 
-        return {
-            connecting: accountStore.getState().connecting,
-            appReady: accountStore.getState().appReady,
-            username: Credentials.get().username,
-            password: Credentials.get().password,
-            saveCredentials: config.get('saveCredentials'),
-            server: config.get('server') || 'hub.vpn.ht',
-            servers
+        this.state = {
+            isConnecting: true,
+            username,
+            password,
+            remember,
+            servers,
+            selectedServer: 'hub.vpn.ht'
         };
-    },
+    }
 
-    componentDidMount: function () {
+    componentDidMount () {
         ServerStore.listen( ({servers}) => {
-            servers = servers.map( item => {
-                const { name, ip, country } = item;
-
-                return {
-                    label: name,
-                    value: ip,
-                    country
-                };
-            });
-
             this.setState({ servers });
         });
 
-        accountStore.listen(this.update);
-    },
-
-    componentWillUnmount: function () {
-        accountStore.unlisten(this.update);
-    },
-
-    update: function () {
-        if (this.isMounted()) {
-            this.setState({
-                connecting: accountStore.getState().connecting,
-                appReady: accountStore.getState().appReady
-            });
-        }
-    },
-
-    updateServers: function () {
-        if (this.isMounted()) {
-            this.setState({
-                servers: serverStore.getState().servers
-            });
-        }
-    },
-
-    handleChange: function (key) {
-        return function (e) {
-            var state = {};
-            state[key] = e.target.value;
-            this.setState(state);
-        }.bind(this);
-    },
-
-    handleConnect: function (e) {
-        e.preventDefault();
-
-        if (this.state.connecting) {
-            VPN.disconnect();
-        } else {
-            if (!this.state.username) {
-                    alert(T.translate('Username should not be left blank'));
-            } else if (!this.state.password) {
-                    alert(T.translate('Password should not be left blank'));
-            } else if (!this.state.server) {
-                    alert(T.translate('You should select a server'));
-            } else {
-
-                // should we save credentials ?
-                if (this.state.saveCredentials) {
-                    Credentials.save(this.state.username, this.state.password);
-                } else {
-                    // make sure to flush previous save
-                    Credentials.logout();
-                }
-
-                VPN.connect(this.state);
-            }
-        }
-    },
-
-    handleServer: function (val) {
-        this.setState({
-            server: val
+        ConnectionStore.listen( ({username, password, remember}) => {
+            this.setState({ username, password, remember });
         });
+    }
 
-        // save for future use
-        config.set('server', val, val.value);
-    },
+    onSelectServer( selectedServer ) {
+        this.setState({ selectedServer });
+    }
 
-    handleChangeSaveCredentials: function (e) {
-        var checked = e.target.checked;
-        this.setState({
-            saveCredentials: checked
-        });
-
-        // clear username/pw
-        if (!checked) {
-            Credentials.logout();
-            this.setState({
-                username: '',
-                password: ''
-            });
-        }
-
-        // save for future use
-        config.set('saveCredentials', !!checked);
-    },
-
-    handleKeyPress: function (e) {
-        if (e.key === 'Enter') {
-            this.handleConnect(e);
-        }
-    },
-
-    render: function () {
-        var currentStatus = T.translate('Loading...');
-
-        if (this.state.appReady) {
-            if (this.state.connecting) {
-                    currentStatus = T.translate('Connecting...');
-            }
-            else {
-                    currentStatus = T.translate('Disconnected');
-            }
-        }
+    render() {
+        const { servers, selectedServer, username, password, remember } = this.state;
 
         return (
             <div>
-
-                <section>
-                    <h1 className="title">{T.translate('VPN connection status')}</h1>
-                    <div className="connectionstatus">
-                        <i className={this.state.connecting ? 'ion-ios-loop spin' : 'ion-ios-close-empty disconnected'}></i>
-                        <p>{currentStatus}</p>
-                    </div>
-                    <button disabled={!this.state.appReady} className="right" onClick={this.handleConnect}>
-                        <p>{this.state.connecting ? T.translate('cancel') : T.translate('connect to vpn')}</p>
-                    </button>
-                </section>
-
-                <section>
-                    <h1 className="title">{T.translate('Login')}</h1>
-                    <input name="username" disabled={!this.state.appReady} value={this.state.username || ''} onChange={this.handleChange('username')} placeholder={T.translate('Username')} type="text" />
-                    <input name="password" disabled={!this.state.appReady} value={this.state.password || ''} onChange={this.handleChange('password')} onKeyPress={this.handleKeyPress} placeholder={T.translate('Password')} type="password" />
-                    <div className="checkbox">
-                        <input type="checkbox" disabled={!this.state.appReady} checked={this.state.saveCredentials} onChange={this.handleChangeSaveCredentials} id="saveCredentials" />
-                        <label htmlFor="saveCredentials">
-                            <p>{T.translate('Remember my username and password')}</p>
-                        </label>
-                    </div>
-                </section>
-
-                <section>
-                    <h1 className="title">{T.translate('Servers')}</h1>
-                    <Select
-                        disabled={!this.state.appReady}
-                        name="server"
-                        value={this.state.server}
-                        options={this.state.servers}
-                        onChange={this.handleServer}
-                        placeholder={T.translate('Select server')}
-                        optionComponent={ServerOption}
-                        valueComponent={ServerItem}
-                        searchable={false}
-                        clearable={false}
-                    />
-                </section>
-
+                <Status isConnecting={false} />
+                <Login username={username} password={password} remember={remember} onUpdate={ConnectionActions.updateCredentials} />
+                <Servers servers={servers} selected={selectedServer} onSelect={({ip}) => this.onSelectServer( ip )} />
                 <Logs />
             </div>
         );
     }
+}
 
-});
-
-module.exports = DashboardConnect;
+export default DashboardConnect;
