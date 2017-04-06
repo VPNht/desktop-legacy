@@ -1,4 +1,5 @@
 import React from 'react';
+import ConnectionActions from '../actions/ConnectionActions';
 import ConnectionStore from '../stores/ConnectionStore';
 import ConnectionPreferences from './DashboardConnect';
 import ConnectionDetails from './DashboardConnectionDetails';
@@ -7,15 +8,23 @@ class Dashboard extends React.Component {
     constructor( props ) {
         super( props );
 
-        const { isConnected } = ConnectionStore.getState();
-
-        this.state = { isConnected };
+        this.state = {
+            isConnected: false
+        };
     }
 
     componentDidMount() {
-        ConnectionStore.listen( ({isConnected}) => {
-            this.setState({ isConnected });
+        ConnectionStore.listen( ({status}) => {
+            this.setState({ isConnected: status === 'connected' });
         });
+
+        this.fetchConnectionStatus = setInterval( () => {
+            ConnectionActions.fetchStatus();
+        }, 100 );
+    }
+
+    componentWillUnmount() {
+        clearInterval( this.fetchConnectionStatus );
     }
 
     render() {

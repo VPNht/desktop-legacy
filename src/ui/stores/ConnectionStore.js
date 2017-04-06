@@ -12,31 +12,33 @@ class ConnectionStore {
             username,
             password,
             remember: username !== '' || password !== '',
-            isConnecting: false,
-            isConnected: false,
+            status: 'disconnected',
             ip: '',
             country: '',
             city: '',
             connectionTime: null
         };
 
-        this.bindAction( ConnectionActions.connect, this.onConnect );
-        this.bindAction( ConnectionActions.disconnect, this.onDisconnect );
+        this.bindAction( ConnectionActions.updateStatus, this.onUpdateStatus );
+        this.bindAction( ConnectionActions.updateDetails, this.onUpdateDetails );
         this.bindAction( ConnectionActions.updateCredentials, this.onUpdateCredentials );
     }
 
-    onConnect() {
-        this.setState({
-            isConnected: true,
-            connectionTime: new Date().getTime()
-        });
+    onUpdateStatus({ status }) {
+        this.setState({ status });
+
+        if( status === 'disconnected' ){
+            this.setState({ connectionTime: null });
+        }
+
+        if( status === 'connected' ) {
+            const connectionTime = this.state.connectionTime || new Date().getTime();
+            this.setState({ connectionTime });
+        }
     }
 
-    onDisconnect() {
-        this.setState({
-            isConnected: false,
-            connectionTime: null
-        });
+    onUpdateDetails({ ip, location }) {
+        this.setState({ ip, location });
     }
 
     onUpdateCredentials( {username, password, remember} ) {

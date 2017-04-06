@@ -7,7 +7,7 @@ import ConnectionStore from '../stores/ConnectionStore';
 import ConnectionActions from '../actions/ConnectionActions';
 import Logs from './Logs';
 
-const Status = ({isReady, isConnecting}) => {
+const Status = ({isConnecting}) => {
     let status = T.translate( 'Loading...' );
 
     return (
@@ -17,7 +17,7 @@ const Status = ({isReady, isConnecting}) => {
                 <i className={isConnecting ? 'ion-ios-loop spin' : 'ion-ios-close-empty disconnected'}></i>
                 <p>{T.translate( isConnecting ? 'Connecting' : 'Disconnected' )}</p>
             </div>
-            <button className="right" onClick={() => {}}>
+            <button className="right" onClick={() => ConnectionActions.connect()}>
                 <p>{T.translate( isConnecting ? 'cancel' : 'connect to vpn')}</p>
             </button>
         </section>
@@ -88,7 +88,7 @@ class DashboardConnect extends React.Component {
         const { username, password, remember } = ConnectionStore.getState();
 
         this.state = {
-            isConnecting: true,
+            isConnecting: false,
             username,
             password,
             remember,
@@ -102,8 +102,9 @@ class DashboardConnect extends React.Component {
             this.setState({ servers });
         });
 
-        ConnectionStore.listen( ({username, password, remember}) => {
-            this.setState({ username, password, remember });
+        ConnectionStore.listen( ({username, password, remember, status}) => {
+            const isConnecting = status === 'connecting';
+            this.setState({ username, password, remember, isConnecting });
         });
     }
 
@@ -112,11 +113,11 @@ class DashboardConnect extends React.Component {
     }
 
     render() {
-        const { servers, selectedServer, username, password, remember } = this.state;
+        const { servers, selectedServer, isConnecting, username, password, remember } = this.state;
 
         return (
             <div>
-                <Status isConnecting={false} />
+                <Status isConnecting={isConnecting} />
                 <Login username={username} password={password} remember={remember} onUpdate={ConnectionActions.updateCredentials} />
                 <Servers servers={servers} selected={selectedServer} onSelect={({ip}) => this.onSelectServer( ip )} />
                 <Logs />

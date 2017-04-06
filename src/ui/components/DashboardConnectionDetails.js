@@ -46,11 +46,12 @@ class ConnectionDetails extends React.Component {
         this.state = {
             connectionTime,
             uptime: connectionTime ? (new Date().getTime() - connectionTime) / 1000 : 0,
-            ip: '127.0.0.1'
+            ip: '',
+            location: ''
         };
 
-        ConnectionStore.listen( ({connectionTime}) => {
-            this.setState({ connectionTime });
+        ConnectionStore.listen( ({connectionTime, ip, location}) => {
+            this.setState({ connectionTime, ip, location });
         });
     }
 
