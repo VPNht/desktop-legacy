@@ -4,287 +4,194 @@ import Router from 'react-router';
 import Select from 'react-select';
 import config from '../../config';
 import T from 'i18n-react';
+import SettingsActions from '../actions/SettingsActions';
+import SettingsStore from '../stores/SettingsStore';
 
-var Preferences = React.createClass({
-    getInitialState: function() {
-        return {
-            metricsEnabled: metrics.enabled(),
-            launchStartup: config.get('launchStartup'),
-            launchStartupHidden: config.get('launchStartupHidden'),
-            connectLaunch: config.get('connectLaunch'),
-            saveCredentials: config.get('saveCredentials'),
-            autoPath: config.get('autoPath'),
-            disableSmartdns: config.get('disableSmartdns'),
-            encryption: config.get('encryption') || 128,
-            customPort: config.get('customPort') || 'default',
-            minToTaskbar: config.get('minToTaskbar')
-        };
-    },
+const General = ({settings}) => {
+    const {
+        username,
+        password,
+        hasMetrics,
+        connectAtLaunch,
+        launchAtStartup,
+        launchAtStartupHidden,
+        disableSmartDNS,
+        port,
+        minimizeToTaskbar
+    } = settings;
 
-    handleChangeMetricsEnabled: function(e) {
-        var checked = e.target.checked;
-        this.setState({
-            metricsEnabled: checked
+    const hasCredentials = username !== '' && password !== '';
+
+    return (
+        <section>
+            <h1 className="title">{T.translate('General')}</h1>
+
+            <div className="checkbox">
+                <input
+                    id="report"
+                    type="checkbox"
+                    value={hasMetrics}
+                    onChange={() => SettingsActions.update( 'hasMetrics', hasMetrics )} />
+                <label htmlFor="report">
+                    <p>{T.translate('Report anonymous usage analytics')}</p>
+                </label>
+            </div>
+
+            <div className="checkbox">
+                <input
+                    id="credentials"
+                    type="checkbox"
+                    disabled={!hasCredentials}
+                    value={connectAtLaunch}
+                    checked={connectAtLaunch}
+                    onChange={() => SettingsActions.update( 'connectAtLaunch', !connectAtLaunch )}/>
+                <label htmlFor="credentials">
+                    <p>{T.translate('Auto-connect after launch (requires a saved user/pass)')}</p>
+                </label>
+            </div>
+
+            <div className="checkbox">
+                <input
+                    id="startup"
+                    type="checkbox"
+                    value={launchAtStartup}
+                    checked={launchAtStartup}
+                    onChange={() => SettingsActions.update( 'launchAtStartup', !launchAtStartup )}/>
+                <label htmlFor="startup">
+                    <p>{T.translate('Launch on operating system startup')}</p>
+                </label>
+            </div>
+
+            <div className="checkbox">
+                <input
+                    id="launchStartupHidden"
+                    type="checkbox"
+                    value={launchAtStartupHidden}
+                    checked={launchAtStartupHidden}
+                    onChange={() => SettingsActions.update( 'launchAtStartupHidden', !launchAtStartupHidden )} />
+                <label htmlFor="launchStartupHidden">
+                    <p>{T.translate('Launch on operating system startup hidden')}</p>
+                </label>
+            </div>
+
+            <div className="checkbox">
+                <input
+                    id="disableSmartdns"
+                    type="checkbox"
+                    value={disableSmartDNS}
+                    checked={disableSmartDNS}
+                    onChange={() => SettingsActions.update( 'disableSmartDNS', !disableSmartDNS )} />
+                <label htmlFor="disableSmartdns">
+                    <p>{T.translate('Disable SmartDNS')}</p>
+                </label>
+            </div>
+
+            <div className="checkbox">
+                <input
+                    id="minToTaskbar"
+                    type="checkbox"
+                    value={minimizeToTaskbar}
+                    checked={minimizeToTaskbar}
+                    onChange={() => SettingsActions.update( 'minimizeToTaskbar', !minimizeToTaskbar )} />
+                <label htmlFor="minToTaskbar">
+                    <p>{T.translate('Minimize to taskbar')}</p>
+                </label>
+            </div>
+        </section>
+    );
+}
+
+const Encryption = ({encryptions, selected}) => (
+    <section className="preferences">
+        <h1 className="title">{T.translate('Encryption')}</h1>
+        <div className="selectbox">
+            <Select
+                name="encryption"
+                value={selected}
+                options={encryptions}
+                onChange={({value}) => SettingsActions.update( 'encryption', value )}
+                searchable={false}
+                clearable={false} />
+        </div>
+    </section>
+);
+
+const Port = ({ports, selected}) => (
+    <section className="port">
+        <h1 className="title">{T.translate('Custom Port')}</h1>
+        <div className="selectbox">
+            <Select
+                name="port"
+                value={selected}
+                options={ports}
+                onChange={(value) => SettingsActions.update( 'port', value )}
+                searchable={false}
+                clearable={false} />
+        </div>
+    </section>
+);
+
+const AutoPath = ({enabled}) => (
+    <section className="preferences">
+        <h1 className="title">{T.translate('Auto Path')}</h1>
+        <div className="checkbox">
+            <input type="checkbox" id="autopath" value={enabled} onChange={() => SettingsActions.update( 'autoPath', !enabled)} />
+            <label htmlFor="autopath">
+                <p>{T.translate( enabled ? 'Enabled' : 'Disabled')}</p>
+            </label>
+            <p className="info">{T.translate('Feature that tries alternate ports in order to resolve certain types of connections issues.')}</p>
+        </div>
+    </section>
+);
+
+class Preferences extends React.Component {
+    constructor( props ) {
+        super( props );
+
+        this.state = SettingsStore.getState();
+    }
+
+    componentDidMount() {
+        SettingsStore.listen( (settings) => {
+            this.setState( settings );
         });
-        metrics.setEnabled(checked);
-        metrics.track('Toggled util/MetricsUtil', {
-            enabled: checked
-        });
-    },
+    }
 
-    handleChangeLaunchStartup: function(e) {
+    render() {
+        const { autoPath, encryption, port } = this.state;
 
-        var checked = e.target.checked;
-        this.setState({
-            launchStartup: checked
-        });
+        const encryptions = [
+            { value: 128, label: '128 BIT AES' },
+            { value: 256, label: '256 bit AES' }
+        ];
 
-        if (checked) {
-        } else {
+        if( autoPath === false ) {
+            encryptions.push({ value: 64, label: '64 BIT BLOWFISH' });
         }
 
-        // save for future use
-        config.set('launchStartup', checked);
+        const ports = [
+            { value: 0, label: T.translate( 'Default' ) }
+        ];
 
-    },
-
-
-    handleChangeLaunchStartupHidden: function(e) {
-
-        var checked = e.target.checked;
-        this.setState({
-            launchStartupHidden: checked
-        });
-
-        if (checked) {
-        } else {
+        if( encryption === 128 ) {
+            ports.push({ value: 53, label: 'UDP - 53' });
+            ports.push({ value: 443, label: 'TCP - 443' });
+            ports.push({ value: 80, label: 'TCP - 80' });
         }
 
-        // save for future use
-        config.set('launchStartupHidden', checked);
-
-    },
-
-    handleChangeDisableSmartdns: function(e) {
-
-        var checked = e.target.checked;
-        this.setState({
-            disableSmartdns: checked
-        });
-
-        // save for future use
-        config.set('disableSmartdns', checked);
-
-    },
-
-    handleChangeMinToTaskbar: function(e) {
-
-        var checked = e.target.checked;
-        this.setState({
-            minToTaskbar: checked
-        });
-
-        // save for future use
-        config.set('minToTaskbar', checked);
-
-    },
-
-
-    handleChangeConnectLaunch: function(e) {
-
-        var checked = e.target.checked;
-        this.setState({
-            connectLaunch: checked
-        });
-
-        // save for future use
-        config.set('connectLaunch', checked);
-
-    },
-
-    handleChangeAutoPath: function(e) {
-
-        var checked = e.target.checked;
-        this.setState({
-            autoPath: checked
-        });
-
-        // 64b not available with autoPath
-        if (this.state.encryption == 64) {
-            this.handleEncryptionChange(128);
-        }
-
-        // save for future use
-        config.set('autoPath', checked);
-
-    },
-
-    handleEncryptionChange: function(encryption) {
-
-        this.setState({
-            encryption: encryption.value
-        });
-        this.handlePortChange({value:'default'});
-        config.set('encryption', encryption.value);
-
-    },
-
-    handlePortChange: function(customPort) {
-
-        this.setState({
-            customPort: customPort.value
-        });
-        config.set('customPort', customPort.value);
-
-    },
-
-
-
-    render: function() {
-
-
-        var encryptions;
-        var ports;
-
-        if (this.state.autoPath) {
-            encryptions = [{
-                value: 128,
-                label: '128 BIT AES'
-            }, {
-                value: 256,
-                label: '256 BIT AES'
-            }];
-        } else {
-            encryptions = [{
-                value: 64,
-                label: '64 BIT BLOWFISH'
-            }, {
-                value: 128,
-                label: '128 BIT AES'
-            }, {
-                value: 256,
-                label: '256 BIT AES'
-            }];
-        }
-
-        if (this.state.encryption == 64) {
-            ports = [{
-                value: 'default',
-                label: 'UDP - ' + T.translate('Default')
-            }];
-        } else if (this.state.encryption == 128) {
-            ports = [{
-                value: 'default',
-                label: 'UDP - ' + T.translate('Default')
-            }, {
-                value: 53,
-                label: 'UDP - 53'
-            }, {
-                value: 443,
-                label: 'TCP - 443'
-            }, {
-                value: 80,
-                label: 'TCP - 80'
-            }];
-        } else if (this.state.encryption == 256) {
-            ports = [{
-                value: 'default',
-                label: 'UDP - ' + T.translate('Default')
-            }, {
-                value: 3389,
-                label: 'UDP - 3389'
-            }];
-        }
-
-
-        var customPort = "";
-        if (!this.state.autoPath) {
-            customPort = (
-                <section className="preferences">
-                    <h1 className="title">{T.translate('Custom Port')}</h1>
-                    <div className="selectbox">
-                        <Select
-                            name="customPort"
-                            value={this.state.customPort}
-                            options={ports}
-                            onChange={this.handlePortChange}
-                            searchable={false}
-                            clearable={false}
-                        />
-                    </div>
-                </section>
-            );
+        if( encryption === 256 ) {
+            ports.push({ value: 3389, label: 'UDP - 3389' });
         }
 
         return (
-            <div className="content-scroller" id="content">
-                <section>
-                        <h1 className="title">{T.translate('General')}</h1>
-                        <div className="checkbox">
-                            <input id="reportAnon" type="checkbox" checked={this.state.metricsEnabled} onChange={this.handleChangeMetricsEnabled}/>
-                            <label htmlFor="reportAnon">
-                                <p>{T.translate('Report anonymous usage analytics')}</p>
-                            </label>
-                        </div>
-                        <div className="checkbox">
-                            <input id="saveCredentials" disabled={!this.state.saveCredentials}  type="checkbox" checked={this.state.connectLaunch && this.state.saveCredentials} onChange={this.handleChangeConnectLaunch}/>
-                            <label htmlFor="saveCredentials">
-                                <p>{T.translate('Auto-connect after launch (requires a saved user/pass)')}</p>
-                            </label>
-                        </div>
-                        <div className="checkbox">
-                            <input id="launchStartup" type="checkbox" checked={this.state.launchStartup} onChange={this.handleChangeLaunchStartup}/>
-                            <label htmlFor="launchStartup">
-                                <p>{T.translate('Launch on operating system startup')}</p>
-                            </label>
-                        </div>
-                        <div className="checkbox">
-                            <input id="launchStartupHidden" type="checkbox" checked={this.state.launchStartupHidden} onChange={this.handleChangeLaunchStartupHidden}/>
-                            <label htmlFor="launchStartupHidden">
-                                <p>{T.translate('Launch on operating system startup hidden')}</p>
-                            </label>
-                        </div>
-                        <div className="checkbox">
-                            <input id="disableSmartdns" type="checkbox" checked={this.state.disableSmartdns} onChange={this.handleChangeDisableSmartdns}/>
-                            <label htmlFor="disableSmartdns">
-                                <p>{T.translate('Disable SmartDNS')}</p>
-                            </label>
-                        </div>
-                        <div className="checkbox">
-                            <input id="minToTaskbar" type="checkbox" checked={this.state.minToTaskbar} onChange={this.handleChangeMinToTaskbar}/>
-                            <label htmlFor="minToTaskbar">
-                                <p>{T.translate('Minimize to taskbar')}</p>
-                            </label>
-                        </div>
-                </section>
-                <section className="preferences">
-                    <h1 className="title">{T.translate('Encryption')}</h1>
-                    <div className="selectbox">
-                        <Select
-                            name="encryption"
-                            value={this.state.encryption}
-                            options={encryptions}
-                            onChange={this.handleEncryptionChange}
-                            searchable={false}
-                            clearable={false}
-                        />
-                    </div>
-                </section>
-                {customPort}
-                <section className="preferences">
-                    <h1 className="title">{T.translate('Auto Path')}</h1>
-                    <div className="checkbox">
-                        <input type="checkbox" id="autopath" checked={this.state.autoPath} onChange={this.handleChangeAutoPath} />
-                        <label htmlFor="autopath">
-                            <p>{this.state.autoPath ? T.translate('Enabled') : T.translate('Disabled')}</p>
-                        </label>
-                        <p className="info">{T.translate('Feature that tries alternate ports in order to resolve certain types of connections issues.')}</p>
-                    </div>
-                </section>
+            <div id="content">
+                <General settings={this.state} />
+                <Encryption encryptions={encryptions} selected={encryption} />
+                {!autoPath ? <Port ports={ports} selected={port} /> : null}
+                <AutoPath enabled={autoPath}/>
             </div>
-
         );
     }
-});
+}
 
-module.exports = Preferences;
+export default Preferences;

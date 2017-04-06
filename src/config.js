@@ -3,14 +3,16 @@ import Config from 'electron-config';
 const defaults = {
     username: '',
     password: '',
-    launchStartup: false,
-    launchStartupHidden: true,
-    connectLaunch: false,
+    hasMetrics: false,
+    launchAtStartup: false,
+    launchAtStartupHidden: true,
+    connectAtLaunch: false,
     saveCredentials: false,
-    disableSmartdns: false,
+    disableSmartDNS: false,
     autoPath: true,
     encryption: 128,
-    minToTaskbar: true
+    port: 0,
+    minimizeToTaskbar: false
 };
 
 export default new Config({
