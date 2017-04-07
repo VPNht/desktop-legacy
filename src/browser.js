@@ -42,16 +42,15 @@ app.on( 'ready', () => {
 
     // Create the window
     mainWindow = new BrowserWindow({
-        show: false,
         width: 800,
-        height: process.platform === 'win32' ? 900 : 870,
+        height: 850,
+        show: false,
+        frame: true,
         resizable: false,
-        frame: process.platform === 'win32',
         title: 'VPN.ht',
-        titleBarStyle: 'hidden-inset',
-        backgroundColor: '#ededed', // to enable subpixel anti-aliasing, since electron 0.37.3
+        backgroundColor: '#ededed',
         webPreferences: {
-            backgroundThrottling: false // disable throttling rendering when not focused
+            backgroundThrottling: false
         }
     });
 
