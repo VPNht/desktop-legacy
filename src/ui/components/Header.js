@@ -23,16 +23,21 @@ class Header extends Component {
     constructor( props ) {
         super( props );
 
-        const { isConnected } = ConnectionStore.getState();
-        this.state = { isConnected };
+        this.state = {
+            isConnected: false
+        };
+    }
 
-        ConnectionStore.listen( ({isConnected}) => {
-            this.setState({ isConnected });
+    componentDidMount() {
+        ConnectionStore.listen( ({status}) => {
+            this.setState({
+                isConnected: status === 'connected'
+            });
         });
     }
 
     render() {
-        let { isConnected  } = this.state;
+        const { isConnected  } = this.state;
 
         return (
             <header>
