@@ -26,6 +26,7 @@
     "axios": "^0.15.3",
     "classnames": "2.2.5",
     "electron-config": "^0.2.1",
+    "es6-promisify": "^5.0.0",
     "get-port": "2.1.0",
     "i18n-react": "^0.3.0-ts1",
     "is-running": "2.1.0",
