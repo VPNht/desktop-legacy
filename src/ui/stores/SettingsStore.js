@@ -7,7 +7,6 @@ class SettingsStore {
     this.state = {
       username: config.get( 'username' ),
       password: config.get( 'password' ),
-      hasMetrics: config.get( 'hasMetrics' ),
       launchAtStartup: config.get( 'launchAtStartup' ),
       launchAtStartupHidden: config.get( 'launchAtStartupHidden' ),
       connectAtLaunch: config.get( 'connectAtLaunch' ),

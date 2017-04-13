@@ -2,7 +2,6 @@ import { shell } from 'electron';
 import React from 'react';
 import T from 'i18n-react';
 import RetinaImage from 'react-retina-image';
-import metrics from '../utils/MetricsUtil';
 
 class About extends React.Component {
     constructor( props ) {
@@ -11,7 +10,6 @@ class About extends React.Component {
 
     goBack() {
         history.back();
-        metrics.track('Went Back From About');
     }
 
     render() {

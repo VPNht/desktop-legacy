@@ -1,7 +1,6 @@
 import {remote} from 'electron';
 import fs from 'fs';
 import path from 'path';
-import metrics from './MetricsUtil';
 
 var app = remote.app;
 

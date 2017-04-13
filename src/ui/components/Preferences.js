@@ -1,5 +1,4 @@
 import React from 'react';
-import metrics from '../utils/MetricsUtil';
 import Router from 'react-router';
 import Select from 'react-select';
 import config from '../../config';
@@ -11,7 +10,6 @@ const General = ({settings}) => {
     const {
         username,
         password,
-        hasMetrics,
         connectAtLaunch,
         launchAtStartup,
         launchAtStartupHidden,
@@ -25,17 +23,6 @@ const General = ({settings}) => {
     return (
         <section>
             <h1 className="title">{T.translate('General')}</h1>
-
-            <div className="checkbox">
-                <input
-                    id="report"
-                    type="checkbox"
-                    value={hasMetrics}
-                    onChange={() => SettingsActions.update( 'hasMetrics', hasMetrics )} />
-                <label htmlFor="report">
-                    <p>{T.translate('Report anonymous usage analytics')}</p>
-                </label>
-            </div>
 
             <div className="checkbox">
                 <input

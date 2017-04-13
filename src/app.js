@@ -9,19 +9,12 @@ import ReactDOM from 'react-dom';
 import ServerActions from './ui/actions/ServerActions';
 import LogActions from './ui/actions/LogActions';
 import config from './config';
-import metrics from './ui/utils/MetricsUtil';
 import webUtil from './ui/utils/WebUtil';
 
 var app = remote.app;
 
 webUtil.addLiveReload();
 webUtil.disableGlobalBackspace();
-
-metrics.track('Started App');
-metrics.track('app heartbeat');
-setInterval(function() {
-    metrics.track('app heartbeat');
-}, 14400000);
 
 // React UI is fully initialized
 ipcRenderer.on( 'ui.ready', async () => {
