@@ -5,7 +5,7 @@ import ConnectionStore from '../stores/ConnectionStore';
 
 const ConnectedStatus = () => (
     <div>
-        <Image className="figure connected" src="Figure.png"/>
+        <Image className="figure connected" src="figure.png"/>
         <p className="connected">{T.translate('connected!')}</p>
         <span>{T.translate('Your internet traffic is now encrypted! and your online identity has become anonymous.')}</span>
     </div>
@@ -13,7 +13,7 @@ const ConnectedStatus = () => (
 
 const DisconnectedStatus = () => (
     <div>
-        <Image className="figure disconnected" src="Figure.png"/>
+        <Image className="figure disconnected" src="figure.png"/>
         <p className="disconnected">{T.translate('not connected!')}</p>
         <span>{T.translate('Your internet traffic is unencrypted and your online identity is exposed.')}</span>
     </div>
@@ -41,7 +41,7 @@ class Header extends Component {
 
         return (
             <header>
-                <Image className="logo" src="Logo.png"/>
+                <Image className="logo" src="logo.png"/>
                 <div className="status">
                     {isConnected ? <ConnectedStatus /> : <DisconnectedStatus />}
                 </div>

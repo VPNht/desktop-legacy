@@ -40,7 +40,7 @@ class App extends Component {
                     </div>
 
                     <footer>
-                        <RetinaImage className="footerimg" src="FooterIllustration.png"/>
+                        <RetinaImage className="footerimg" src="footer.png"/>
                     </footer>
                 </div>
             </Router>
