@@ -80,7 +80,7 @@ const Servers = ({servers, selected, onSelect}) => {
     )
 }
 
-class DashboardConnect extends React.Component {
+class Authentication extends React.Component {
     constructor( props ) {
         super( props );
 
@@ -126,4 +126,4 @@ class DashboardConnect extends React.Component {
     }
 }
 
-export default DashboardConnect;
+export default Authentication;

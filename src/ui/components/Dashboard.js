@@ -1,8 +1,8 @@
 import React from 'react';
 import ConnectionActions from '../actions/ConnectionActions';
 import ConnectionStore from '../stores/ConnectionStore';
-import ConnectionPreferences from './DashboardConnect';
-import ConnectionDetails from './DashboardConnectionDetails';
+import Authentication from './DashboardAuthentication';
+import Details from './DashboardConnection';
 
 class Dashboard extends React.Component {
     constructor( props ) {
@@ -32,7 +32,7 @@ class Dashboard extends React.Component {
 
         return (
             <div className="content-scroller" id="content">
-                {isConnected ? <ConnectionDetails /> : <ConnectionPreferences />}
+                {isConnected ? <Connection /> : <Authentication />}
             </div>
         );
     }

@@ -37,7 +37,7 @@ const IP = ({ip, location}) => (
     </section>
 );
 
-class ConnectionDetails extends React.Component {
+class Connection extends React.Component {
     constructor( props ) {
         super( props );
 
@@ -81,4 +81,4 @@ class ConnectionDetails extends React.Component {
     }
 }
 
-export default ConnectionDetails;
+export default Connection;
