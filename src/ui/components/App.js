@@ -10,6 +10,7 @@ import Header from './Header';
 import Dashboard from './Dashboard';
 import Preferences from './Preferences';
 import About from './About';
+import Logs from './Logs';
 
 class App extends Component {
     constructor( props ) {
@@ -34,7 +35,8 @@ class App extends Component {
                         <Route exact path="/preferences" component={Preferences} />
                         <Route exact path="/about" render={() => (
                             <About packageName={name} packageVersion={version} homepageURL={homepage} />
-                        )}/>
+                        )} />
+                        <Route exact path="/logs" render={() => (<Logs />)} />
                     </div>
 
                     <footer>

@@ -120,7 +120,6 @@ class Authentication extends React.Component {
                 <Status isConnecting={isConnecting} />
                 <Login username={username} password={password} remember={remember} onUpdate={ConnectionActions.updateCredentials} />
                 <Servers servers={servers} selected={selectedServer} onSelect={({ip}) => this.onSelectServer( ip )} />
-                <Logs />
             </div>
         );
     }

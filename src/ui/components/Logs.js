@@ -39,8 +39,6 @@ const saveLogsToFile = async (messages) => {
         });
     }
     catch( e ) {
-        console.log( e );
-
         remote.dialog.showErrorBox(
             T.translate( 'Unable to save log path' ),
             T.translate( 'Looks like we can\'t save the log file.\nTry again with another path' )
@@ -65,18 +63,20 @@ class LogViewer extends React.Component {
         const { messages } = this.state;
 
         return (
-            <section>
+            <section className="logs">
                 <h1 className="title">{T.translate('Connection report')}</h1>
 
-                <textarea ref="logsTextarea" className="logs" name="description" value={messages.join( '\n' )} readOnly />
+                <textarea name="description" value={messages.join( '\n' )} readOnly />
 
-                <button className="left" type="submit" onClick={async () => await saveLogsToFile( messages )}>
-                    <p>{T.translate('Export')}</p>
-                </button>
+                <div className="actions">
+                    <button type="submit" onClick={async () => saveLogsToFile( messages )}>
+                        <p>{T.translate('Export')}</p>
+                    </button>
 
-                <button className="left" type="submit" onClick={() => saveLogsToClipboard( messages )}>
-                    <p>{T.translate('Copy to clipboard')}</p>
-                </button>
+                    <button type="submit" onClick={() => saveLogsToClipboard( messages )}>
+                        <p>{T.translate('Copy to clipboard')}</p>
+                    </button>
+                </div>
             </section>
         );
     }

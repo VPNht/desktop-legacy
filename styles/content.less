@@ -129,18 +129,30 @@ section input[type="password"] {
     margin-left:5px;
 }
 
-section textarea.logs {
-  overflow: auto;
-  height:80px;
-  width:100%;
-  -webkit-user-select: text;
-  font-size: 10px;
-  white-space: pre-wrap;
-  border: 1px solid #ccc;
-  background-color: #ffffff;
-  padding: 15px 15px;;
-  -webkit-user-select: all;
-  resize: none;
+section.logs {
+    textarea {
+        overflow: auto;
+        height:450px;
+        width:100%;
+        outline: none;
+        -webkit-user-select: text;
+        font-size: 10px;
+        white-space: pre-wrap;
+        border: 1px solid #ccc;
+        background-color: #ffffff;
+        padding: 15px 15px;;
+        -webkit-user-select: all;
+        resize: none;
+        margin-bottom: 5px;
+    }
+
+    div.actions {
+        margin-left: 100px;
+
+        button {
+            margin-right: 10px;
+        }
+    }
 }
 
 section .console-output p {
