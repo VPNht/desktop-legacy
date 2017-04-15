@@ -7,14 +7,20 @@ const Menu = () => (
     <ul className="sidebar">
         <Link to="/">
             <li>
-                <Image src="icons/Dashboard%20Icon.png"/>
-                <p>{T.translate('dashboard')}</p>
+                <Image src="icons/dashboard.png"/>
+                <p>{T.translate('DASHBOARD')}</p>
             </li>
         </Link>
         <Link to="/preferences">
             <li>
-                <Image src="icons/Country%20Selection.png"/>
-                <p>{T.translate('preferences')}</p>
+                <Image src="icons/preferences.png"/>
+                <p>{T.translate('PREFERENCES')}</p>
+            </li>
+        </Link>
+        <Link to="/logs">
+            <li>
+                <Image src="icons/logs.png"/>
+                <p>{T.translate('CONNECTION_REPORT')}</p>
             </li>
         </Link>
     </ul>

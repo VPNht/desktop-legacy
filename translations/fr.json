@@ -83,8 +83,8 @@
     "Disabled": "Désactivé",
     "Feature that tries alternate ports in order to resolve certain types of connections issues.": "Permet d'essayer des ports différents pour résoudre certains problèmes de connectivité.",
 
-    "dashboard": "Tableau de bord",
-    "preferences": "Paramètres",
+    "DASHBOARD": "Tableau de bord",
+    "PREFERENCES": "Paramètres",
 
     "connected!": "connecté !",
     "Your internet traffic is now encrypted! and your online identity has become anonymous.": "Le trafic Internet est chiffré et anonyme ! Votre identité en ligne est protégée.",
@@ -96,5 +96,6 @@
     "Plug and play!": "Plug & play!",
     "You can start using our service, and start surfing in privacy, as soon as you create an account.": "Vous pouvez commencer à utiliser nos services et surfer en tout anonymat dès que votre compte est créé.",
     "No logs": "Pas de traces",
-    "You value your privacy. So do we. We don’t keep logs, we don’t know the sites you have visited or the applications you’ve used.": "Vous tenez à votre vie privée. Nous aussi. Nous ne conservons aucunes données, nous ne connaissons donc pas les sites que vous avez consultés ou les applications que vous avez utilisées."
+    "You value your privacy. So do we. We don’t keep logs, we don’t know the sites you have visited or the applications you’ve used.": "Vous tenez à votre vie privée. Nous aussi. Nous ne conservons aucunes données, nous ne connaissons donc pas les sites que vous avez consultés ou les applications que vous avez utilisées.",
+    "CONNECTION_REPORT": "Connection Report"
 }
