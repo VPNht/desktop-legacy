@@ -10,6 +10,8 @@ import LogActions from '../actions/LogActions';
 const writeFile = promisify( fs.writeFile );
 
 const saveLogsToClipboard = (messages) => {
+    if( messages.length === 0) return;
+
     remote.clipboard.writeText( messages.join( '\n' ) );
     remote.dialog.showMessageBox({
         type: 'info',
@@ -20,6 +22,8 @@ const saveLogsToClipboard = (messages) => {
 }
 
 const saveLogsToFile = async (messages) => {
+    if( messages.length === 0) return;
+
     const path = remote.dialog.showSaveDialog({
         title: T.translate( 'Select path for log file' ),
         filters: [{
@@ -50,10 +54,11 @@ class LogViewer extends React.Component {
     constructor( props ) {
         super( props );
 
-        this.state = {
-            messages: []
-        };
+        const { messages } = LogStore.getState();
+        this.state = { messages };
+    }
 
+    componentDidMount() {
         LogStore.listen( ({messages}) => {
             this.setState({ messages });
         });
