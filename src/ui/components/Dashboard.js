@@ -2,7 +2,7 @@ import React from 'react';
 import ConnectionActions from '../actions/ConnectionActions';
 import ConnectionStore from '../stores/ConnectionStore';
 import Authentication from './DashboardAuthentication';
-import Details from './DashboardConnection';
+import Connection from './DashboardConnection';
 
 class Dashboard extends React.Component {
     constructor( props ) {
