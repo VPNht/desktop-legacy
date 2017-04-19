@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import Select from 'react-select';
 import T from 'i18n-react';
-import ServerStore from '../stores/ServerStore';
+import ServersStore from '../stores/ServersStore';
 import ConnectionStore from '../stores/ConnectionStore';
 import ConnectionActions from '../actions/ConnectionActions';
 import Logs from './Logs';
@@ -84,7 +84,7 @@ class Authentication extends React.Component {
     constructor( props ) {
         super( props );
 
-        const { servers } = ServerStore.getState();
+        const { servers } = ServersStore.getState();
         const { username, password, remember } = ConnectionStore.getState();
 
         this.state = {
@@ -98,7 +98,7 @@ class Authentication extends React.Component {
     }
 
     componentDidMount () {
-        ServerStore.listen( ({servers}) => {
+        ServersStore.listen( ({servers}) => {
             this.setState({ servers });
         });
 

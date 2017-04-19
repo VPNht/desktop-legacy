@@ -1,13 +1,13 @@
 import _ from 'lodash';
 import alt from '../alt';
-import ServerActions from '../actions/ServerActions';
+import ServersActions from '../actions/ServersActions';
 import request from 'axios';
 
 const endpointURL = process.env.MYIP_ENDPOINT || 'https://myip.ht';
 
-const SearchSource = {
+const ServersSource = {
   update: {
-    async remote( state ) {
+    async remote() {
       const { data } = await request( `${endpointURL}/servers-geo.json` );
       return data;
     },
@@ -16,8 +16,8 @@ const SearchSource = {
       return null;
     },
 
-    success: ServerActions.update,
-    error: ServerActions.abort,
+    success: ServersActions.updateServers,
+    error: ServersActions.updateServersError,
 
     shouldFetch( state ) {
       return true;
@@ -32,19 +32,18 @@ const DEFAULT_SERVER = {
     distance: 0
 };
 
-class ServerStore {
+class ServersStore {
     constructor() {
         this.state = {
             servers: [DEFAULT_SERVER]
         };
 
-        this.registerAsync( SearchSource );
-        this.bindAction( ServerActions.fetch, this.onFetch );
-        this.bindAction( ServerActions.update, this.onUpdate );
-        this.bindAction( ServerActions.abort, this.onAbort );
+        this.registerAsync( ServersSource );
+        this.bindAction( ServersActions.fetchServers, this.onFetchServers );
+        this.bindAction( ServersActions.updateServers, this.onUpdateServers );
     }
 
-    onFetch( {servers} ) {
+    onFetchServers() {
         const instance = this.getInstance();
 
         if( instance.isLoading() === false ) {
@@ -52,7 +51,7 @@ class ServerStore {
         }
     }
 
-    onUpdate( {servers} ) {
+    onUpdateServers( {servers} ) {
         servers = servers.map( item => {
             const { countryName, country, regionName, cityName, distance, host, ip } = item;
             const region = regionName ? `${regionName}, ` : '';
@@ -65,9 +64,6 @@ class ServerStore {
 
         this.setState({ servers });
     }
-
-    onAbort() {
-    }
 }
 
-export default alt.createStore( ServerStore, 'Servers' );
+export default alt.createStore( ServersStore, 'Servers' );

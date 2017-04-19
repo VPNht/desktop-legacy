@@ -6,7 +6,7 @@ import _ from 'lodash';
 import { render as prettifyObject } from 'prettyjson';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ServerActions from './ui/actions/ServerActions';
+import ServersActions from './ui/actions/ServersActions';
 import LogActions from './ui/actions/LogActions';
 import config from './config';
 import webUtil from './ui/utils/WebUtil';
@@ -35,7 +35,7 @@ ipcRenderer.on( 'ui.ready', async () => {
     LogActions.addInfo( `Network Interfaces:\n${interfaces}` );
     LogActions.addInfo( `Operating System ${system}`);
 
-    ServerActions.fetch();
+    ServersActions.fetchServers();
 });
 
 //
