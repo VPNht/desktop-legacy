@@ -3,6 +3,27 @@ import _ from 'lodash';
 import config from '../../config';
 import ConnectionActions from '../actions/ConnectionActions';
 
+let status = 'disconnected';
+
+const StatusSource = {
+  update: {
+    async remote() {
+      return { status };
+    },
+
+    local() {
+      return null;
+    },
+
+    shouldFetch( state ) {
+      return true;
+    },
+
+    success: ConnectionActions.updateStatus,
+    error: ConnectionActions.updateStatusError
+  }
+};
+
 class ConnectionStore {
     constructor() {
         this.state = {
@@ -13,8 +34,27 @@ class ConnectionStore {
             connectionTime: null
         };
 
+        this.registerAsync( StatusSource );
+        this.bindAction( ConnectionActions.connect, this.onConnect );
+        this.bindAction( ConnectionActions.disconnect, this.onDisconnect );
+        this.bindAction( ConnectionActions.fetchStatus, this.onFetchStatus );
         this.bindAction( ConnectionActions.updateStatus, this.onUpdateStatus );
-        this.bindAction( ConnectionActions.updateDetails, this.onUpdateDetails );
+    }
+
+    onConnect() {
+        status = 'connected';
+    }
+
+    onDisconnect() {
+        status = 'disconnected';
+    }
+
+    onFetchStatus() {
+        const instance = this.getInstance();
+
+        if( instance.isLoading() === false ) {
+            instance.update();
+        }
     }
 
     onUpdateStatus({ status }) {
@@ -28,10 +68,6 @@ class ConnectionStore {
             const connectionTime = this.state.connectionTime || new Date().getTime();
             this.setState({ connectionTime });
         }
-    }
-
-    onUpdateDetails({ ip, location }) {
-        this.setState({ ip, location });
     }
 }
 
