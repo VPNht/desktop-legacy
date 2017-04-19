@@ -5,13 +5,7 @@ import ConnectionActions from '../actions/ConnectionActions';
 
 class ConnectionStore {
     constructor() {
-        const username = config.get( 'username' );
-        const password = config.get( 'password' );
-
         this.state = {
-            username,
-            password,
-            remember: username !== '' || password !== '',
             status: 'disconnected',
             ip: '',
             country: '',
@@ -21,7 +15,6 @@ class ConnectionStore {
 
         this.bindAction( ConnectionActions.updateStatus, this.onUpdateStatus );
         this.bindAction( ConnectionActions.updateDetails, this.onUpdateDetails );
-        this.bindAction( ConnectionActions.updateCredentials, this.onUpdateCredentials );
     }
 
     onUpdateStatus({ status }) {
@@ -39,15 +32,6 @@ class ConnectionStore {
 
     onUpdateDetails({ ip, location }) {
         this.setState({ ip, location });
-    }
-
-    onUpdateCredentials( {username, password, remember} ) {
-        config.set({
-            username: remember ? username : '',
-            password: remember ? password : ''
-        });
-
-        this.setState({ username, password, remember });
     }
 }
 

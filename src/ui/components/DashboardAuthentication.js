@@ -3,6 +3,8 @@ import React from 'react';
 import Select from 'react-select';
 import T from 'i18n-react';
 import ServersStore from '../stores/ServersStore';
+import SettingsStore from '../stores/SettingsStore';
+import SettingsActions from '../actions/SettingsActions';
 import ConnectionStore from '../stores/ConnectionStore';
 import ConnectionActions from '../actions/ConnectionActions';
 import Logs from './Logs';
@@ -72,7 +74,7 @@ const Servers = ({servers, selected, onSelect}) => {
                 options={servers}
                 optionComponent={ServerItem}
                 value={selected}
-                onChange={onSelect}
+                onChange={({ip}) => onSelect( ip )}
                 searchable={false}
                 clearable={false}
             />
@@ -85,41 +87,53 @@ class Authentication extends React.Component {
         super( props );
 
         const { servers } = ServersStore.getState();
-        const { username, password, remember } = ConnectionStore.getState();
+        const { username, password, rememberCredentials } = SettingsStore.getState();
 
         this.state = {
             isConnecting: false,
             username,
             password,
-            remember,
+            rememberCredentials,
             servers,
             selectedServer: 'hub.vpn.ht'
         };
+
+        this.onUpdateCredentials = this.onUpdateCredentials.bind( this );
+        this.onSelectServer = this.onSelectServer.bind( this );
     }
 
     componentDidMount () {
+        SettingsStore.listen( ({username, password, rememberCredentials}) => {
+            this.setState({ username, password, rememberCredentials });
+        });
+
         ServersStore.listen( ({servers}) => {
             this.setState({ servers });
         });
 
-        ConnectionStore.listen( ({username, password, remember, status}) => {
-            const isConnecting = status === 'connecting';
-            this.setState({ username, password, remember, isConnecting });
+        ConnectionStore.listen( ({status}) => {
+            this.setState({ isConnecting: status === 'connecting' });
         });
     }
 
-    onSelectServer( selectedServer ) {
-        this.setState({ selectedServer });
+    onUpdateCredentials( username, password, rememberCredentials ) {
+        SettingsActions.update( 'rememberCredentials', rememberCredentials );
+        SettingsActions.update( 'username', username );
+        SettingsActions.update( 'password', password );
+    }
+
+    onSelectServer( ip ) {
+        this.setState({ selectedServer: ip });
     }
 
     render() {
-        const { servers, selectedServer, isConnecting, username, password, remember } = this.state;
+        const { servers, selectedServer, isConnecting, username, password, rememberCredentials } = this.state;
 
         return (
             <div>
                 <Status isConnecting={isConnecting} />
-                <Login username={username} password={password} remember={remember} onUpdate={ConnectionActions.updateCredentials} />
-                <Servers servers={servers} selected={selectedServer} onSelect={({ip}) => this.onSelectServer( ip )} />
+                <Login username={username} password={password} remember={rememberCredentials} onUpdate={this.onUpdateCredentials} />
+                <Servers servers={servers} selected={selectedServer} onSelect={this.onSelectServer} />
             </div>
         );
     }

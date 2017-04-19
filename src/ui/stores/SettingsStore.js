@@ -7,6 +7,7 @@ class SettingsStore {
     this.state = {
       username: config.get( 'username' ),
       password: config.get( 'password' ),
+      rememberCredentials: config.get( 'rememberCredentials' ),
       launchAtStartup: config.get( 'launchAtStartup' ),
       launchAtStartupHidden: config.get( 'launchAtStartupHidden' ),
       connectAtLaunch: config.get( 'connectAtLaunch' ),
@@ -22,8 +23,13 @@ class SettingsStore {
   }
 
   onUpdate({key, value}) {
-    config.set( key, value );
+    const { rememberCredentials } = this.state;
+
     this.setState({ [key]: value });
+
+    if( rememberCredentials || (key !== 'username' && key !== 'password') ) {
+      config.set( key, value );
+    }
   }
 }
 
