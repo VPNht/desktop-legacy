@@ -15,6 +15,7 @@ class SettingsStore {
       disableSmartDNS: config.get( 'disableSmartDNS' ),
       autoPath: config.get( 'autoPath' ),
       encryption: config.get( 'encryption' ),
+      managementPort: 53813,
       port: config.get( 'port' ),
       minimizeToTaskbar: config.get( 'minimizeToTaskbar' )
     };

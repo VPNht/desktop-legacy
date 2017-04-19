@@ -1,8 +1,8 @@
 import alt  from '../alt';
 
 class ConnectionActions {
-  connect() {
-    return {};
+  connect( host ) {
+    return { host };
   }
 
   disconnect() {

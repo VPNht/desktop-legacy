@@ -2,6 +2,8 @@ import alt from '../alt';
 import _ from 'lodash';
 import config from '../../config';
 import ConnectionActions from '../actions/ConnectionActions';
+import SettingsStore from '../stores/SettingsStore';
+import API from '../api/api';
 
 let status = 'disconnected';
 
@@ -41,8 +43,25 @@ class ConnectionStore {
         this.bindAction( ConnectionActions.updateStatus, this.onUpdateStatus );
     }
 
-    onConnect() {
-        status = 'connected';
+    async onConnect( { host } ) {
+        try {
+            const { port, managementPort, encryption, disableSmartDNS } = SettingsStore.getState();
+
+            const { data } = await API.fetchServerOVPNConfiguration({
+                host,
+                port,
+                managementPort,
+                encryption,
+                disableSmartDNS
+            });
+
+            await API.saveServerOVPNConfiguration( data );
+
+            status = 'connected';
+        }
+        catch( e ) {
+            status = 'disconnected';
+        }
     }
 
     onDisconnect() {

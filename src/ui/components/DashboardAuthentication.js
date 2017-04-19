@@ -9,7 +9,7 @@ import ConnectionStore from '../stores/ConnectionStore';
 import ConnectionActions from '../actions/ConnectionActions';
 import Logs from './Logs';
 
-const Status = ({isConnecting}) => {
+const Status = ({isConnecting, onConnect}) => {
     let status = T.translate( 'Loading...' );
 
     return (
@@ -19,7 +19,7 @@ const Status = ({isConnecting}) => {
                 <i className={isConnecting ? 'ion-ios-loop spin' : 'ion-ios-close-empty disconnected'}></i>
                 <p>{T.translate( isConnecting ? 'Connecting' : 'Disconnected' )}</p>
             </div>
-            <button className="right" onClick={() => ConnectionActions.connect()}>
+            <button className="right" onClick={onConnect}>
                 <p>{T.translate( isConnecting ? 'cancel' : 'connect to vpn')}</p>
             </button>
         </section>
@@ -100,6 +100,7 @@ class Authentication extends React.Component {
 
         this.onUpdateCredentials = this.onUpdateCredentials.bind( this );
         this.onSelectServer = this.onSelectServer.bind( this );
+        this.onConnect = this.onConnect.bind( this );
     }
 
     componentDidMount () {
@@ -126,13 +127,18 @@ class Authentication extends React.Component {
         this.setState({ selectedServer: ip });
     }
 
+    onConnect() {
+        const { selectedServer } = this.state;
+        ConnectionActions.connect( selectedServer );
+    }
+
     render() {
         const { servers, selectedServer, isConnecting, username, password, rememberCredentials } = this.state;
 
         return (
             <div>
-                <Status isConnecting={isConnecting} />
-                <Login username={username} password={password} remember={rememberCredentials} onUpdate={this.onUpdateCredentials} />
+                <Status isConnecting={isConnecting} onConnect={this.onConnect}/>
+                <Login server={selectedServer} username={username} password={password} remember={rememberCredentials} onUpdate={this.onUpdateCredentials} />
                 <Servers servers={servers} selected={selectedServer} onSelect={this.onSelectServer} />
             </div>
         );
