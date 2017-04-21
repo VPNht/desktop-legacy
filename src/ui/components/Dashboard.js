@@ -11,12 +11,12 @@ class Dashboard extends React.Component {
         this.state = {
             isConnected: false
         };
+
+        this.updateFromConnectionStore = this.updateFromConnectionStore.bind( this );
     }
 
     componentDidMount() {
-        ConnectionStore.listen( ({status}) => {
-            this.setState({ isConnected: status === 'connected' });
-        });
+        ConnectionStore.listen( this.updateFromConnectionStore );
 
         this.fetchConnectionStatus = setInterval( () => {
             ConnectionActions.fetchStatus();
@@ -24,7 +24,13 @@ class Dashboard extends React.Component {
     }
 
     componentWillUnmount() {
+        ConnectionStore.unlisten( this.updateFromConnectionStore );
+
         clearInterval( this.fetchConnectionStatus );
+    }
+
+     updateFromConnectionStore( {status} ) {
+        this.setState({ isConnected: status === 'connected' });
     }
 
     render() {

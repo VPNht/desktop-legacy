@@ -50,9 +50,7 @@ class Connection extends React.Component {
             location: ''
         };
 
-        ConnectionStore.listen( ({connectionTime, ip, location}) => {
-            this.setState({ connectionTime, ip, location });
-        });
+        this.updateFromConnectionStore = this.updateFromConnectionStore.bind( this );
     }
 
     componentDidMount() {
@@ -67,6 +65,12 @@ class Connection extends React.Component {
 
     componentWillUnmount() {
         clearInterval( this.updateInterval );
+
+        ConnectionStore.unlisten( this.updateFromConnectionStore );
+    }
+
+    updateFromConnectionStore( {connectionTime, ip, location }) {
+        this.setState({ connectionTime, ip, location });
     }
 
     render() {

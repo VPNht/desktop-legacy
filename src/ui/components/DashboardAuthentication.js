@@ -98,23 +98,37 @@ class Authentication extends React.Component {
             selectedServer: 'hub.vpn.ht'
         };
 
+        this.updateFromSettingsStore = this.updateFromSettingsStore.bind( this );
+        this.updateFromServersStore = this.updateFromServersStore.bind( this );
+        this.updateFromConnectionStore = this.updateFromConnectionStore.bind( this );
+
         this.onUpdateCredentials = this.onUpdateCredentials.bind( this );
         this.onSelectServer = this.onSelectServer.bind( this );
         this.onConnect = this.onConnect.bind( this );
     }
 
-    componentDidMount () {
-        SettingsStore.listen( ({username, password, rememberCredentials}) => {
-            this.setState({ username, password, rememberCredentials });
-        });
+    componentDidMount() {
+        SettingsStore.listen( this.updateFromSettingsStore );
+        ServersStore.listen( this.updateFromServersStore );
+        ConnectionStore.listen( this.updateFromConnectionStore );
+    }
 
-        ServersStore.listen( ({servers}) => {
-            this.setState({ servers });
-        });
+    componentWillUnmount() {
+        SettingsStore.unlisten( this.updateFromSettingsStore );
+        ServersStore.unlisten( this.updateFromServersStore );
+        ConnectionStore.unlisten( this.updateFromConnectionStore );
+    }
 
-        ConnectionStore.listen( ({status}) => {
-            this.setState({ isConnecting: status === 'connecting' });
-        });
+    updateFromSettingsStore( {username, password, rememberCredentials} ) {
+        this.setState({ username, password, rememberCredentials });
+    }
+
+    updateFromServersStore( {servers} ) {
+        this.setState({ servers });
+    }
+
+    updateFromConnectionStore( {status} ) {
+        this.setState({ isConnecting: status === 'connecting' });
     }
 
     onUpdateCredentials( username, password, rememberCredentials ) {
