@@ -13,8 +13,38 @@ class ConnectionActions {
     return {};
   }
 
-  updateStatus( {status} ) {
-    return { status };
+  updateStatus( {data} ) {
+    const {
+      clientState,
+      connectionState,
+      localIP = null,
+      remoteIP = null,
+      uploadedBytes = null,
+      downloadedBytes = null
+    } = data;
+
+    let status = 'disconnected';
+    
+    if( clientState === 'CONNECTED' ) {
+      switch( connectionState ) {
+        case 'DISCONNECTED':
+          status = 'DISCONNECTED';
+        break;
+
+        case 'CONNECTING':
+        case 'RECONNECTING':
+        case 'AUTHENTICATING':
+        case 'CONFIGURATING':
+          status = 'connecting';
+        break;
+
+        case 'CONNECTED':
+          status = 'connected';
+        break;
+      }
+    }
+    
+    return { status, localIP, remoteIP, uploadedBytes, downloadedBytes };
   }
 
   updateStatusError() {

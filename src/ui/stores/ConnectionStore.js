@@ -9,8 +9,8 @@ let status = 'disconnected';
 
 const StatusSource = {
   update: {
-    async remote() {
-      return { status };
+    remote() {
+      return API.fetchLocalOVPNServiceDetails();
     },
 
     local() {

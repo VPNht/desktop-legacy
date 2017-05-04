@@ -11,4 +11,12 @@ const fetchServerOVPNConfiguration = ({ host, port, managementPort, encryption, 
 const saveServerOVPNConfiguration = ( configuration ) =>
   writeFile( path.resolve( process.env.CONFIG_PATH, 'config.ovpn' ), configuration );
 
-export default { fetchServerOVPNConfiguration, saveServerOVPNConfiguration };
+const fetchLocalOVPNServiceDetails = () => {
+  return request( `http://localhost:1234/status` );
+}
+
+export default {
+  fetchServerOVPNConfiguration,
+  saveServerOVPNConfiguration,
+  fetchLocalOVPNServiceDetails
+};
