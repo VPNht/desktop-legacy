@@ -97,5 +97,7 @@
     "You can start using our service, and start surfing in privacy, as soon as you create an account.": "You can start using our service, and start surfing in privacy, as soon as you create an account.",
     "No logs": "No logs",
     "You value your privacy. So do we. We don’t keep logs, we don’t know the sites you have visited or the applications you’ve used.": "You value your privacy. So do we. We don’t keep logs, we don’t know the sites you have visited or the applications you’ve used.",
-    "CONNECTION_REPORT": "Connection Report"
+    "CONNECTION_REPORT": "Connection Report",
+    "UPLOADED": "Uploaded",
+    "DOWNLOADED": "Downloaded"
 }

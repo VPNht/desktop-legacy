@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import bytes from 'bytes';
 import React from 'react';
 import Router from 'react-router';
 import T from 'i18n-react';
@@ -26,14 +27,21 @@ const Status = ({uptime = 0}) => (
     </section>
 );
 
-const IP = ({ip, location}) => (
+const Details = ({ip, location, uploadedBytes, downloadedBytes}) => (
     <section className="ipOverview">
         <h1 className="title">{T.translate( 'IP and Country Overview' )}</h1>
         <p>{T.translate( 'Your New IP Address:' )}</p>
         <span>{ip || T.translate( 'Loading...' )}</span>
         <div />
         <p>{T.translate('Your New ISP Location:')}</p>
-        <span>{location || T.translate( 'Loading...' )}</span>
+        <span>{location || 'N/A'}</span>
+        <div />
+        <p>{T.translate('UPLOADED')}</p>
+        <span>{uploadedBytes ? bytes(uploadedBytes) : 'N/A'}</span>
+        <div />
+        <p>{T.translate('DOWNLOADED')}</p>
+        <span>{downloadedBytes ? bytes(downloadedBytes) : 'N/A'}</span>
+        <div />
     </section>
 );
 
@@ -46,7 +54,8 @@ class Connection extends React.Component {
         this.state = {
             connectionTime,
             uptime: connectionTime ? (new Date().getTime() - connectionTime) / 1000 : 0,
-            ip: '',
+            localIP: '',
+            remoteIP: '',
             location: ''
         };
 
@@ -54,6 +63,8 @@ class Connection extends React.Component {
     }
 
     componentDidMount() {
+        ConnectionStore.listen( this.updateFromConnectionStore );
+
         this.updateInterval = setInterval( () => {
             const { connectionTime } = this.state;
 
@@ -69,17 +80,17 @@ class Connection extends React.Component {
         ConnectionStore.unlisten( this.updateFromConnectionStore );
     }
 
-    updateFromConnectionStore( {connectionTime, ip, location }) {
-        this.setState({ connectionTime, ip, location });
+    updateFromConnectionStore( state ) {
+        this.setState( state );
     }
 
     render() {
-        const { uptime, ip, location } = this.state;
+        const { uptime, remoteIP, location, uploadedBytes, downloadedBytes } = this.state;
 
         return (
             <div>
                 <Status uptime={uptime} />
-                <IP ip={ip} location={location} />
+                <Details ip={remoteIP} location={location} uploadedBytes={uploadedBytes} downloadedBytes={downloadedBytes} />
             </div>
         );
     }

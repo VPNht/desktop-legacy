@@ -76,7 +76,7 @@ class ConnectionStore {
         }
     }
 
-    onUpdateStatus({ status }) {
+    onUpdateStatus({ status, localIP, remoteIP, uploadedBytes, downloadedBytes }) {
         this.setState({ status });
 
         if( status === 'disconnected' ){
@@ -85,7 +85,7 @@ class ConnectionStore {
 
         if( status === 'connected' ) {
             const connectionTime = this.state.connectionTime || new Date().getTime();
-            this.setState({ connectionTime });
+            this.setState({ connectionTime, remoteIP, localIP, uploadedBytes, downloadedBytes });
         }
     }
 }
