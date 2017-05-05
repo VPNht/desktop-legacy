@@ -3,14 +3,15 @@ import _ from 'lodash';
 import config from '../../config';
 import ConnectionActions from '../actions/ConnectionActions';
 import SettingsStore from '../stores/SettingsStore';
-import API from '../api/api';
+import VPNConfiguration from '../api/vpnConfiguration'
+import VPN from '../api/vpn';
 
 let status = 'disconnected';
 
 const StatusSource = {
   update: {
     remote() {
-      return API.fetchLocalOVPNServiceDetails();
+      return VPN.fetchStatus();
     },
 
     local() {
@@ -45,9 +46,9 @@ class ConnectionStore {
 
     async onConnect( { host } ) {
         try {
-            const { port, managementPort, encryption, disableSmartDNS } = SettingsStore.getState();
+            const { port, managementPort, encryption, disableSmartDNS, username, password } = SettingsStore.getState();
 
-            const { data } = await API.fetchServerOVPNConfiguration({
+            const { data } = await VPNConfiguration.fetchFromServer({
                 host,
                 port,
                 managementPort,
@@ -55,17 +56,16 @@ class ConnectionStore {
                 disableSmartDNS
             });
 
-            await API.saveServerOVPNConfiguration( data );
-
-            status = 'connected';
+            await VPNConfiguration.saveOnDisk( data );
+            await VPN.connect( username, password );
         }
         catch( e ) {
-            status = 'disconnected';
+          console.log( e );
         }
     }
 
     onDisconnect() {
-        status = 'disconnected';
+      VPN.disconnect();
     }
 
     onFetchStatus() {
