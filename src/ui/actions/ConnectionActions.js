@@ -25,10 +25,14 @@ class ConnectionActions {
 
     let status = 'disconnected';
     
+    if( clientState === 'CONNECTING' ) {
+      status = 'connecting';
+    }
+    
     if( clientState === 'CONNECTED' ) {
       switch( connectionState ) {
         case 'DISCONNECTED':
-          status = 'DISCONNECTED';
+          status = 'disconnected';
         break;
 
         case 'CONNECTING':
