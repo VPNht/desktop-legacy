@@ -49,11 +49,10 @@ class Connection extends React.Component {
     constructor( props ) {
         super( props );
 
-        const { connectionTime } = ConnectionStore.getState();
+        const { uptimeInSeconds } = ConnectionStore.getState();
 
         this.state = {
-            connectionTime,
-            uptime: connectionTime ? (new Date().getTime() - connectionTime) / 1000 : 0,
+            uptimeInSeconds: null,
             localIP: '',
             remoteIP: '',
             location: ''
@@ -64,19 +63,9 @@ class Connection extends React.Component {
 
     componentDidMount() {
         ConnectionStore.listen( this.updateFromConnectionStore );
-
-        this.updateInterval = setInterval( () => {
-            const { connectionTime } = this.state;
-
-            this.setState({
-                uptime: connectionTime ? (new Date().getTime() - connectionTime) / 1000 : 0
-            });
-        }, 1000 );
     }
 
     componentWillUnmount() {
-        clearInterval( this.updateInterval );
-
         ConnectionStore.unlisten( this.updateFromConnectionStore );
     }
 
@@ -85,11 +74,11 @@ class Connection extends React.Component {
     }
 
     render() {
-        const { uptime, remoteIP, location, uploadedBytes, downloadedBytes } = this.state;
+        const { uptimeInSeconds, remoteIP, location, uploadedBytes, downloadedBytes } = this.state;
 
         return (
             <div>
-                <Status uptime={uptime} />
+                <Status uptime={uptimeInSeconds} />
                 <Details ip={remoteIP} location={location} uploadedBytes={uploadedBytes} downloadedBytes={downloadedBytes} />
             </div>
         );

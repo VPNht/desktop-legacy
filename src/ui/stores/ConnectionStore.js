@@ -34,7 +34,7 @@ class ConnectionStore {
             ip: '',
             country: '',
             city: '',
-            connectionTime: null
+            uptimeInSeconds: null
         };
 
         this.registerAsync( StatusSource );
@@ -78,16 +78,15 @@ class ConnectionStore {
         }
     }
 
-    onUpdateStatus({ status, localIP, remoteIP, uploadedBytes, downloadedBytes }) {
+    onUpdateStatus({ status, localIP, remoteIP, uploadedBytes, downloadedBytes, uptimeInSeconds }) {
         this.setState({ status });
 
         if( status === 'disconnected' ){
-            this.setState({ connectionTime: null });
+            this.setState({ uptimeInSeconds: null });
         }
 
         if( status === 'connected' ) {
-            const connectionTime = this.state.connectionTime || new Date().getTime();
-            this.setState({ connectionTime, remoteIP, localIP, uploadedBytes, downloadedBytes });
+            this.setState({ uptimeInSeconds, remoteIP, localIP, uploadedBytes, downloadedBytes });
         }
     }
 }

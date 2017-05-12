@@ -17,6 +17,7 @@ class ConnectionActions {
     const {
       clientState,
       connectionState,
+      uptimeInSeconds = null,
       localIP = null,
       remoteIP = null,
       uploadedBytes = null,
@@ -48,10 +49,10 @@ class ConnectionActions {
       }
     }
     
-    return { status, localIP, remoteIP, uploadedBytes, downloadedBytes };
+    return { status, localIP, remoteIP, uploadedBytes, downloadedBytes, uptimeInSeconds };
   }
 
-  updateStatusError() {
+  updateStatusError(data) {
     return { status: null };
   }
 }
