@@ -9,7 +9,7 @@ import ConnectionStore from '../stores/ConnectionStore';
 import ConnectionActions from '../actions/ConnectionActions';
 import Logs from './Logs';
 
-const Status = ({isConnecting, onConnect}) => {
+const Status = ({isConnecting, onConnect, onCancel}) => {
     let status = T.translate( 'Loading...' );
 
     return (
@@ -19,7 +19,7 @@ const Status = ({isConnecting, onConnect}) => {
                 <i className={isConnecting ? 'ion-ios-loop spin' : 'ion-ios-close-empty disconnected'}></i>
                 <p>{T.translate( isConnecting ? 'Connecting' : 'Disconnected' )}</p>
             </div>
-            <button className="right" onClick={onConnect}>
+            <button className="right" onClick={isConnecting ? onCancel : onConnect}>
                 <p>{T.translate( isConnecting ? 'cancel' : 'connect to vpn')}</p>
             </button>
         </section>
@@ -105,6 +105,7 @@ class Authentication extends React.Component {
         this.onUpdateCredentials = this.onUpdateCredentials.bind( this );
         this.onSelectServer = this.onSelectServer.bind( this );
         this.onConnect = this.onConnect.bind( this );
+        this.onCancel = this.onCancel.bind( this );
     }
 
     componentDidMount() {
@@ -146,12 +147,16 @@ class Authentication extends React.Component {
         ConnectionActions.connect( selectedServer );
     }
 
+    onCancel() {
+        ConnectionActions.disconnect();
+    }
+
     render() {
         const { servers, selectedServer, isConnecting, username, password, rememberCredentials } = this.state;
 
         return (
             <div>
-                <Status isConnecting={isConnecting} onConnect={this.onConnect}/>
+                <Status isConnecting={isConnecting} onConnect={this.onConnect} onCancel={this.onCancel} />
                 <Login server={selectedServer} username={username} password={password} remember={rememberCredentials} onUpdate={this.onUpdateCredentials} />
                 <Servers servers={servers} selected={selectedServer} onSelect={this.onSelectServer} />
             </div>
