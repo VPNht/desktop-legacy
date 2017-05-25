@@ -5,7 +5,7 @@ import './app';
 import './ui/i18n';
 
 const name = "VPN.ht";
-const version = "0.0.3";
+const version = "0.0.4";
 const homepage = "https://vpn.ht";
 
 ReactDOM.render(
