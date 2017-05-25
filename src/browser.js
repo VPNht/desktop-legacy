@@ -1,6 +1,7 @@
 import { app, ipcMain, BrowserWindow } from 'electron';
 import path from 'path';
 import yargs from 'yargs';
+import isDevelopment from 'electron-is-dev';
 import createApplicationMenu from './menu';
 import createApplicationTray from './tray';
 
@@ -57,7 +58,10 @@ app.on( 'ready', () => {
     // Load the initial page
     const initialPageURL = path.join( __dirname, 'index.html' );
     mainWindow.loadURL( path.normalize( `file://${initialPageURL}` ) );
-    mainWindow.webContents.openDevTools();
+
+    if( isDevelopment ) {
+        mainWindow.webContents.openDevTools();
+    }
 
     mainWindow.on( 'did-finish-load', () => {
         if( !args.hide ) {

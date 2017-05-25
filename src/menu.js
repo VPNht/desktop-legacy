@@ -36,10 +36,6 @@ const createMenu = (emitter) => Menu.buildFromTemplate([
                 selector: 'unhideAllApplications:'
             }, {
                 type: 'separator'
-            }, {
-                label: T.translate( 'Toggle DevTools' ),
-                accelerator: `Alt+${specialKey}+I`,
-                click: () => emitter.send( 'debug' )
             }
         ]
     },
