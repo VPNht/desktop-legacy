@@ -97,6 +97,22 @@ ipcRenderer.on( 'close', () => {
     remote.getCurrentWindow().close();
 });
 
+ipcRenderer.on( 'connect', () => {
+    const { status } = ConnectionStore.getState();
+
+    if (status === 'disconnected') {
+        ConnectionActions.connect();
+    }
+});
+
+ipcRenderer.on( 'disconnect', () => {
+    const { status } = ConnectionStore.getState();
+
+    if (status !== 'disconnected') {
+        ConnectionActions.disconnect();
+    }
+});
+
 ipcRenderer.on( 'disconnectAndQuit', () => {
     ConnectionActions.disconnect();
     ipcRenderer.send( 'vpn-disconnected' );

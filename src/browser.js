@@ -72,9 +72,18 @@ app.on( 'ready', () => {
     });
 
     let isDisconnected = true;
-    ipcMain.on( 'vpn-connected', () => isDisconnected = false );
-    ipcMain.on( 'vpn-connecting', () => isDisconnected = false );
-    ipcMain.on( 'vpn-disconnected', () => isDisconnected = true );
+    
+    const updateDisconnected = (wasDisconnected, hasDisconnected) => {
+        if (hasDisconnected == wasDisconnected) return;
+
+        ipcMain.emit( 'tray:set', hasDisconnected ? 'disconnected' : 'connected' );
+
+        isDisconnected = hasDisconnected;
+    }
+    
+    ipcMain.on( 'vpn-connected', () => updateDisconnected( isDisconnected, false ) );
+    ipcMain.on( 'vpn-connecting', () => updateDisconnected( isDisconnected, false ) );
+    ipcMain.on( 'vpn-disconnected', () => updateDisconnected( isDisconnected, true ) );
 
     const connectionCheck = setInterval( () => {
         mainWindow.send( 'vpn-check-state' );

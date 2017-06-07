@@ -15,7 +15,8 @@ const createDisconnectedMenu = (emitter) => Menu.buildFromTemplate([
     },
     {
         label: T.translate( 'Disconnect' ),
-        click: () => emitter.send( 'disconnect' )
+        click: () => emitter.send( 'disconnect' ),
+        enabled: false
     },
     {
         type: 'separator'

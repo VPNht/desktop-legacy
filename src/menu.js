@@ -34,8 +34,6 @@ const createMenu = (emitter) => Menu.buildFromTemplate([
             }, {
                 label: T.translate( 'Show All' ),
                 selector: 'unhideAllApplications:'
-            }, {
-                type: 'separator'
             }
         ]
     },
