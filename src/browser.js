@@ -2,6 +2,7 @@ import { app, ipcMain, BrowserWindow } from 'electron';
 import path from 'path';
 import yargs from 'yargs';
 import isDevelopment from 'electron-is-dev';
+import config from './config';
 import createApplicationMenu from './menu';
 import createApplicationTray from './tray';
 import ConnectionStore from './ui/stores/ConnectionStore';
@@ -51,6 +52,7 @@ app.on( 'ready', () => {
         resizable: false,
         title: 'VPN.ht',
         backgroundColor: '#ededed',
+        skipTaskbar: config.get( 'minimizeToTaskbar' ),
         webPreferences: {
             backgroundThrottling: false
         }

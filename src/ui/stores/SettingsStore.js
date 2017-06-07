@@ -1,3 +1,4 @@
+import { remote } from 'electron';
 import alt from '../alt';
 import config from '../../config';
 import SettingsActions from '../actions/SettingsActions';
@@ -30,6 +31,10 @@ class SettingsStore {
 
     if( rememberCredentials || (key !== 'username' && key !== 'password') ) {
       config.set( key, value );
+    }
+
+    if( key === 'minimizeToTaskbar' ) {
+      remote.getCurrentWindow().setSkipTaskbar( value );
     }
   }
 }
