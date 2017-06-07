@@ -44,7 +44,8 @@ const createMenu = (emitter) => Menu.buildFromTemplate([
         submenu: [
             {
                 label: T.translate( 'Minimize' ),
-                selector: 'performMiniaturize:'
+                selector: 'performMiniaturize:',
+                click: () => emitter.send( 'minimize' )
             },
             {
                 label: T.translate( 'Close' ),
