@@ -93,6 +93,10 @@ ipcRenderer.on( 'minimize', () => {
     remote.getCurrentWindow().minimize();
 });
 
+ipcRenderer.on( 'close', () => {
+    remote.getCurrentWindow().close();
+});
+
 ipcRenderer.on( 'disconnectAndQuit', () => {
     ConnectionActions.disconnect();
     ipcRenderer.send( 'vpn-disconnected' );

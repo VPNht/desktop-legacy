@@ -49,7 +49,7 @@ const createMenu = (emitter) => Menu.buildFromTemplate([
             },
             {
                 label: T.translate( 'Close' ),
-                click: () => emitter.send( 'quit' )
+                click: () => emitter.send( 'close' )
             },
             {
                 type: 'separator'
