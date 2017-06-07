@@ -4,6 +4,7 @@ import yargs from 'yargs';
 import isDevelopment from 'electron-is-dev';
 import createApplicationMenu from './menu';
 import createApplicationTray from './tray';
+import ConnectionStore from './ui/stores/ConnectionStore';
 
 // Update application paths
 let args = yargs(process.argv.slice(1)).wrap(100).argv;
@@ -70,6 +71,31 @@ app.on( 'ready', () => {
         }
     });
 
+    let isDisconnected = true;
+    ipcMain.on( 'vpn-connected', () => isDisconnected = false );
+    ipcMain.on( 'vpn-connecting', () => isDisconnected = false );
+    ipcMain.on( 'vpn-disconnected', () => isDisconnected = true );
+
+    const connectionCheck = setInterval( () => {
+        mainWindow.send( 'vpn-check-state' );
+    }, 1000 );
+
+    mainWindow.on( 'close', (e) => {
+        if (!isDisconnected) {
+            e.preventDefault();
+            mainWindow.hide();
+            mainWindow.webContents.send( 'disconnectAndQuit' );
+
+            ipcMain.on( 'vpn-disconnected', () => {
+                app.quit();
+            });
+
+            return;
+        }
+
+        clearInterval( connectionCheck );
+    });
+
     // Resume after OS wakes up
     const { powerMonitor } = require( 'electron' );
 
@@ -93,18 +119,4 @@ app.on( 'window-all-closed', () => {
   if( process.platform != 'darwin' ) {
     app.quit();
   }
-});
-
-// Disconnect before quitting
-let isDisconnected = true;
-ipcMain.on( 'vpn.connected', () => isDisconnected = false );
-ipcMain.on( 'vpn.connecting', () => isDisconnected = false );
-ipcMain.on( 'vpn.disconnected', () => isDisconnected = true );
-
-app.on( 'before-quit', (e) =>  {
-    if( !isDisconnected ) {
-        e.preventDefault();
-        mainWindow.webContents.send( 'application:vpn-check-disconnect' );
-        ipcMain.once( 'vpn.disconnected', () => app.quit() );
-    }
 });

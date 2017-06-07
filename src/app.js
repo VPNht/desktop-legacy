@@ -6,6 +6,8 @@ import _ from 'lodash';
 import { render as prettifyObject } from 'prettyjson';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import ConnectionStore from './ui/stores/ConnectionStore';
+import ConnectionActions from './ui/actions/ConnectionActions';
 import ServersActions from './ui/actions/ServersActions';
 import LogActions from './ui/actions/LogActions';
 import config from './config';
@@ -87,14 +89,15 @@ ipcRenderer.on( 'hide', () => {
     remote.getCurrentWindow().hide();
 });
 
-ipcRenderer.on( 'connect', () => {
+ipcRenderer.on( 'disconnectAndQuit', () => {
+    ConnectionActions.disconnect();
+    ipcRenderer.send( 'vpn-disconnected' );
 });
 
-ipcRenderer.on( 'disconnect', () => {
-});
-
-ipcRenderer.on( 'quit', () => {
-    app.quit();
+//
+ipcRenderer.on( 'vpn-check-state', () => {
+    const { status } = ConnectionStore.getState();
+    ipcRenderer.send( `vpn-${status}` );
 });
 
 // Define styles
