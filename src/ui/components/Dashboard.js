@@ -8,8 +8,10 @@ class Dashboard extends React.Component {
     constructor( props ) {
         super( props );
 
+        const { status } = ConnectionStore.getState();
+
         this.state = {
-            isConnected: false
+            isConnected: status === "connected"
         };
 
         this.updateFromConnectionStore = this.updateFromConnectionStore.bind( this );
