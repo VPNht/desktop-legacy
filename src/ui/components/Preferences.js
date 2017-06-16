@@ -111,7 +111,7 @@ const Port = ({ports, selected}) => (
                 name="port"
                 value={selected}
                 options={ports}
-                onChange={(value) => SettingsActions.update( 'port', value )}
+                onChange={({value}) => SettingsActions.update( 'port', value )}
                 searchable={false}
                 clearable={false} />
         </div>
