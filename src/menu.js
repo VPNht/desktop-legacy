@@ -1,10 +1,11 @@
 import { app, shell, ipcMain, ipcRenderer, BrowserWindow, Menu } from 'electron';
+import _ from 'lodash';
 import T from 'i18n-react';
 
 const specialKey = process.platform == 'darwin' ? 'Command' : 'Ctrl';
 
-const createMenu = (emitter) => Menu.buildFromTemplate([
-    {
+const createMenu = (emitter) => {
+    let template = [{
         label: 'VPN.ht',
         submenu: [
             {
@@ -21,7 +22,7 @@ const createMenu = (emitter) => Menu.buildFromTemplate([
         ]
     },
     {
-        label: 'View',
+        label: T.translate( 'View' ),
         submenu: [
             {
                 label: T.translate( 'Hide' ) + ' VPN.ht',
@@ -78,11 +79,18 @@ const createMenu = (emitter) => Menu.buildFromTemplate([
                 click: () => emitter.send( 'open', 'about', false )
             }
         ]
+    }];
+
+    if( process.platform !== 'darwin' ) {
+        const viewLabel = T.translate( 'View' );
+        template = _.reject( template, ({label}) => label == viewLabel );
     }
-]);
+
+    return Menu.buildFromTemplate( template );
+}
 
 const initialize = (mainWindow) => {
-    const menu = createMenu( mainWindow.webContents );
+    let menu = createMenu( mainWindow.webContents );
     Menu.setApplicationMenu( menu );
 }
 
