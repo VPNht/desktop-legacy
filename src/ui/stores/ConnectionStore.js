@@ -46,8 +46,6 @@ class ConnectionStore {
 
     async onConnect( { host } ) {
         try {
-            this.setState({ status: 'connecting' });
-            
             const { port, managementPort, encryption, disableSmartDNS, username, password } = SettingsStore.getState();
 
             const { data } = await VPNConfiguration.fetchFromServer({
