@@ -57,7 +57,7 @@ class ConnectionStore {
             });
 
             await VPNConfiguration.saveOnDisk( data );
-            await VPN.connect( username, password );
+            await VPN.connect( username, password, managementPort );
         }
         catch( e ) {
           console.log( e );
