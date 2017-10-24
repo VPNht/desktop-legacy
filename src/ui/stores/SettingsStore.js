@@ -6,6 +6,7 @@ import SettingsActions from '../actions/SettingsActions';
 class SettingsStore {
   constructor() {
     this.state = {
+      servicePort: 1234,
       username: config.get( 'username' ),
       password: config.get( 'password' ),
       rememberCredentials: config.get( 'rememberCredentials' ),

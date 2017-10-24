@@ -1,17 +1,21 @@
 import request from 'axios';
+import SettingsStore from '../stores/SettingsStore'
 
-const ENDPOINT_URL = 'http://localhost:1234';
-
-const fetchStatus = () =>
-  request( `${ENDPOINT_URL}/status` );
-
-const connect = (username, password, port) => {
-  username = encodeURIComponent( new Buffer( username ).toString( 'base64' ) );
-  password = encodeURIComponent( new Buffer( password ).toString( 'base64' ) );
-  return request( `${ENDPOINT_URL}/connect?u=${username}&p=${password}&mp=${port}` );
+const fetchStatus = () => {
+	const {servicePort} = SettingsStore.getState();
+  return request( `http://localhost:${servicePort}/status` );
 }
 
-const disconnect = () =>
-  request( `${ENDPOINT_URL}/disconnect` );
+const connect = (username, password, port) => {
+	const {servicePort} = SettingsStore.getState();
+  username = encodeURIComponent( new Buffer( username ).toString( 'base64' ) );
+  password = encodeURIComponent( new Buffer( password ).toString( 'base64' ) );
+  return request( `http://localhost:${servicePort}/connect?u=${username}&p=${password}&mp=${port}` );
+}
+
+const disconnect = () => {
+	const {servicePort} = SettingsStore.getState();
+  return request( `http://localhost:${servicePort}/disconnect` );
+}
 
 export default { fetchStatus, connect, disconnect };
