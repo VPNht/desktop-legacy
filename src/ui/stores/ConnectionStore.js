@@ -1,6 +1,8 @@
 import alt from '../alt';
 import _ from 'lodash';
 import config from '../../config';
+import LogStore from '../stores/LogStore';
+import LogActions from '../actions/LogActions'
 import ConnectionActions from '../actions/ConnectionActions';
 import SettingsStore from '../stores/SettingsStore';
 import VPNConfiguration from '../api/vpnConfiguration'
@@ -42,25 +44,46 @@ class ConnectionStore {
         this.bindAction( ConnectionActions.disconnect, this.onDisconnect );
         this.bindAction( ConnectionActions.fetchStatus, this.onFetchStatus );
         this.bindAction( ConnectionActions.updateStatus, this.onUpdateStatus );
+        this.bindAction( ConnectionActions.updateStatusError, this.onUpdateStatusError );
     }
 
     async onConnect( { host } ) {
-        try {
-            const { port, managementPort, encryption, disableSmartDNS, username, password } = SettingsStore.getState();
+        this.waitFor(LogStore.dispatchToken);
 
-            const { data } = await VPNConfiguration.fetchFromServer({
+        const { port, managementPort, encryption, disableSmartDNS, username, password } = SettingsStore.getState();
+
+        let data = {};
+
+        try {
+            data = await VPNConfiguration.fetchFromServer({
                 host,
                 port,
                 managementPort,
                 encryption,
                 disableSmartDNS
             });
+            LogActions.addInfo(`Fetched OpenVPN configuration`);
+        }
+        catch( e ) {
+            LogActions.addError(`Could not fetch OpenVPN configuration (${host}:${port})`);
+            return;
+        }
 
+        try {
             await VPNConfiguration.saveOnDisk( data );
+            LogActions.addInfo(`Saved OpenVPN configuration`);
+        }
+        catch( e ) {
+            LogActions.addError("Could not save OpenVPN configuration. ");
+            return;
+        }
+
+        try {
             await VPN.connect( username, password, managementPort );
         }
         catch( e ) {
-          console.log( e );
+            LogActions.addError(`Could not request new OpenVPN connection from local service.`);
+            return;
         }
     }
 
@@ -77,15 +100,30 @@ class ConnectionStore {
     }
 
     onUpdateStatus({ status, localIP, remoteIP, uploadedBytes, downloadedBytes, uptimeInSeconds }) {
+        const previousStatus = this.state.status;
+
         this.setState({ status });
 
         if( status === 'disconnected' ){
             this.setState({ uptimeInSeconds: null });
+
+            if( previousStatus === 'connected' ) {
+                LogStore.addInfo('Succesfully disconnected.')
+            }
         }
 
         if( status === 'connected' ) {
             this.setState({ uptimeInSeconds, remoteIP, localIP, uploadedBytes, downloadedBytes });
+
+            LogStore.addInfo('Succesfully connected.')
         }
+    }
+
+    onUpdateStatusError() {
+        setTimeout(() => {
+            const {servicePort} = SettingsStore.getState();
+            LogActions.addInfo(`Could not fetch status from local serivce on port ${servicePort}.`);
+        }, 0);
     }
 }
 
