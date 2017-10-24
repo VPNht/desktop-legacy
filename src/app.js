@@ -93,7 +93,14 @@ ipcRenderer.on( 'open', (e, name, openInBrowser) => {
 });
 
 ipcRenderer.on( 'toggle', () => {
-    ipcRenderer.emit( remote.getCurrentWindow().isVisible() ? 'hide': 'show' );
+    const currentWindow = remote.getCurrentWindow()
+
+    if( currentWindow.isMinimized() || !currentWindow.isVisible() ) {
+        currentWindow.show()
+    }
+    else {
+        currentWindow.hide()
+    }
 });
 
 ipcRenderer.on( 'show', () => {
