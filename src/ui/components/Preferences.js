@@ -149,7 +149,7 @@ class Preferences extends React.Component {
 
         const encryptions = [
             { value: 128, label: '128 BIT AES' },
-            { value: 256, label: '256 bit AES' }
+            { value: 256, label: '256 BIT AES' }
         ];
 
         if( autoPath === false ) {
