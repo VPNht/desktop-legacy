@@ -8,7 +8,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ConnectionStore from './ui/stores/ConnectionStore';
 import ConnectionActions from './ui/actions/ConnectionActions';
+import ServersStore from './ui/stores/ServersStore'
 import ServersActions from './ui/actions/ServersActions';
+import SettingsStore from './ui/stores/SettingsStore'
 import LogActions from './ui/actions/LogActions';
 import config from './config';
 import webUtil from './ui/utils/WebUtil';
@@ -38,7 +40,20 @@ ipcRenderer.on( 'ui.ready', async () => {
     LogActions.addInfo( `Operating System ${system}`);
 
     ServersActions.fetchServers();
+
+    const { connectAtLaunch, username, password } = SettingsStore.getState();
+
+    if( connectAtLaunch && username && password ) {
+        ServersStore.listen(tryConnectingAtLaunch);
+    }
 });
+
+const tryConnectingAtLaunch = (servers) => {
+    setTimeout(() => {
+        ConnectionActions.connect();
+        ServersStore.unlisten(tryConnectingAtLaunch);
+    }, 0);
+}
 
 //
 const AVAILABLE_PAGES = {
