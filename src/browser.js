@@ -118,6 +118,10 @@ app.on( 'ready', () => {
     createApplicationTray( mainWindow );
 
     ipcMain.emit( 'tray:set', 'disconnected' );
+
+    ipcMain.on('tray:double-click', () => {
+        mainWindow.show()
+    });
 });
 
 // Show the window after the page has been loaded

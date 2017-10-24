@@ -86,6 +86,10 @@ const initialize = (mainWindow) => {
 
     const tray = new Tray( `${__dirname}/tray_disconnected.png` );
 
+    tray.on('double-click', () => {
+        ipcMain.emit('tray:double-click');
+    });
+
     ipcMain.on( 'tray:set', (status) => {
         const menu = menus[status];
         tray.setContextMenu( menu );
