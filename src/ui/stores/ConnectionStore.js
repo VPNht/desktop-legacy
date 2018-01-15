@@ -52,25 +52,28 @@ class ConnectionStore {
 
         const { port, managementPort, encryption, disableSmartDNS, username, password } = SettingsStore.getState();
 
-        let data = {};
+        let configurationData = {};
 
         try {
-            data = await VPNConfiguration.fetchFromServer({
+            const { data } = await VPNConfiguration.fetchFromServer({
                 host,
                 port,
                 managementPort,
                 encryption,
                 disableSmartDNS
             });
+
+            configurationData = data;
+
             LogActions.addInfo(`Fetched OpenVPN configuration`);
         }
         catch( e ) {
             LogActions.addError(`Could not fetch OpenVPN configuration (${host}:${port})`);
             return;
-        }
+        }   
 
         try {
-            await VPNConfiguration.saveOnDisk( data );
+            await VPNConfiguration.saveOnDisk( configurationData );
             LogActions.addInfo(`Saved OpenVPN configuration`);
         }
         catch( e ) {
