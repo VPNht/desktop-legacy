@@ -1,0 +1,9 @@
+{
+	"ConfigDir": "/Applications/VPN.ht.app/Contents/Resources/config/",
+	"ConfigExtension": "ovpn",
+	"LogDir": "/Applications/VPN.ht.app/Contents/Resources/log/",
+	"LogAppend": true,
+	"ExePath": "/Applications/VPN.ht.app/Contents/Resources/bin/openvpn",
+	"Priority": "NORMAL_PRIORITY_CLASS"
+}
+
