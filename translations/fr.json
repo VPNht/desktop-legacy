@@ -85,6 +85,7 @@
 
     "DASHBOARD": "Tableau de bord",
     "PREFERENCES": "Paramètres",
+    "ERROR_AUTHENTICATION_FAILED": "Could not connect to server!\nInvalid user credentials!",
 
     "connected!": "connecté !",
     "Your internet traffic is now encrypted! and your online identity has become anonymous.": "Le trafic Internet est chiffré et anonyme ! Votre identité en ligne est protégée.",

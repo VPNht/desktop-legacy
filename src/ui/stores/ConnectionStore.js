@@ -1,5 +1,6 @@
 import alt from '../alt';
 import _ from 'lodash';
+import T from 'i18n-react';
 import config from '../../config';
 import LogStore from '../stores/LogStore';
 import LogActions from '../actions/LogActions'
@@ -70,7 +71,7 @@ class ConnectionStore {
         catch( e ) {
             LogActions.addError(`Could not fetch OpenVPN configuration (${host}:${port})`);
             return;
-        }   
+        }
 
         try {
             await VPNConfiguration.saveOnDisk( configurationData );
@@ -102,7 +103,7 @@ class ConnectionStore {
         }
     }
 
-    onUpdateStatus({ status, localIP, remoteIP, uploadedBytes, downloadedBytes, uptimeInSeconds }) {
+    onUpdateStatus({ status, localIP, remoteIP, uploadedBytes, downloadedBytes, uptimeInSeconds, error }) {
         const previousStatus = this.state.status;
 
         this.setState({ status });
@@ -111,14 +112,23 @@ class ConnectionStore {
             this.setState({ uptimeInSeconds: null });
 
             if( previousStatus === 'connected' ) {
-                LogStore.addInfo('Succesfully disconnected.')
+                LogActions.addInfo('Succesfully disconnected.')
             }
         }
 
         if( status === 'connected' ) {
             this.setState({ uptimeInSeconds, remoteIP, localIP, uploadedBytes, downloadedBytes });
 
-            LogStore.addInfo('Succesfully connected.')
+            LogActions.addInfo('Succesfully connected.')
+        }
+
+        if( error !== "" ) {
+            const errorMessage = _.map(T.translate(`ERROR_${error}`), (value) => {
+                return typeof value == "string" ? value : "\n";
+            }).join("");
+
+            alert(errorMessage),
+            LogActions.addError(errorMessage);
         }
     }
 

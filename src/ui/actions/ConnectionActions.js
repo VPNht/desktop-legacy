@@ -21,15 +21,16 @@ class ConnectionActions {
       localIP = null,
       remoteIP = null,
       uploadedBytes = null,
-      downloadedBytes = null
+      downloadedBytes = null,
+      error = null
     } = data;
 
     let status = 'disconnected';
-    
+
     if( clientState === 'CONNECTING' ) {
       status = 'connecting';
     }
-    
+
     if( clientState === 'CONNECTED' ) {
       switch( connectionState ) {
         case 'DISCONNECTED':
@@ -48,8 +49,8 @@ class ConnectionActions {
         break;
       }
     }
-    
-    return { status, localIP, remoteIP, uploadedBytes, downloadedBytes, uptimeInSeconds };
+
+    return { status, localIP, remoteIP, uploadedBytes, downloadedBytes, uptimeInSeconds, error };
   }
 
   updateStatusError(data) {

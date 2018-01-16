@@ -86,6 +86,8 @@
     "DASHBOARD": "dashboard",
     "PREFERENCES": "preferences",
 
+    "ERROR_AUTHENTICATION_FAILED": "Could not connect to server!\nInvalid user credentials!",
+
     "connected!": "connected!",
     "Your internet traffic is now encrypted! and your online identity has become anonymous.": "Your internet traffic is now encrypted! and your online identity has become anonymous.",
     "not connected!": "not connected!",
