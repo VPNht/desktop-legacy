@@ -8,6 +8,9 @@
     "Connected": "Connected",
     "disconnected": "Disconnected",
 
+    "NOTIFICATION_CONNECTED": "Connected!",
+    "NOTIFICATION_DISCONNECTED": "Disconnected!",
+
     "Another instance of VPN.ht is already running. Only one instance of the app can be open at a time": "Another instance of VPN.ht is already running. Only one instance of the app can be open at a time",
     "OK": "OK",
     "A new version is available, do you want to install now?": "A new version is available, do you want to install now?",
