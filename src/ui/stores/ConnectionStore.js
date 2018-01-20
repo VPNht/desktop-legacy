@@ -122,7 +122,7 @@ class ConnectionStore {
             LogActions.addInfo('Succesfully connected.')
         }
 
-        if( error !== "" ) {
+        if( error ) {
             const errorMessage = _.map(T.translate(`ERROR_${error}`), (value) => {
                 return typeof value == "string" ? value : "\n";
             }).join("");
